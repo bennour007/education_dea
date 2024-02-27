@@ -1,0 +1,433 @@
+var_name,label
+CNT,Country code 3-character
+CNTRYID,Country Identifier
+CNTSCHID,Intl. School ID
+CYC,PISA Assessment Cycle (2 digits + 2 character Assessment type - MS/FT)
+NatCen,National Centre 6-digit Code
+STRATUM,Stratum ID 5-character (cnt + original stratum ID)
+SUBNATIO,Adjudicated sub-region code 7-digit code (3-digit country code + region ID + stratum ID)
+REGION,REGION
+OECD,OECD country
+ADMINMODE,Mode of Respondent
+LANGTEST_QQQ,Language of Questionnaire
+SC001Q01TA,Which of the following definitions best describes the community in which your school is located?
+SC013Q01TA,Is your school a public or a private school?
+SC014Q01TA,What kind of organisation runs your school?
+SC016Q01TA,"Percentage of schoolyr funding comes from: Government (includes departments, local, regional, state and national)"
+SC016Q02TA,Percentage of schoolyr funding comes from: Student fees or school charges paid by parents or guardians
+SC016Q03TA,"Percentage of schoolyr funding comes from: Benefactors, donations, bequests, sponsorships, parent or guardian fundraising"
+SC016Q04TA,Percentage of schoolyr funding comes from: Other
+SC011Q01TA,Which of the following statements best describes the schooling available to students in your location?
+SC002Q01TA,"As of [February 1, 2021], what was the total school enrolment (number of students): Number of boys:"
+SC002Q02TA,"As of [February 1, 2021], what was the total school enrolment (number of students): Number of girls:"
+SC211Q01JA,Percentage [15-year-old modal grade] students who: Students whose [heritage language] is different from [test language]
+SC211Q02JA,Percentage [15-year-old modal grade] students who: Students with special learning needs
+SC211Q03JA,Percentage [15-year-old modal grade] students who: Students from socioeconomically disadvantaged homes
+SC211Q04JA,Percentage [15-year-old modal grade] students who: Students who are immigrants (not including refugees)
+SC211Q05JA,Percentage [15-year-old modal grade] students who: Students who have parents who have immigrated
+SC211Q06JA,Percentage [15-year-old modal grade] students who: Students who are refugees
+SC018Q01TA01,Teachers in TOTAL: Full-time
+SC018Q01TA02,Teachers in TOTAL: Part-time
+SC018Q02TA01,Teachers [fully certified] by [the appropriate authority]: Full-time
+SC018Q02TA02,Teachers [fully certified] by [the appropriate authority]: Part-time
+SC018Q08JA01,Teachers with an [ISCED Level 6 - Bachelor's or equivalent level] qualification: Full-time
+SC018Q08JA02,Teachers with an [ISCED Level 6 - Bachelor's or equivalent level] qualification: Part-time
+SC018Q09JA01,Teachers with an [ISCED Level 7 - Master's or equivalent level] qualification: Full-time
+SC018Q09JA02,Teachers with an [ISCED Level 7 - Master's or equivalent level] qualification: Part-time
+SC018Q10JA01,Teachers with an [ISCED Level 8 - Doctoral or equivalent level] qualification: Full-time
+SC018Q10JA02,Teachers with an [ISCED Level 8 - Doctoral or equivalent level] qualification: Part-time
+SC182Q01WA01,Teachers of mathematics in TOTAL: Full-time
+SC182Q01WA02,Teachers of mathematics in TOTAL: Part-time
+SC182Q06WA01,Teachers of math [fully certified] by [the appropriate authority]: Full-time
+SC182Q06WA02,Teachers of math [fully certified] by [the appropriate authority]: Part-time
+SC182Q07JA01,Teachers of math with at least an [ISCED Level 6 ] qualification: Full-time
+SC182Q07JA02,Teachers of math with at least an [ISCED Level 6 ] qualification: Part-time
+SC182Q08JA01,Teachers of math with at least an [ISCED Level 6 ] qualification [with a major] in mathematics: Full-time
+SC182Q08JA02,Teachers of math with at least an [ISCED Level 6 ] qualification [with a major] in mathematics: Part-time
+SC182Q09JA01,Teachers of math with at least an [ISCED Level 6 ] qualification in [pedagogy]: Full-time
+SC182Q09JA02,Teachers of math with at least an [ISCED Level 6 ] qualification in [pedagogy]: Part-time
+SC182Q10JA01,Teachers of math with an [ISCED Level 5] but not an [ISCED Level 6] qualification: Full-time
+SC182Q10JA02,Teachers of math with an [ISCED Level 5] but not an [ISCED Level 6] qualification: Part-time
+SC168Q01JA,"Number of non-teaching staff working in school who are: Personnel for pedagogical support, irrespective of the [grade levels]/ages they support"
+SC168Q02JA,Number of non-teaching staff working in school who are: School administrative personnel
+SC168Q03JA,Number of non-teaching staff working in school who are: School management personnel
+SC168Q04JA,Number of non-teaching staff working in school who are: Other non-teaching staff
+SC012Q01TA,"During admission, how often consider: Student's record of academic performance (including placement tests)"
+SC012Q02TA,"During admission, how often consider: Recommendation of feeder schools"
+SC012Q03TA,"During admission, how often consider: Parents' or guardians' endorsement of the instructional or religious philosophy of the school"
+SC012Q04TA,"During admission, how often consider: Whether the student requires or is interested in a special programme"
+SC012Q05TA,"During admission, how often consider: Preference given to family members of current or former students"
+SC012Q06TA,"During admission, how often consider: Residence in a particular area"
+SC012Q08JA,"During admission, how often consider: Student's disciplinary record in this or another school"
+SC012Q10JA,"During admission, how often consider: Student's parental status or pregnancy"
+SC012Q11JA,"During admission, how often consider: Student's working status"
+SC012Q12JA,"During admission, how often consider: Student's cultural or ethnic background"
+SC185Q01WA,How likely a student in your school would be transferred to another school for: Low academic achievement
+SC185Q02WA,How likely a student in your school would be transferred to another school for: High academic achievement
+SC185Q03WA,How likely a student in your school would be transferred to another school for: Behavioural problems
+SC185Q04WA,How likely a student in your school would be transferred to another school for: Special learning needs
+SC185Q05WA,How likely a student in your school would be transferred to another school for: Parents' or guardians' request
+SC202Q01JA,"At your school, who is responsible for: Appointing or hiring teachers"
+SC202Q02JA,"At your school, who is responsible for: Dismissing or suspending teachers from employment"
+SC202Q03JA,"At your school, who is responsible for: Establishing teachers' starting salaries, including setting pay scales"
+SC202Q04JA,"At your school, who is responsible for: Determining teachers' salary increases"
+SC202Q05JA,"At your school, who is responsible for: Formulating the school budget"
+SC202Q06JA,"At your school, who is responsible for: Deciding on budget allocations"
+SC202Q07JA,"At your school, who is responsible for: Establishing student disciplinary policies and procedures"
+SC202Q08JA,"At your school, who is responsible for: Establishing student assessment policies, including [national/regional] assessments"
+SC202Q09JA,"At your school, who is responsible for: Approving students for admission to the school"
+SC202Q10JA,"At your school, who is responsible for: Choosing which learning materials are used"
+SC202Q11JA,"At your school, who is responsible for: Determining course content, including [national/regional] curricula"
+SC202Q12JA,"At your school, who is responsible for: Deciding which courses are offered"
+SC201Q01JA,How often you/others in [school management team]: Collaborating with teachers to solve classroom discipline problems
+SC201Q03JA,How often you/others in [school management team]: Providing feedback to teachers based on observations of instruction in the classroom
+SC201Q04JA,How often you/others in [school management team]: Taking actions to support co-operation among teachers to develop new teaching practices
+SC201Q05JA,How often you/others in [school management team]: Taking actions to ensure that teachers take responsibility for improving their teaching skills
+SC201Q06JA,How often you/others in [school management team]: Taking actions to ensure that teachers feel responsible for their students' learning outcomes
+SC201Q07JA,How often you/others in [school management team]: Providing parents or guardians with information on the school and student performance
+SC201Q11JA,How often you/others in [school management team]: Working on a professional development plan for this school
+SC004Q01TA,"[Stem] At your school, what is the total number of students in the [national modal grade for 15-year-olds]?"
+SC004Q02TA,"[Stem] Approximately, how many desktop or laptop computers are available for these students for educational purposes?"
+SC004Q03TA,"[Stem] Approximately, how many of these desktop or laptop computers are connected to the Internet?"
+SC004Q08JA,"[Stem] Approximately, how many tablet devices (e.g. [iPad®], [Galaxy Book®], [Fire®]) or e-book readers (i.e. portable device for reading books on screen, e.g. [Amazon® KindleTM], [Kobo]) are available for these students for educational purposes?"
+SC004Q05NA,"[Stem] Approximately, how many interactive whiteboards are available in the school altogether?"
+SC004Q06NA,"[Stem] Approximately, how many data projectors are available in the school altogether?"
+SC004Q07NA,"[Stem] Approximately, how many desktop or laptop computers with internet connection are available for teachers in your school?"
+SC190Q01JA,Apply to your school: The school has a written statement about the general use of digital devices on the school premises.
+SC190Q02JA,Apply to your school: The use of [cell phones] is not allowed on the school premises.
+SC190Q05JA,Apply to your school: The school has formal guidelines for the use of digital devices for teaching and learning in specific subjects.
+SC190Q06JA,Apply to your school: Teachers establish rules for when students may use digital devices during lessons.
+SC190Q07JA,Apply to your school: Teachers establish rules in collaboration with students about their use of [digital resources] at school or in class.
+SC190Q08JA,Apply to your school: The school has a specific programme to prepare students for responsible internet behaviour.
+SC190Q09JA,Apply to your school: The school has a specific policy about using social networks (e.g. [Facebook®]) in teaching and learning.
+SC190Q10JA,Apply to your school: The school has a specific programme to promote collaboration on the use of digital devices among teachers.
+SC190Q11JA,"Apply to your school: The school has a scheduled time for teachers to meet to share, evaluate or develop instructional materials and approaches that employ digital devices."
+SC037Q01TA,Exist at your school: Internal evaluation / Self-evaluation
+SC037Q02TA,Exist at your school: External evaluation
+SC037Q03TA,Exist at your school: Written specification of the school's curricular profile and educational goals
+SC037Q04TA,Exist at your school: Written specification of student performance standards
+SC037Q05NA,Exist at your school: Systematic recording of data such as teacher or student attendance and professional development
+SC037Q06NA,Exist at your school: Systematic recording of student test results and graduation rates
+SC037Q07TA,"Exist at your school: Seeking written feedback from students (e.g. regarding lessons, teachers or resources)"
+SC037Q08TA,Exist at your school: Teacher mentoring
+SC037Q09TA,Exist at your school: Regular consultation aimed at school improvement with one or more experts over a period of at least six months
+SC037Q11JA,Exist at your school: Implementation of a standardised policy for mathematics subjects (i.e. school curriculum with shared instructional materials accompanied by staff development and training)
+SC200Q01JA,Occur in school's external evals:  The results of external evaluation led to changes in school policies.
+SC200Q02JA,Occur in school's external evals:  We used the data to plan specific action for school development.
+SC200Q03JA,Occur in school's external evals:  We used the data to plan specific action for the improvement of teaching.
+SC200Q04JA,Occur in school's external evals:  We put measures derived from the results of external evaluations into practice.
+SC032Q01TA,"Last school yr, teachers monitored by? Tests or assessments of student achievement"
+SC032Q02TA,"Last school yr, teachers monitored by? Teacher peer review (of lesson plans, assessment instruments, lessons)"
+SC032Q03TA,"Last school yr, teachers monitored by? Principal or senior staff observations of lessons"
+SC032Q04TA,"Last school yr, teachers monitored by? Observation of classes by inspectors or other persons external to the school"
+SC193Q01WA,Do teacher evals impact: A change in salary
+SC193Q02WA,Do teacher evals impact: A financial bonus or another kind of monetary reward
+SC193Q03WA,Do teacher evals impact: Opportunities for professional development activities
+SC193Q04WA,Do teacher evals impact: A change in the likelihood of career advancement
+SC193Q05WA,Do teacher evals impact: Public recognition from you
+SC193Q06WA,Do teacher evals impact: Changes in work responsibilities that make the job more attractive
+SC193Q07WA,"Do teacher evals impact: A role in school development initiatives (e.g. curriculum development group, development of school objectives)"
+SC025Q01NA,"Last 3 mnths, percentage teaching staff attended professional dev: All teaching staff at your school"
+SC025Q02NA,"Last 3 mnths, percentage teaching staff attended professional dev:  Staff who teach mathematics at your school"
+SC027Q02NA,In-house professional dev: Our school invites specialists to conduct in-service training for teachers.
+SC027Q03NA,In-house professional dev: Our school organises in-service workshops which deal with specific issues that our school faces.
+SC027Q04NA,In-house professional dev: Our school organises in-service workshops for specific groups of teachers (e.g. newly appointed teachers).
+SC183Q02JA,In-house professional dev for math teachers: Our school invites specialists to conduct in-service training for mathematics teachers.
+SC183Q03JA,"In-house professional dev for math teachers: Our school organises in-service workshops, which deal with specific issues that our mathematics teachers face."
+SC183Q04JA,In-house professional dev for math teachers: Our school organises in-service workshops for specific mathematics teachers (e.g. newly appointed teachers).
+SC184Q01JA,Offers math teachers professional dev in: Mathematics content
+SC184Q02JA,Offers math teachers professional dev in: Mathematics pedagogy/instruction
+SC184Q03JA,Offers math teachers professional dev in: Mathematics curriculum
+SC184Q04JA,Offers math teachers professional dev in: Integrating digital resources into mathematics instruction
+SC184Q05JA,Offers math teachers professional dev in: Improving students' critical thinking or problem solving skills
+SC184Q06JA,Offers math teachers professional dev in: Mathematics assessment
+SC184Q07JA,"Offers math teachers professional dev in: Addressing individual students' needs (e.g. differentiated learning, differentiated instruction)"
+SC017Q01NA,Instruction hindered by: A lack of teaching staff
+SC017Q02NA,Instruction hindered by: Inadequate or poorly qualified teaching staff
+SC017Q03NA,Instruction hindered by: A lack of assisting staff
+SC017Q04NA,Instruction hindered by: Inadequate or poorly qualified assisting staff
+SC017Q05NA,"Instruction hindered by: A lack of educational material (e.g. textbooks, IT equipment, library or laboratory material)"
+SC017Q06NA,"Instruction hindered by: Inadequate or poor quality educational material (e.g. textbooks, IT equipment, library or laboratory material)"
+SC017Q07NA,"Instruction hindered by: A lack of physical infrastructure (e.g. building, grounds, heating/cooling, lighting and acoustic systems)"
+SC017Q08NA,"Instruction hindered by: Inadequate or poor quality physical infrastructure (e.g. building, grounds, heating/cooling, lighting and acoustic systems)"
+SC017Q09JA,"Instruction hindered by: A lack of [digital resources] (e.g. desktop or laptop computers, internet access, learning management systems or school learning platforms)"
+SC017Q10JA,"Instruction hindered by: Inadequate or poor quality [digital resources] (e.g. desktop or laptop computers, internet access, learning management systems or school learning platforms)"
+SC061Q01TA,Learning hindered by: Student truancy
+SC061Q02TA,Learning hindered by: Students skipping classes
+SC061Q03TA,Learning hindered by: Students lacking respect for teachers
+SC061Q04TA,Learning hindered by: Student use of alcohol or illegal drugs
+SC061Q05TA,Learning hindered by: Students intimidating or bullying other students
+SC061Q11HA,Learning hindered by: Students not being attentive
+SC061Q06TA,Learning hindered by: Teachers not meeting individual students' needs
+SC061Q07TA,Learning hindered by: Teacher absenteeism
+SC061Q08TA,Learning hindered by: Staff resisting change
+SC061Q09TA,Learning hindered by: Teachers being too strict with students
+SC061Q10TA,Learning hindered by: Teachers not being well prepared for classes
+SC172Q02JA,Extent a problem in your school: Profanity
+SC172Q03JA,Extent a problem in your school: Vandalism
+SC172Q04JA,Extent a problem in your school: Theft
+SC172Q05JA,"Extent a problem in your school: Intimidation or verbal abuse among students (including texting, emailing, etc.)"
+SC172Q06JA,Extent a problem in your school: Physical injury caused by students to other students
+SC172Q07JA,"Extent a problem in your school: Intimidation or verbal abuse of teachers or non-teaching staff (including texting, emailing, etc.)"
+SC173Q01JA,"Last yr, how often staff: They helped students of different backgrounds to recognise the similarities that exist between them."
+SC173Q02JA,"Last yr, how often staff: They encouraged students of different backgrounds to resolve disagreements by finding common ground."
+SC173Q03JA,"Last yr, how often staff: They supported activities or organisations that encourage students' expression of diverse identities."
+SC173Q04JA,"Last yr, how often staff: They taught students how to respond to discrimination."
+SC173Q05JA,"Last yr, how often staff: They taught students to be inclusive of others with different backgrounds."
+SC173Q06JA,"Last yr, how often staff: They provided additional support for students from disadvantaged backgrounds."
+SC064Q05WA,Proportion parent/guardians who: Discussed their child's behaviour with a teacher on the parents' or guardians' own initiative
+SC064Q06WA,Proportion parent/guardians who: Discussed their child's behaviour on the initiative of one of their child's teachers
+SC064Q01TA,Proportion parent/guardians who: Discussed their child's progress with a teacher on the parents' or guardians' own initiative
+SC064Q02TA,Proportion parent/guardians who: Discussed their child's progress on the initiative of one of their child's teachers
+SC064Q04NA,"Proportion parent/guardians who: Volunteered in physical or extra-curricular activities, (e.g. building maintenance, carpentry, gardening or yard work, school play, sports, field trip)"
+SC064Q03TA,Proportion parent/guardians who: Participated in local school government (e.g. parent council or school management committee)
+SC064Q07WA,Proportion parent/guardians who: Assisted in fundraising for the school
+SC192Q01JA,"Last school yr, how often has school staff: Invited parents or guardians to volunteer for school activities"
+SC192Q02JA,"Last school yr, how often has school staff: Initiated communications with parents or guardians about school programmes"
+SC192Q03JA,"Last school yr, how often has school staff: Initiated communications with parents or guardians about their child's progress"
+SC192Q04JA,"Last school yr, how often has school staff: Included parents or guardians in making school decisions"
+SC192Q05JA,"Last school yr, how often has school staff: Provided information to parents or guardians about how to help students with homework and other curriculum-related activities"
+SC192Q06JA,"Last school yr, how often has school staff: Provided information to parents or guardians about how to help students improve their skills in mathematics"
+SC175Q01JA,Minutes in [class period] for: Mathematics
+SC175Q02JA,"Minutes in [class period] for: Average minutes in a [class period] across all subjects, including Mathematics"
+SC176Q01JA,What is the average size of mathematics classes in <national modal grade for 15-year-olds> in your school?
+SC003Q01TA,What is the average size of <test language> classes in <national modal grade for 15-year-olds> in your school?
+SC174Q01JA,How many foreign languages are being taught at your school <this academic year>?
+SC053Q01TA,"Does school offer this school yr: Band, orchestra or choir"
+SC053Q02TA,Does school offer this school yr: School play or school musical
+SC053Q03TA,"Does school offer this school yr: School yearbook, newspaper or magazine"
+SC053Q04TA,"Does school offer this school yr: Volunteering or service activities, e.g. [national examples]"
+SC053Q05NA,Does school offer this school yr: Mathematics club
+SC053Q06NA,"Does school offer this school yr: Mathematics competitions, e.g. [national examples]"
+SC053Q07TA,Does school offer this school yr: Chess club
+SC053Q08TA,Does school offer this school yr: Club with a focus on computers (e.g. programming or coding)
+SC053Q09TA,Does school offer this school yr: Art club or art activities
+SC053Q10TA,Does school offer this school yr: Sporting team or sporting activities
+SC053D11TA,"<This academic year>,follow. activities/school offers<national modal grade for 15-year-olds>? <country specific item>"
+SC212Q01JA,Study help for [national modal grade for 15-year-olds] students: Room(s) where the students can do their homework
+SC212Q02JA,Study help for [national modal grade for 15-year-olds] students: Staff help with homework
+SC212Q03JA,Study help for [national modal grade for 15-year-olds] students: Peer-to-peer tutoring
+SC034Q01NA,"How often students assessed by: Mandatory [standardised tests], e.g. [country specific example]"
+SC034Q02NA,How often students assessed by: Non-mandatory [standardised tests] (e.g. publicly or commercially available standardised test material like [country specific example])
+SC034Q03TA,How often students assessed by: Teacher-developed tests
+SC034Q04TA,How often students assessed by: Teachers' judgmental ratings
+SC035Q01NA,How student tests are used: [Standardised tests]: To guide students' learning
+SC035Q01NB,How student tests are used: Teacher-developed tests: To guide students' learning
+SC035Q02TA,How student tests are used: [Standardised tests]: To inform parents or guardians about their child's progress
+SC035Q02TB,How student tests are used: Teacher-developed tests: To inform parents or guardians about their child's progress
+SC035Q03TA,How student tests are used: [Standardised tests]: To make decisions about students' retention or promotion
+SC035Q03TB,How student tests are used: Teacher-developed tests: To make decisions about students' retention or promotion
+SC035Q04TA,How student tests are used: [Standardised tests]: To group students for instructional purposes
+SC035Q04TB,How student tests are used: Teacher-developed tests: To group students for instructional purposes
+SC035Q05TA,How student tests are used: [Standardised tests]: To compare the school to [district or national] performance
+SC035Q05TB,How student tests are used: Teacher-developed tests: To compare the school to [district or national] performance
+SC035Q06TA,How student tests are used: [Standardised tests]: To monitor the school's progress from year to year
+SC035Q06TB,How student tests are used: Teacher-developed tests: To monitor the school's progress from year to year
+SC035Q07TA,How student tests are used: [Standardised tests]: To make judgements about teachers' effectiveness
+SC035Q07TB,How student tests are used: Teacher-developed tests: To make judgements about teachers' effectiveness
+SC035Q08TA,How student tests are used: [Standardised tests]: To identify aspects of instruction or the curriculum that could be improved
+SC035Q08TB,How student tests are used: Teacher-developed tests: To identify aspects of instruction or the curriculum that could be improved
+SC035Q09NA,How student tests are used: [Standardised tests]: To adapt teaching to the students' needs
+SC035Q09NB,How student tests are used: Teacher-developed tests: To adapt teaching to the students' needs
+SC035Q10TA,How student tests are used: [Standardised tests]: To compare the school with other schools
+SC035Q10TB,How student tests are used: Teacher-developed tests: To compare the school with other schools
+SC035Q11NA,How student tests are used: [Standardised tests]: To award certificates to students
+SC035Q11NB,How student tests are used: Teacher-developed tests: To award certificates to students
+SC042Q01TA,School's policy for [national modal grade for 15-year-olds] students: Students are grouped by ability into different classes.
+SC042Q02TA,School's policy for [national modal grade for 15-year-olds] students: Students are grouped by ability within their classes.
+SC187Q01WA,"Which describes school's math classes: Mathematics classes study similar content, but at different levels of difficulty."
+SC187Q02WA,Which describes school's math classes: Different classes study different content or sets of mathematics topics that have different levels of difficulty.
+SC187Q03WA,Which describes school's math classes: Students are grouped by ability within their mathematics classes.
+SC187Q04WA,"Which describes school's math classes: In mathematics classes, teachers use pedagogy suitable for students with heterogeneous abilities (i.e. students are not grouped by ability)."
+SC177Q01JA,Who is responsible for this at your school: Choosing a student's mathematics course(s)
+SC177Q02JA,Who is responsible for this at your school: Choosing the level of difficulty of a student's mathematics course(s)
+SC177Q03JA,Who is responsible for this at your school: Choosing the number of mathematics courses or [class periods] that a student takes
+SC188Q01JA,Extent structures your school's math programme: [Local or municipal] curriculum standards or curriculum guides
+SC188Q02JA,Extent structures your school's math programme: [Regional or state] curriculum standards or curriculum guides
+SC188Q03JA,Extent structures your school's math programme: [National or federal] curriculum standards or frameworks
+SC188Q04JA,Extent structures your school's math programme: In-school curriculum frameworks and standards for learning
+SC188Q05JA,Extent structures your school's math programme: Results from [local or municipal] assessments
+SC188Q06JA,Extent structures your school's math programme: Results from [regional or state] assessments
+SC188Q07JA,Extent structures your school's math programme: Results from [national or federal ] assessments
+SC188Q08JA,Extent structures your school's math programme: Recommendations from school mathematics department
+SC188Q09JA,Extent structures your school's math programme: Discretion of individual teachers
+SC188Q10JA,Extent structures your school's math programme: Results from school assessments (e.g. quizzes or tests created by teachers)
+SC188Q11JA,Extent structures your school's math programme: Commercially designed programmes
+SC195Q01JA,"How often students assessed by: Mandatory [standardised tests], e.g. [country specific example]"
+SC195Q02JA,How often students assessed by: Non-mandatory [standardised tests] (e.g. publicly or commercially available standardised test material like [country specific example])
+SC195Q03JA,How often students assessed by: Teacher-developed tests
+SC195Q04JA,How often students assessed by: Teachers' judgmental ratings
+SC198Q01JA,Use of math achievement data in your school: Mathematics achievement data are posted publicly (e.g. in the media)
+SC198Q02JA,Use of math achievement data in your school: Mathematics achievement data are tracked over time by an administrative authority
+SC198Q03JA,Use of math achievement data in your school: Mathematics achievement data are provided directly to parents or guardians
+SC178Q01JA,Percentage of students who received these [marks] in math in last [school report]: [Marks] at or above the [pass mark]
+SC178Q02JA,Percentage of students who received these [marks] in math in last [school report]: [Marks] below the [pass mark]
+SC180Q01JA,Does your school offer additional math lessons apart from math lessons offered during the usual school hours?
+SC181Q01JA,Other types of math lessons offered: [Enrichment]
+SC181Q02JA,Other types of math lessons offered: [Remedial]
+SC181Q03JA,Other types of math lessons offered: Without differentiation depending on the prior achievement level of the students
+SC189Q02WA,"Applies to your school? The school has a policy on how to use [digital devices] in mathematics instruction (e.g. amount of computer use in mathematics lessons, use of specific mathematics computer programs)."
+SC189Q03WA,Applies to your school? All [national modal grade for 15-year-olds] mathematics classes in the school use the same textbook.
+SC189Q04WA,Applies to your school? Mathematics teachers in the school follow a standardised curriculum that specifies content at least on a monthly basis.
+SC189Q01JA,Applies to your school? The school has a specific policy to encourage the teaching and learning of [social and emotional skills].
+SC189Q05JA,Applies to your school? There is a mission statement describing the [social and emotional skills] we aim to foster in our school.
+SC189Q06JA,Applies to your school? Teachers are asked to evaluate students' [social and emotional skills] as a part of their grading.
+SC169Q01JA,Does your school offer career guidance to students in <national modal grade for 15-year-olds>?
+SC210Q01JA,Which statements best describe the situation for [national modal grade for 15-year-olds] students at your school?
+SC170Q01JA,Who has main responsibility for career guidance for [national modal grade for 15-year-olds] students at your school?
+SC171Q01JA,Does school offer this info to [national modal grade for 15-year-olds] students: Information about internships
+SC171Q02JA,Does school offer this info to [national modal grade for 15-year-olds] students: Information about future careers
+SC171Q03JA,Does school offer this info to [national modal grade for 15-year-olds] students: Information about future educational opportunities
+SC171Q04JA,Does school offer this info to [national modal grade for 15-year-olds] students: Information about student financing (e.g. student loans or grants)
+SC204Q01JA,Agree/disagree: Creativity can be trained.
+SC204Q02JA,Agree/disagree: People can be creative if they keep trying.
+SC204Q05JA,Agree/disagree: There are many different ways to be creative.
+SC204Q06JA,Agree/disagree: It is possible to be creative in nearly any subject.
+SC205Q01JA,Agree/disagree: Teachers in our school give students enough time to come up with creative solutions on assignments.
+SC205Q02JA,Agree/disagree: Teachers in our school value students' creativity.
+SC205Q03JA,Agree/disagree: Class activities in our school help students think about new ways to solve complex tasks.
+SC205Q05JA,Agree/disagree: Mathematics assignments at our school require students to come up with different solutions for a complex task.
+SC205Q06JA,Agree/disagree: Teachers in our school encourage students to come up with original answers.
+SC205Q07JA,"Agree/disagree: At our school, students are given a chance to express their ideas."
+SC207Q01JA,"Is this offered at your school, and how often offered: Art classes/activities (e.g. painting, drawing)"
+SC207Q02JA,"Is this offered at your school, and how often offered: Creative writing classes/activities"
+SC207Q03JA,"Is this offered at your school, and how often offered: Music classes/activities (e.g. chorus, band)"
+SC207Q04JA,"Is this offered at your school, and how often offered: Debate [club]"
+SC207Q05JA,"Is this offered at your school, and how often offered: Dramatics, theatre class/activities"
+SC207Q06JA,"Is this offered at your school, and how often offered: Publications (e.g. newspaper, [yearbooks], literary magazine)"
+SC207Q07JA,"Is this offered at your school, and how often offered: Science [club]"
+SC207Q08JA,"Is this offered at your school, and how often offered: Computer programming classes/activities"
+SC208Q01JA,Agree/disagree: Most students at my school are creative.
+SC208Q02JA,Agree/disagree: Most students at my school enjoy doing creative projects.
+SC208Q03JA,Agree/disagree: Most students at my school perform well when given the freedom to be creative.
+SC208Q04JA,Agree/disagree: Most students at my school enjoy work that is challenging.
+SC208Q05JA,Agree/disagree: Most students at my school enjoy learning new things.
+SC208Q06JA,Agree/disagree: Most students at my school perform well when given complex problems to solve.
+SC208Q07JA,Agree/disagree: Most students at my school are artistic.
+SC208Q08JA,Agree/disagree: Most students at my school are imaginative.
+SC208Q09JA,Agree/disagree: Most students at my school are able to think of many new ideas.
+SC213Q01JA,"In last 3 yrs, how many school days was school closed due to: Number of school days closed because of COVID-19:"
+SC213Q02JA,"In last 3 yrs, how many school days was school closed due to: Number of school days closed for another reason (e.g. a natural disaster, strikes or demonstrations, air pollution):"
+SC214Q01JA,"During COVID closures, instruction organized: Classes were taught remotely using digital devices."
+SC214Q02JA,"During COVID closures, instruction organized: Students were asked to complete classes on their own based on materials distributed to them."
+SC214Q03JA,"During COVID closures, instruction organized: Classes were cancelled and not replaced by remote instruction."
+SC215Q01JA,"During COVID closures, did school offer students: Paper textbooks, workbooks, or worksheets"
+SC215Q02JA,"During COVID closures, did school offer students: Digital textbooks, workbooks, or worksheets"
+SC215Q03JA,"During COVID closures, did school offer students: Real-time lessons by a teacher from my school on a video communication program (e.g. [ZoomTM], [SkypeTM], [Google® MeetTM], [Microsoft® Teams])"
+SC215Q04JA,"During COVID closures, did school offer students: Recorded lessons or other digital material created by teachers from my school"
+SC215Q05JA,"During COVID closures, did school offer students: Recorded lessons or other digital material created by others outside of school"
+SC215Q06JA,"During COVID closures, did school offer students: Additional instructional resources for students with special learning needs"
+SC215Q07JA,"During COVID closures, did school offer students: Additional instructional resources for students whose [heritage language] is different from [test language]"
+SC215Q08JA,"During COVID closures, did school offer students: Lessons broadcast over television or radio"
+SC216Q01JA,"During COVID closures, remote instruction hindered by: Lack of access to digital devices among students"
+SC216Q02JA,"During COVID closures, remote instruction hindered by: Lack of access to digital devices among teachers"
+SC216Q03JA,"During COVID closures, remote instruction hindered by: Lack of access to the Internet among students"
+SC216Q04JA,"During COVID closures, remote instruction hindered by: Lack of access to the Internet among teachers"
+SC216Q05JA,"During COVID closures, remote instruction hindered by: Lack of learning management systems or school learning platforms (e.g. [Blackboard®], [Edmodo®], [Moodle®], [Google® Classroom™])"
+SC216Q06JA,"During COVID closures, remote instruction hindered by: Lack of educational materials for distance learning (e.g. textbooks, workbooks, worksheets, instructional videos)"
+SC216Q07JA,"During COVID closures, remote instruction hindered by: Difficulty getting in touch with students while school buildings were closed"
+SC216Q08JA,"During COVID closures, remote instruction hindered by: Shortage of teachers available to provide remote instruction"
+SC216Q09JA,"During COVID closures, remote instruction hindered by: Lack of experience in providing remote instruction among teachers"
+SC217Q01JA,"During COVID closures, were teachers asked to: Communicate with students through written notes or letters"
+SC217Q02JA,"During COVID closures, were teachers asked to: Communicate with students through email"
+SC217Q03JA,"During COVID closures, were teachers asked to: Conduct virtual office hours or meetings with students"
+SC217Q04JA,"During COVID closures, were teachers asked to: Answer students' questions over the phone"
+SC217Q05JA,"During COVID closures, were teachers asked to: Initiate calls to students (e.g. phone, Skype™)"
+SC217Q06JA,"During COVID closures, were teachers asked to: Ask parents or guardians for their help with their child's distance learning"
+SC217Q07JA,"During COVID closures, were teachers asked to:  Initiate communications (e.g. email, phone, [SkypeTM]) with parents or guardians about their child's progress"
+SC217Q08JA,"During COVID closures, were teachers asked to: Provide information to parents or guardians about how to help their child with school work"
+SC217Q10JA,"During COVID closures, were teachers asked to: Keep track of students' completion of distance learning assignments"
+SC218Q01JA,"During COVID closures, did the school keep track of students' attendance in distance learning activities?"
+SC219Q01JA,"During COVID closures, approximately what percentage of students attended distance learning activities in a typical week?"
+SC220Q01JA,"During COVID closures, approximately what percentage of students did not attend any distance learning activities?"
+SC221Q01JA,"During COVID closures, resources for teachers' remote instruction: Regular meetings with other teachers and staff"
+SC221Q02JA,"During COVID closures, resources for teachers' remote instruction: Online platforms and tools for self-directed or collaborative learning (e.g. online forums, discussion boards, professional communities)"
+SC221Q03JA,"During COVID closures, resources for teachers' remote instruction: Tools that help teachers develop remote instruction plans (e.g. digital lesson planners, compiled resources and guides offered by organisations)"
+SC221Q04JA,"During COVID closures, resources for teachers' remote instruction: Professional development activities focused on how to provide remote instruction"
+SC222Q01JA,"During COVID closures, extent you felt these groups supported your school:  A national educational authority"
+SC222Q02JA,"During COVID closures, extent you felt these groups supported your school:  A regional educational authority"
+SC222Q03JA,"During COVID closures, extent you felt these groups supported your school:  A local educational authority"
+SC222Q04JA,"During COVID closures, extent you felt these groups supported your school:  Students' parents or guardians"
+SC222Q05JA,"During COVID closures, extent you felt these groups supported your school:  Private donors"
+SC223Q01JA,"School prepare by? Training teaching staff on the use of video communication programs (e.g. Zoom™, Skype™, Google® Meet™, Microsoft® Teams) for remote instruction"
+SC223Q02JA,"School prepare by? Training students on the use of video communication programs (e.g. Zoom™, Skype™, Google® Meet™, Microsoft® Teams) for remote instruction"
+SC223Q03JA,"School prepare by? Preparing digital material for remote instruction (e.g. reorganising existing resources, designing new resources)"
+SC223Q04JA,"School prepare by? Preparing paper-based material for remote instruction (e.g. reorganising existing resources, designing new resources)"
+SC223Q05JA,"School prepare by? Adapting existing curriculum plans for remote instruction (e.g. modifying course requirements, sequence of lessons, grading policies)"
+SC223Q06JA,"School prepare by? Preparing digital materials for assessing student learning via online assessment (e.g. quizzes, tests)"
+SC223Q07JA,School prepare by? Compiling instructional resources for parents or guardians to support their child's learning outside the school
+SC223Q08JA,School prepare by? Ensuring that students have access to digital devices for remote instruction
+SC223Q09JA,School prepare by? Ensuring that teaching staff have access to digital resources for remote instruction
+SC223Q10JA,School prepare by? Preparing a plan for transitioning students and teachers from classroom-based instruction to remote instruction
+SC155Q06HA,Agree/disagree: Teachers have the necessary technical and pedagogical skills to integrate digital devices in instruction.
+SC155Q07HA,Agree/disagree: Teachers have sufficient time to prepare lessons integrating digital devices.
+SC155Q08HA,Agree/disagree: Effective professional resources for teachers to learn how to use digital devices are available.
+SC155Q09HA,Agree/disagree: An effective online learning support platform is available.
+SC155Q10HA,Agree/disagree: Teachers are provided with incentives to integrate digital devices in their teaching.
+SC155Q11HA,Agree/disagree: The school has sufficient qualified technical assistant staff.
+SC224Q01JA,How prepared is your school to provide remote instruction if closed to students for an extended period in the future?
+SC209Q04JA,Have you: I have spoken to teachers at my school about the importance of the PISA test.
+SC209Q05JA,Have you: I have spoken to parents or guardians about the importance of the PISA test.
+SC209Q06JA,Have you: I have encouraged the students at my school to do their best during the PISA test.
+PRIVATESCH,"School type derived from sampling information; values = public, private, missing"
+SCHLTYPE,School type
+SCHSIZE,School size (Sum)
+TOTAT,Total number of all teachers at school (Sum)
+PROATCE,Proportion of all teachers fully certified
+PROPAT6,Proportion of all teachers with at least ISCED level 6 Bachelor qualification
+PROPAT7,Proportion of all teachers with at least ISCED level 7 Master qualification
+PROPAT8,Proportion of all teachers with ISCED level 8 Doctoral qualification
+STRATIO,Student-teacher ratio
+TOTMATH,Total number of mathematics teachers at school (Sum)
+PROPMATH,Proportion of mathematics teachers at school
+SMRATIO,Student-mathematics teacher ratio
+TOTSTAFF,Total number of non-teaching staff at school
+PROPSUPP,Proportion of personnel for pedagogical support
+PROADMIN,Proportion of school administrative personnel
+PROMGMT,Proportion of school management personnel
+PROOSTAF,Proportion of other non-teaching staff
+SCHSEL,School selectivity
+SCHAUTO,School autonomy (WLE)
+TCHPART,Teacher participation (WLE)
+SRESPCUR,School responsibility for curriculum
+SRESPRES,School responsibility for resources
+EDULEAD,Educational leadership (WLE)
+INSTLEAD,Instructional leadership (WLE)
+ENCOURPG,School encouragement of parent or guardian involvement (WLE)
+RATCMP1,Availability of computers
+RATCMP2,Computers connected to the Internet
+RATTAB,Availability of tablet devices
+DIGDVPOL,Digital device policies at school (WLE)
+TEAFDBK,Feedback to teachers (WLE)
+MTTRAIN,Mathematics teacher training (WLE)
+DMCVIEWS,School diversity and multi-cultural views (WLE)
+NEGSCLIM,Negative school climate (WLE)
+STAFFSHORT,Shortage of educational staff (WLE)
+EDUSHORT,Shortage of educational material (WLE)
+STUBEHA,Student-related factors affecting school climate (WLE)
+TEACHBEHA,Teacher-related factors affecting school climate (WLE)
+MCLSIZE,Math class size
+CLSIZE,Class size (test language class)
+STDTEST,Use of standardized tests (WLE)
+TDTEST,Use of teacher-developed tests (WLE)
+CREACTIV,Creative extra-curricular activities (3 activities)
+ALLACTIV,Extra-curricular activities offered (all) (WLE)
+MACTIV,Mathematics-related extra-curricular activities at school
+MATHEXC,Mathematics extension courses offered at school
+ABGMATH,Ability grouping for mathematics classes
+BCREATSC,Beliefs about creativity (WLE)
+CREENVSC,Creative school environment (WLE)
+ACTCRESC,Creative school activities offered (WLE)
+OPENCUL,Openness culture/climate (WLE)
+SCSUPRTED,School Closure Support from Education Authorities
+SCSUPRT,School Closure Support from Other Sources
+PROBSCRI,Problems with Schools’ Capacity to Provide Remote Instruction (WLE)
+SCPREPBP,"School Preparation for Remote Instruction, Before Pandemic (WLE)"
+SCPREPAP,"School Preparation for Remote Instruction, In Response to Pandemic (WLE)"
+DIGPREP,Preparedness for Digital Learning (WLE)
+W_SCHGRNRABWT,GRADE NONRESPONSE ADJUSTED SCHOOL BASE WEIGHT
+W_FSTUWT_SCH_SUM,Sum of W_FSTUWT
+W_FSTUWT_SCH_N,N of W_FSTUWT
+SENWT,Senate Weight (sum of 5000 per country)
+VER_DAT,Date of the database creation
+test,NA
