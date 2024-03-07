@@ -9,6 +9,12 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Abstract 
+
+Education is the backbone of long-term economic prosperity. Thus, studying the educational landscapes of different countries for comparative reasons allows researchers to derive best practices that can be moulded into policies for the benefit of the collective well-being of communities in the regions. In this context, we conduct a detailed examination of school efficiency across 1190 schools at the NUTS2 regions of the Visegrad countries, namely Hungary, Poland, the Czech Republic, and the Slovak Republic, utilizing the rich dataset provided by PISA 2019. The dataset compiled for this research consists of an integrated mix of data, where student-level performance metrics and scores are aggregated to reflect school-level outcomes. This comprehensive dataset includes detailed information about the internal environment of each school, as well as the external factors surrounding it. Our analysis is threefold: first, we employ Data Envelopment Analysis (DEA) that identifies key factors contributing to school effectiveness and best practices in terms of student performancces; second, we employ a double-bootstrap procedure to estimate the contribution of various non-discretionary variables on school efficiency (related to the schools and to the region in question); and third, we conduct a Meta-Efficiency analysis across the four countries to unravel hidden patterns of inefficiencies. Our approach provides comprehensive analysis and insights that have actual practical policy implications, which can be tailored to the regional context of each of the countries in our study.
+
+
+
 ## Introduction
 
   importance of education for prosperity and sustainable development. education and the motor of innovation. 
@@ -33,6 +39,19 @@ description of the DEA model and its parameters and specifications, its use on s
 results of the efficiency, multipliers and the intensity weights
 
 all the plots
+
+| Variable                      | CZE                            | HUN                            | POL                            | SVK                            |
+|-------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|
+| **Intercept**                 | 1.626* <br> (1.511, 1.742)     | 1.545* <br> (1.376, 1.727)     | 1.568* <br> (1.458, 1.673)     | 1.686* <br> (1.541, 1.824)     |
+| **Student Behavior Issue Mean** | 0.122* <br> (0.092, 0.154)      | 0.227* <br> (0.170, 0.283)      | 0.102* <br> (0.067, 0.138)      | 0.097* <br> (0.062, 0.134)      |
+| **Teacher Behavior Issue Mean** | -0.069* <br> (-0.099, -0.039)  | -0.053 <br> (-0.110, 0.006)     | -0.043 <br> (-0.076, -0.010)    | -0.044 <br> (-0.088, -0.000)    |
+| **Resources Issue Mean**      | 0.032* <br> (0.004, 0.059)     | -0.046 <br> (-0.099, 0.007)     | -0.023 <br> (-0.054, 0.009)     | -0.001 <br> (-0.034, 0.032)     |
+| **Staff Issues Mean**         | -0.009 <br> (-0.033, 0.016)    | -0.010 <br> (-0.060, 0.041)     | -0.019 <br> (-0.050, 0.014)     | 0.014 <br> (-0.018, 0.046)      |
+| **Total Class Periods**       | -0.015* <br> (-0.018, -0.012)  | -0.007* <br> (-0.011, -0.004)   | -0.010* <br> (-0.013, -0.009)   | -0.015* <br> (-0.018, -0.011)   |
+| **SCHSIZE**                   | 0.0002* <br> (0.0001, 0.0003)  | -0.0001 <br> (-0.0003, 0.0001)  | -0.0001* <br> (-0.0002, -0.0000)| 0.0002* <br> (-0.0000, 0.0004)  |
+| **SC001Q01TA**                | -0.016* <br> (-0.030, -0.002)  | -0.047* <br> (-0.073, -0.022)   | -0.030* <br> (-0.047, -0.015)   | -0.051* <br> (-0.075, -0.029)   |
+| **TOTAT**                     | -0.003 <br> (-0.004, -0.001)   | -0.001 <br> (-0.003, 0.002)     | 0.0004 <br> (-0.001, 0.002)     | -0.004* <br> (-0.007, -0.001)   |
+
 
 
 ## Discussion

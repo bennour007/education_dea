@@ -140,6 +140,7 @@ school_issues <- c(
 
 school_data_vars <- c(
   "SC001Q01TA", # Community type where the school is located
+  "SC011Q01TA", # number of schools in the area (3 none, 2 one school, 1 two ore more schools)
   "SCHSIZE",    # Total number of students enrolled in the school
   "SC002Q01TA", # Total school enrollment - Number of boys
   "SC002Q02TA", # Total school enrollment - Number of girls

@@ -3,6 +3,7 @@ sch <- read_csv('clean_data/schools.csv')
 
 school_data_vars <- c(
   "SC001Q01TA", # Community type where the school is located
+  "SC011Q01TA", # number of schools in the area (3 none, 2 one school, 1 two ore more schools)
   "SCHSIZE",    # Total number of students enrolled in the school
   "SC002Q01TA", # Total school enrollment - Number of boys
   "SC002Q02TA", # Total school enrollment - Number of girls
@@ -36,5 +37,5 @@ data_full <- stu %>%
     mean_reading_attitude, 
     mean_science_attitude, 
     mean_math_attitude
-  ) %>%
-  readr::write_csv('clean_data/clean_united_data.csv')
+  ) 
+  # readr::write_csv(data_full,'clean_data/clean_united_data.csv')
