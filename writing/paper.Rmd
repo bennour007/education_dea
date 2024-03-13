@@ -19,6 +19,14 @@ dea_out_1 <- read_rds(here::here("results", "dea_out_1.rds"))
 
 ## Abstract 
 
+# change the names of the vars in the tables
+# put larger tables in portrait mode
+# add literature to the ND var subsections
+# talk about the descriptives of the data
+# interpret the results 
+# finalize the citations 
+# discuss (the disposability test, generalization problem, more dimensions to add, time, student vs school level issue of aggregation)
+
 Education is the backbone of long-term economic prosperity. Thus, studying the educational landscapes of different countries for comparative reasons allows researchers to derive best practices that can be moulded into policies for the benefit of the collective well-being of communities in the regions. In this context, we conduct a detailed examination of school efficiency across 1190 schools at the NUTS2 regions of the Visegrad countries, namely Hungary, Poland, the Czech Republic, and the Slovak Republic, utilizing the rich dataset provided by PISA 2019. The dataset compiled for this research consists of an integrated mix of data, where student-level performance metrics and scores are aggregated to reflect school-level outcomes. This comprehensive dataset includes detailed information about the internal environment of each school, as well as the external factors surrounding it. Our analysis is threefold: first, we employ Data Envelopment Analysis (DEA) that identifies key factors contributing to school effectiveness and best practices in terms of student performancces; second, we employ a double-bootstrap procedure to estimate the contribution of various non-discretionary variables on school efficiency (related to the schools and to the region in question); and third, we conduct a Meta-Efficiency analysis across the four countries to unravel hidden patterns of inefficiencies. Our approach provides comprehensive analysis and insights that have actual practical policy implications, which can be tailored to the regional context of each of the countries in our study.
 
 
