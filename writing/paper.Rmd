@@ -2,11 +2,17 @@
 title: "Untitled"
 author: "Bennour Mohamed Hsin"
 date: "2024-02-04"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+pacman::p_load(tidyverse, gt)
+
+data_full <- readr::read_csv('clean_data/clean_united_data.csv')
+dea_out_1 <- read_rds(here::here("results", "dea_out_1.rds"))
 ```
 
 ## Abstract 
@@ -17,24 +23,427 @@ Education is the backbone of long-term economic prosperity. Thus, studying the e
 
 ## Introduction
 
-  importance of education for prosperity and sustainable development. education and the motor of innovation. 
-  
-  the literature trends in assessing school systems (what is important for school systems, make the right things vs making things right). 
-  
-  using efficiency analysis as a methodology to analyze school systems as a proposition to solve the problem.
+Knowledge plays a pivotal role in shaping a nation's economic landscape, driving growth and prosperity [@hanushek2020_a] and [@hanushek2020_b]. It is considered a major factor for enhancing productivity and influencing a nation's overall economic situation [@jdadams1990]. The increasing of a nation's knowledge stock is closely related to the increasing of its human capital, achieved through investments in technology and training [@inglesi-lotz_2013] and [@hanushek2020_b]. Additionally [@hanushek2021] determined that the overall prevalence of patience and risk-taking practices across countries accounts for nearly two thirds of the variations that drives this investment in Human Capital, which is to say that there are specific dynamics that govern these mechanics of influence. 
+This deliberate effort in investing in the Human Capital results in a multiplier effect for the economies in question, fostering innovation, encouraging healthy competition, and contributing to comprehensive growth and development [@inglesi-lotz_2014] and [@pmromer1989], this was also emphasized by [@cunha2006] who explicitly mentioned this multiplier effect of skill gains. The emphasis on knowledge (tacit knowledge, know-how, skills of different dimensions) has consistently been associated with a nation's education system and its quality, strongly linked to long-term economic growth development and overall prosperity, for instance [@hanushek2012] derived a causal effect of cognitive skills of a population on the long-term economic growth rates across countries.However, sustaining this correlation becomes a challenge as the socio-economic contexts and conditions change and evolve [@hanushek2016].
+Understanding the mechanics that drives investment in Human Capital, and the causal effect of cognitive skills on economic growth are both a great starting point to address what constitutes these skills, and how they are acquired, by whom, and more imortantly how can agents of interest in this context optimize their return on investment and make sure that the resources enabled for this process are fully utilized, hence the focus on education, and educational institutions. 
+The literature provided various scopes on how to approach educational landscapes from this perspective, two main scopes are efficiency (doing the right things) and effectiveness (doing things right). Essentially effectiveness focus on the practices (resources, operations, pedagogy, etc) that yields a desired result in terms of output, whereas efficiency (the scope of this paper) focuses on the operational dimension of these practices and how to maximize a desired output given a status quo of inputs. [@dewitte2017] in a comprehensive review criticizes the dychotomy between the literature on efficiency and effectiveness in the context of an educational landscape, arguing that both scopes have distinct contributions that must be connected together for a rather comprehensive understanding of the issues challenges and adavantages of a given system. 
+For the purposes of this paper we will approach the problem of assessing an educational landscape from the efficiency perspective, essentially given the finite nature of resources that are versed into a given system and because of the public nature of a majority of the education instituion which require additional attention to the policies implemented and their results and consequences on the public. This justifies the study of education systems as it allows to pinpoints the advantages and challenges that countries face in terms of educational excellence. following this line of thought, [@worthington2001] assumes that education institutions conduct a basic transformation of inputs into outputs, and this transformation can be proxied with a production function which can be estimated directly (parametrically) or indirectly (non-parametrically). Using Frontier estimation methods such as Data-envelopment-Analysis ([@charnes1978]) or Stochastic-Frontier-Analysis ([@aigner1977]) (or other similar methodologies) expanded the analysis tools that researchers used to approach educational institutions from the input/output perspective. 
+Building on this, frontier methodologies are often utilized in a two-stage set up to further assess how efficient Decision Making Units (or DMU) react with other non-discretionary variables, this methodology has been observed in various studies including [@mayston_jesson1988], [@ray2004], and [@ruggiero2004] among others.
+For this paper we decided to adopt this approach where we estimate (non-parametrically) the production function of our school sample with the means of Data-envelopment-analysis (or DEA, yielding efficiency scores) in the first stage then we use a a double-bootstrap process (following [@sw2007]) to estimate a truncated regression that enables inference on some non-discretionary factors within the DMUs and around it. 
+In this study we will use a sample of schools spanning across the Visegrad countries (V4: ) extracted from the PISA survey data of 2022. This data allows us to specify a set of inputs, outputs, and non discretionary  factors that we will use to derive best practices, and to derive inference in the second stage of our analysis. 
+The remaining of the paper is as follows: section 2 will introduce the methodology and data used in the study, section 3 will provide the results, section 4 will present a discussion, and finally we conclude in section 5. 
 
 
-## Methodology
+
+## Data and Methodology
+
+The literature is rich with studies regarding assessing educational landscapes of regions or cities (example: [@Butler_Monk_1985], [@Sengupta_Sfeir_1986], [@Barrow_1991], [@Ruggiero_1996a], [@Fukuyama_Weber_2002], [@Banker_et_al_2004], [@Davutyan_et_al_2010], and [@Johnson_Ruggiero_2014]), as well as countries (example: [@Gershberg_Schuermann_2001], [@Hanushek_Luque_2003], [@Afonso_Aubyn_2006], [@Kocher_et_al_2006], [@Gimenez_et_al_2007], [@Agasisti_2011b], [@Thieme_et_al_2012], and [@Aristovnik_2013]). There are also studies that tackles the assessment process from other angles, for example [@Cooper_Cohn_1997] (used data on classes in South Carolina) and [@De_Witte_Rogge_2011] (assessed teachers' performance across various college courses). Additionally other papers studied and assessed the student level performance, including [@Thanassoulis_1999], [@Colbert_et_al_2000], [@Thanassoulis_Portela_2002], [@Dolton_et_al_2003], [@Johnes_2006b], [@Deutsch_et_al_2013], [@Portela_et_al_2013], [@Thieme_et_al_2013], [@Crespo-Cebada_et_al_2014], and [@Podinovski_et_al_2014] to cite a few. Another scope of analysis remains, and that's the school level assessment which can be found in [@Bessent_Bessent_1980], [@Charnes_et_al_1981], [@Bessent_et_al_1982],  [@Ray_1991], [@Thanassoulis_1996],  [@Bradley_et_al_2001], [@Ouellette_Vierstraete_2005], [@Grosskopf_et_al_2009], [@Essid_et_al_2010],  [@Agasisti_2011a], [@Johnes_et_al_2012], [@Burney_et_al_2013], and [@Brennan_et_al_2014] among others. 
+
+Moreover, in order to assess these educational institutions (at any level of analysis), different methodologies can be used and employed depending on the premis, the need, and the objective of the study. In the realm of frontier analysis, DEA is the most common methodology used in such papers, however, DEA is commonly combined with other methodologies as well such as Bootstrapping [@essid2010; @essid2013], or simply a regression procedure (be it ols, tobit or truncated) [@ruggiero1998; @afonso2006; @agasisti2007; @johnes2012] or even using the Malmquist index [@worthington2008; @ouellette2010; @essid2014] to cite a few. [@dewitte2017] provides one of the most comprehensive reviews of the literature in this regard.  
+
+In this paper we will adopt the school level analysis scope. The assumption that Educaitional institutions can be regarded as productive units that transforms inputs into outputs ([@worthington2001]), enables researchers to scrutinize data on school level with flexibility regarding the scope of the study or the angle of investigation. For this reason, efficiency analysis, especially DEA, has been quite popular in the literature as it captures the mechanics of this said transformation by estimating the frontier of efficient DMUs (in which the deviation from the efficiency frontier is assumed to be entirely due to inefficiency). However, these institutions, schools in particular, are not isolated entities. In fact, there's multiple factors that affect a school's performance spanning from the individual circumstances of the students, teachers, and staff of that school, to the environmental factors surrounding it, from infrastructure, location, and other competing schools. 
+
+In order to conduct the investigation on the influential environmental factors on the efficiency of the schools in the Visegrad countries,  we will leverage the PISA survey data from 2022 in a two-stage analysis, where in the first stage we estimate the efficiency of our units in each country, then we run a double bootstrap procedure that estimates the influence of each environmental factor in a truncated regression. In this section we will delve into more details on the data we used, the approach we adopt, and the model specifications.
 
 
-Description of the data, sources and preparation 
+### Data
 
-descriptive summary of the data
+The PISA survey data is commonly used by researcher as it contains comprehensive information on many levels for multiple countries within the OECD and outside it. The survey contains multiple response files, on Student level, School level, and Teacher level (among others). The popularity of the use of this PISA survey data is reflected by the amount of papers published containing 'PISA data' or 'PISA survey' as a keyword which amounts to 322 papers from the Web of Science database and 414 from the Scopus database, between 2003 and 2024. 
+In our study we combine a set a variables on school level and student level to build a comprehensive and aggregated school level data set that contain enough information that can be leveraged by the methodology we use to investigate the effect of non-discretionary variables on school efficiency for the Visegrad countries (Hungary (HUN), Poland (POL), Czech Republic (CZE), Slovak Republic (SVK)). Our final clean dataset contains 1180 observations originally, and 1085 observation after removing the missing values. The decomposition of the final dataset by country is described in table 1. 
 
-description of the DEA model and its parameters and specifications, its use on similar data and the expected results
+```{r echo=FALSE}
+data_full %>% 
+  na.omit() %>% 
+  group_by(CNT) %>% 
+  summarise(count = n()) %>% 
+  gt()
+```
+Table 2 provide a full description of the final 
+
+
+```{r echo=FALSE}
+
+variables <- c("SC001Q01TA", "SC011Q01TA", "SCHSIZE", "SC002Q01TA", "SC002Q02TA",
+               "STRATIO", "TOTAT", "student_behavior_issue_mean", "teacher_behavior_issue_mean",
+               "resources_issue_mean", "staff_issues_mean", "total_homework_time",
+               "total_class_periods", "mean_PV_science", "mean_PV_reading", "mean_PV_math",
+               "mean_reading_attitude", "mean_science_attitude", "mean_math_attitude")
+
+data_full %>% 
+  na.omit() %>% 
+  # group_by(CNT) %>% 
+  summarise(
+    across(
+      all_of(variables),
+      list(min = ~min(.x, na.rm = TRUE), 
+                         max = ~max(.x, na.rm = TRUE),
+                         mean = ~mean(.x, na.rm = TRUE), 
+                         sd = ~sd(.x, na.rm = TRUE)), 
+      .names = "{.col}__{.fn}"
+    )
+  ) %>% 
+  pivot_longer(1:76, names_to = 'variable', values_to = 'value') %>% 
+  separate(variable, c('variable', 'measure'), sep = '__') %>% 
+  pivot_wider(names_from = measure, values_from = value) %>% 
+  gt()
+```
+<div align="center">
+
+```{r echo=FALSE}
+
+data_full %>% 
+  na.omit() %>% 
+  group_by(CNT) %>%
+  summarise(
+    across(
+      all_of(variables),
+      list(min = ~min(.x, na.rm = TRUE), 
+                         max = ~max(.x, na.rm = TRUE),
+                         mean = ~mean(.x, na.rm = TRUE), 
+                         sd = ~sd(.x, na.rm = TRUE)), 
+      .names = "{.col}__{.fn}"
+    )
+  ) %>% 
+  pivot_longer(2:77, names_to = 'variable', values_to = 'value') %>% 
+  separate(variable, c('variable', 'measure'), sep = '__') %>% 
+  pivot_wider(names_from = variable, values_from = value) %>% 
+  gt() %>% 
+  tab_options(
+    table.width = pct(50) # Ensure the table uses the full page width
+    # column_labels.text_wrap = TRUE, # Wrap column headers
+    # data_row.text_wrap = TRUE # Wrap data rows
+  )
+```
+</div>
+
+
+
+#### Inputs 
+
+Choosing the inputs that will be used in our analysis is very important for few reasons. First, in the context of analyzing schools' efficiency, the inputs of schools are almost fixed, thus we have to use plausible inputs with enough variation. We decided to use as  inputs the students to teacher ratio (STRATIO) which has been used in other studies such as [@Bessent_Bessent_1980; @Charnes_et_al_1981;  @Ray_1991; @Johnes_1996; @Cooper_Cohn_1997; @Heshmati_Kumbhakar_1997;  @Afonso_Aubyn_2006; @Johnes_Yu_2008; @Cherchye_et_al_2010; @Agasisti_2011b; @Agasisti_2013; @Johnes_2013; @Zoghbi_et_al_2013] among others and the total number of schooling hours (total_class_period)  which has been used in similar studies such as [@rebai2020; @benyahia2018] to cite a few. 
+
+
+```{r echo=FALSE}
+data_full %>% 
+  na.omit() %>% 
+  select(CNT, STRATIO, total_class_periods) %>% 
+  group_by(CNT) %>%
+  summarise(
+    across(
+      c(STRATIO, total_class_periods),
+      list(min = ~min(.x, na.rm = TRUE), 
+                         max = ~max(.x, na.rm = TRUE),
+                         mean = ~mean(.x, na.rm = TRUE), 
+                         sd = ~sd(.x, na.rm = TRUE)), 
+      .names = "{.col}__{.fn}"
+    )
+  ) %>% 
+  pivot_longer(2:ncol(.), names_to = 'variable', values_to = 'value') %>% 
+  separate(variable, c('variable', 'measure'), sep = '__') %>% 
+  pivot_wider(names_from = variable, values_from = value) %>% 
+  gt()
+```
+
+
+
+
+#### Outputs
+
+For the output we will adopt variables depicting aggregate (average) students' test scores by school, these aggregations describe the average scores students got for each school in MATH, READING, and SCIENCE. This is in accordance with multiple studies in this context such as[@Bessent_Bessent_1980; @Charnes_et_al_1981; @Afonso_Aubyn_2006;  @Cherchye_et_al_2010; @Essid_et_al_2010; @Essid_et_al_2013; @De_Witte_Kortelainen_2013; @De_Witte_et_al_2013; @rebai2020; @benyahia2018]
+
+```{r echo=FALSE}
+data_full %>% 
+  na.omit() %>% 
+  select(CNT, mean_PV_science, mean_PV_reading, mean_PV_math) %>% 
+  group_by(CNT) %>%
+  summarise(
+    across(
+      c(mean_PV_science, mean_PV_reading, mean_PV_math),
+      list(min = ~min(.x, na.rm = TRUE), 
+                         max = ~max(.x, na.rm = TRUE),
+                         mean = ~mean(.x, na.rm = TRUE), 
+                         sd = ~sd(.x, na.rm = TRUE)), 
+      .names = "{.col}__{.fn}"
+    )
+  ) %>% 
+  pivot_longer(2:ncol(.), names_to = 'variable', values_to = 'value') %>% 
+  separate(variable, c('variable', 'measure'), sep = '__') %>% 
+  pivot_wider(names_from = variable, values_from = value) %>% 
+  gt()
+```
+
+
+#### Non-discretionary variables
+
+The final piece of our data is the non-discretionary variables which we will use to assess the contribution of environmental variables in the schools and around them on the their efficiency. These variables are typically used in a two-stage analysis such as ours and provide insights that enables inference in order to understand what can be done (according to the sample of the study) to imptove the school efficiency that maximizes the output of test scores. We incorporated in the second stage of our analysis variables regarding behavior issues (absence, delinquency, harassment, violence, etc) of students (student_behavior_issue_mean), teachers (teacher_behavior_issue_mean), and staff  (staff_issues_mean), as well as issues of available resources in the premis including personal and material resources  (resources_issue_mean), number of schools in the area (SC011Q01TA, 3 none, 2 one school, 1 two ore more schools),  Community type where the school is located (SC001Q01TA, 1 urban, 0 rural), school size depicted by the number of enrolled students in the school (SCHSIZE), and the total number of all teachers at the school (TOTAT).
+
+```{r echo=FALSE}
+data_full %>% 
+  na.omit() %>% 
+  select(CNT, 
+         student_behavior_issue_mean,
+          teacher_behavior_issue_mean,
+          resources_issue_mean,
+          staff_issues_mean,
+          # total_homework_time, #I dont think this is necessary
+          # total_class_periods,
+          SC011Q01TA, # number of schools in the area (3 none, 2 one school, 1 two ore more schools)
+          # STRATIO,
+          SCHSIZE,
+          SC001Q01TA, # Community type where the school is located
+          TOTAT # Total number of all teachers at the school
+         ) %>% 
+  group_by(CNT) %>%
+  summarise(
+    across(
+      c(student_behavior_issue_mean,
+          teacher_behavior_issue_mean,
+          resources_issue_mean,
+          staff_issues_mean,
+          # total_homework_time, #I dont think this is necessary
+          # total_class_periods,
+          SC011Q01TA, # number of schools in the area (3 none, 2 one school, 1 two ore more schools)
+          # STRATIO,
+          SCHSIZE,
+          SC001Q01TA, # Community type where the school is located
+          TOTAT # Total number of all teachers at the school
+        ),
+      list(min = ~min(.x, na.rm = TRUE), 
+                         max = ~max(.x, na.rm = TRUE),
+                         mean = ~mean(.x, na.rm = TRUE), 
+                         sd = ~sd(.x, na.rm = TRUE)), 
+      .names = "{.col}__{.fn}"
+    )
+  ) %>% 
+  pivot_longer(2:ncol(.), names_to = 'variable', values_to = 'value') %>% 
+  separate(variable, c('variable', 'measure'), sep = '__') %>% 
+  pivot_wider(names_from = variable, values_from = value) %>% 
+  gt()
+```
+
+### Methodology
+
+
+The choice of the methodology is directly linked to the objective of this study. Since our aim is to investigate the environmental factors that influence the efficiency of schools in our sample we will first start by determining how we will estimate this efficiency, an then we will need to estimate the contributions of the other factors. Thus a two-stage analysis in plausible for this purpose. This two-stage analysis is based on an initial estimation of the efficiency using DEA, which will be regresses on other variable in the second stage. 
+
+To execute our approach, we start by scrutinizing DEA, the result of the pioneering work of [@charnes1978] which was later popularized by [@banker1984], the idea is basically a linear program that estimates a set of parameters for each DMU that allows to rank these DMUs in order of their best practices or technical efficiency additionally depicting a frontier of best practice determined by efficient DMUs. DEA programs can be input oriented (minimize inputs at the same level of output, yielding efficiency scores between $]0,1]$ where a score of 1 indicate a fully efficient unit (FE) ) or ouptut oriented (maximize outputs at the same level of inputs, yielding efficiency scores between $[1,+\infty [$, where a score of 1 indicate a fully efficient unit (FE) ) while accounting for returns to scale as a constraint in the program. As for the second stage, it's also straight forward, as many authors advocate for the use of OLS or tobit regression such as [@chilingerian2004], [@ray2004], and [@ruggiero2004].
+
+However, an interesting debate has took place regarding the statistical plausibility of second stage regression. On the one hand, advocates of this approach argue that the simplicity and versatility of the approach allows for valuable and practical insight. OLS or Tobit regressions are usually used in this context allowing for inference, in fact [@hoff2007] provided a review of the use of tobit and OLS regression in a second stage, and advocated for the use of tobit. On the other hand opponents to the approach advocate for a more careful specifications, since a two-stage analysis doesn't stem for a data generating process (DGP), thus it's quite difficult to understand what is exactly being estimated in the second stage. One of the earliest critics of this approach was [@grosskopf1996] who specified that other than the lack of a DGP, there's a possibility that these non-discretionary variables of the second stage can be correlated with the output efficiency of the first stage. Both [@grosskopf1996] and [@ramalho2010] argued against the use of linear models in the second stage. Building on this criticism, [@simar2007] was the first paper that coherently justified the use of a two-stage DEA proposing a DGP and two bootstrap algorithm that enable inference in the second stage with a truncated regression. The basic idea behind [@simar2007] work, is that DEA efficiency scores are non-parametrically estimated, thus they are a non-observed estimate of an unkown efficiency frontier which means that these scores do not account for stochasticity (i.e: any deviation from the efficiency frontier is entirely due to inefficiency) which means that using non-parametric methods in the second stage is more appropriate, hence the bootstrap algorithms.
+
+In this study, we adopt an output oriented model with the aim to maximize the average test scores' results of the schools in our sample data with variable returns to scales for the first stage, whereas for the second stage, we adopt the second algorithm (Double Bootstrap) from [@simar2007] to estimate the parameters of the second stage truncated regression, at 95% confidence interval, with the first bootstrap loop at L1=100,  and the second one at L2=2000.
+
+
+The DEA program is given by the following:
+
+
+For a set of \(n\) Decision Making Units (DMUs), the inputs and outputs form matrices where each DMU is associated with \(m\) inputs \( X = [x_1, x_2, ..., x_m] \)  and \(s\) outputs \( Y = [y_1, y_2, ..., y_s] \) we optimize the following:
+
+
+$$\begin{aligned}
+& \text{Maximize} & & \theta \\
+& \text{Subject to:} & & \sum_{j=1}^{n} \lambda_j y_{rj} \geq \theta y_{ro}, & & \forall r = 1, \ldots, s, \\
+& & & \sum_{j=1}^{n} \lambda_j x_{ij} \leq x_{io}, & & \forall i = 1, \ldots, m, \\
+& & & \sum_{j=1}^{n} \lambda_j = 1, \\
+& & & \lambda_j \geq 0, & & \forall j = 1, \ldots, n.
+\end{aligned}$$
+
+
+
+
+
+Where:
+
+- \( \theta \) is the efficiency score of DMU_0.
+- \( x_{ij} \) and \( y_{rj} \) are the inputs and outputs of the \( j^{th} \) DMU, respectively.
+- \( \lambda_j \) are the weights assigned to each DMU, indicating the contribution of each DMU to the construction of the virtual DMU against which DMU_0 is being benchmarked.
+
 
 
 ## Results
+
+```{r echo=FALSE}
+summary_stats <- dea_out_1 %>%
+  mutate(efficiency_scores = map(dea_out, ~.$eff)) %>%
+  summarise(
+    mean_efficiency = mean(unlist(efficiency_scores)),
+    sd_efficiency = sd(unlist(efficiency_scores)),
+    min_efficiency = min(unlist(efficiency_scores)),
+    max_efficiency = max(unlist(efficiency_scores))
+  )
+summary_stats %>% 
+  gt()
+```
+
+
+
+```{r echo=FALSE}
+# Analysis 2: Plot distribution of efficiency scores for each country.
+dea_out_1 %>%
+  mutate(efficiency_scores = map(dea_out, ~.$eff)) %>%
+  unnest(efficiency_scores) %>%
+  ggplot(aes(x = efficiency_scores)) +
+  geom_histogram(bins = 30, fill = "skyblue", color = "skyblue") +
+  facet_wrap(~CNT) +
+  labs(title = "Distribution of Efficiency Scores by Country",
+       subtitle = "Including Fully efficient schools",
+       x = "Efficiency Score",
+       y = "Frequency")
+```
+
+
+
+```{r echo=FALSE}
+# Extract efficiency scores, compute quartiles, and mark fully efficient schools.
+dea_by_quartile <- dea_out_1 %>% 
+  mutate(
+    eff_scores =  map(dea_out, ~pluck(.x, "eff"))
+  ) %>% 
+  unnest(eff_scores) %>% 
+  mutate(
+    full_eff = if_else(eff_scores == 1, 1, 0),
+    quartiles = cut(eff_scores,
+                    breaks = quantile(eff_scores, probs = c(0, 0.25, 0.5, 0.75, 1), na.rm = TRUE),
+                    labels = c('Q1', 'Q2', 'Q3', 'Q4'),
+                    include.lowest = TRUE)
+  )
+
+# Plot histogram of efficiency scores by country and quartile for non-fully efficient schools.
+dea_by_quartile %>% 
+  filter(full_eff != 1) %>% 
+  ggplot(aes(x = eff_scores)) +
+  geom_histogram(bins = 30, fill = "skyblue", color = "skyblue") +
+  facet_grid(quartiles ~ CNT) +
+  labs(title = "Distribution of Efficiency Scores by Country and Quartile\nFor non Efficient Schools",
+       x = "Efficiency Score",
+       y = "Frequency")
+```
+
+
+
+
+```{r echo=FALSE}
+# Plot boxplot of efficiency scores by country and quartile for non-fully efficient schools.
+dea_by_quartile %>% 
+  filter(full_eff != 1) %>% 
+  ggplot(aes(x = quartiles, y = eff_scores)) +
+  geom_boxplot() +
+  facet_grid(~ CNT) +
+  labs(title = "Distribution of Efficiency Scores by Country and Quartile\nFor non Efficient Schools",
+       x = "Quartile",
+       y = "Efficiency Score")
+```
+
+
+
+```{r echo=FALSE, warning=FALSE}
+# Calculate and display count and percentage of schools in each quartile, including fully efficient ones.
+dea_by_quartile %>% 
+  mutate(
+    quartiles_ineff = if_else(full_eff == 1, "FE", quartiles)
+  ) %>% 
+  count(quartiles_ineff) %>% 
+  mutate(
+    p = case_when(
+      CNT == 'CZE' ~ (n / 417)*100,
+      CNT == 'HUN' ~ (n / 254)*100,
+      CNT == 'POL' ~ (n / 238)*100,
+      CNT == 'SVK' ~ (n / 271)*100
+    ),
+    p = glue::glue('({round(p, 2)}%)')
+  ) %>% 
+  unite(p, c('n','p'), sep = '  ') %>% 
+  pivot_wider(names_from = quartiles_ineff, values_from = p) %>% 
+  ungroup() %>% 
+  gt()
+```
+
+
+
+```{r echo=FALSE}
+# Create and plot a stacked bar chart showing the percentage distribution of schools by efficiency quartile and country.
+dea_by_quartile %>% 
+  mutate(
+    quartiles_ineff = if_else(full_eff == 1, "FE", quartiles)
+  ) %>% 
+  count(quartiles_ineff) %>% 
+  ggplot() +
+  geom_col(
+    aes(
+      x = n, 
+      y = CNT,
+      .group = CNT,
+      fill = quartiles_ineff
+    ), position = "dodge"
+  ) +
+  labs(title = "Percentage of Fully Efficient (FE) and Quartile distribution\nof Inefficient Schools by Country",
+       x = "Percentage",
+       y = "Country")
+
+
+```
+
+
+
+```{r echo=FALSE}
+# Function to calculate the number of zero and non-zero values in each column
+count_zeros_and_nonzeros <- function(matrix) {
+  # Count non-zero values
+  non_zero_counts <- colSums(matrix != 0)
+  # Count zero values
+  zero_counts <- colSums(matrix == 0)
+  # Combine into a data frame for easier viewing
+  # Count non-zero values
+  non_zero_avg <- colMeans(matrix != 0)
+  # Count zero values
+  zero_avg <- colMeans(matrix == 0)
+  
+  return(data.frame(non_zero_counts, non_zero_avg, zero_counts, zero_avg))
+}
+
+# Apply the function to the 'multiplier_weights' for each country
+# Replace 'multiplier_weights' with 'vy' or any other matrix you need to analyze
+frequency_results <- dea_out_1 %>%
+  mutate(
+    frequency_counts = map(multiplier_weights, count_zeros_and_nonzeros)
+  )
+
+subjects <- c('science', 'reading', 'math')
+
+
+frequency_results %>% 
+  unnest(frequency_counts) %>% 
+  mutate(output = subjects) %>% 
+  pivot_longer(c(non_zero_counts,zero_counts), names_to = 'importance1', values_to = 'frequency') %>% 
+  # pivot_longer(c(non_zero_avg,zero_avg), names_to = 'importance2', values_to = 'avg') %>%
+  ggplot() +
+  geom_col(
+    aes(x = frequency, y = CNT, fill = output),
+    position = 'fill'
+  ) +
+  # geom_col(
+  #   aes(x = avg, y = CNT, fill = output),
+  #   position = 'fill'
+  # ) +
+  facet_grid(~importance1)
+```
+
+
+
+```{r echo=FALSE}
+frequency_results %>% 
+  unnest(frequency_counts) %>% 
+  mutate(output = subjects) %>% 
+  # pivot_longer(c(non_zero_counts,zero_counts), names_to = 'importance1', values_to = 'frequency') %>% 
+  pivot_longer(c(non_zero_avg,zero_avg), names_to = 'importance2', values_to = 'avg') %>% 
+  ggplot() +
+  geom_col(
+    aes(x = avg, y = CNT, fill = output),
+    position = 'dodge'
+  ) +
+  facet_grid(~importance2)
+
+```
+
 
 results of the efficiency, multipliers and the intensity weights
 

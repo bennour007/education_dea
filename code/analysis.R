@@ -86,7 +86,7 @@ dea_by_quartile %>%
       y = CNT,
       .group = CNT,
       fill = quartiles_ineff
-    ), position = "fill"
+    ), position = "dodge"
   ) +
   labs(title = "Percentage of Fully Efficient (FE) and Quartile distribution\nof Inefficient Schools by Country",
        x = "Percentage",

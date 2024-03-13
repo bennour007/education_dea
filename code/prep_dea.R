@@ -15,9 +15,11 @@ nested_data <- data_full %>%
     inputs = map(data, ~ {
       df_selected <- .x %>%
         select(
-          mean_reading_attitude, 
-          mean_science_attitude, 
-          mean_math_attitude,
+          total_class_periods,
+          STRATIO
+          # mean_reading_attitude, 
+          # mean_science_attitude, 
+          # mean_math_attitude,
         )
       mat <- as.matrix(df_selected)
       colnames(mat) <- colnames(df_selected)  # Ensure column names are preserved
@@ -41,13 +43,13 @@ nested_data <- data_full %>%
           teacher_behavior_issue_mean,
           resources_issue_mean,
           staff_issues_mean,
-          # total_homework_time,
-          total_class_periods,
-          SC011Q01TA,
+          # total_homework_time, #I dont think this is necessary
+          # total_class_periods,
+          SC011Q01TA, # number of schools in the area (3 none, 2 one school, 1 two ore more schools)
           # STRATIO,
           SCHSIZE,
-          SC001Q01TA,
-          TOTAT
+          SC001Q01TA, # Community type where the school is located
+          TOTAT # Total number of all teachers at the school
         )
       mat <- as.matrix(df_selected)
       colnames(mat) <- colnames(df_selected)  # Ensure column names are preserved
@@ -79,8 +81,7 @@ dea_out_1 <- nested_data %>%
 
 
 
-# dea_out_1 %>% 
-#   write_rds(here::here("results", "dea_out_1.rds"))
+
 
 
 dea_out_1 <- dea_out_1 %>%
@@ -89,3 +90,7 @@ dea_out_1 <- dea_out_1 %>%
     multiplier_weights = map(dea_out, ~pluck(.x, "vy")),
     intensity_weights = map(dea_out, ~pluck(.x, "lambda"))
   )
+
+
+# dea_out_1 %>%
+#   write_rds(here::here("results", "dea_out_1.rds"))

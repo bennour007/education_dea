@@ -1,0 +1,1155 @@
+---
+title: "A Directional Distance Function Double-Bootstrap approach to assess the Tunisian educational system"
+author:
+- 'Author: Bennour Mohamed Hsin'
+- 'Supervisor: Essid Hedi, Professor'
+csl: my_thesis.csl
+output:
+  html_document: default
+documentclass: report
+toc: yes
+lot: yes
+lof: yes
+tables: yes
+include-before: 
+
+fontsize: 12pt
+citecolor: blue
+bibliography: thesis.bib
+editor_options:
+  chunk_output_type: console
+---
+```{r include=FALSE}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(readxl)
+library(rpart.plot)
+```
+
+
+# Thesis abstract
+
+In this thesis, we seek to study the issue of conducting valid inference in two-stage DEA analysis where efficiency estimates are obtained with DEA in the first stage and then regressed on other covariates in the second stage. We review the methodological advantages and issues in this approach and propose an adaptation to the double-bootstrap algorithm and its DGP in order to use it with a more general distance function formula than it was initially designed for. Our algorithm takes advantage of the flexible and popular directional distance function that allows researchers to incorporate bad outputs in their models. We Finish this work with an empirical application where we use our algorithm to analyze the marginal effect of several covariates on the inefficiency of a sample of Tunisian schools, our results confirm the importance of the class-size, competition between schools, and school location, while disagrees with the significance of the effect of the number of girls and the school-size on the schools' inefficiency.
+
+# 1.Introduction
+
+In some empirical applications, researchers often seek to analyze the performance of certain Decision-Making Units(hereafter as DMU, eg: a government, an organization, a firm, a school, an individual, etc.). These DMUs are often characterized by a production process that takes a certain level of resources (or inputs) and transforms them to a certain level of goods (or outputs). In this context researchers model productivity and efficiency as metrics of performance, by analyzing the production process which yields a production frontier. Productivity, as defined in [@coelli], is the ratio of outputs produced to the level of inputs used in the production process of a given DMU. Moreover, from such a measure we can derive the production frontier which describes the feasible level of outputs for each level of inputs, this frontier reflects the state of technology for a given sector or industry. Indeed [@cooper2011] defined the fully efficient DMU in the Pareto-Koopmans sense as a unit in a situation where "none of [its] inputs or outputs in [its] production activity can be improved without worsening the other inputs or outputs". However, unlike productivity, efficiency can be decomposed to various components such as "Allocative efficiency" where DMUs use the optimal combinations of inputs/outputs in the production process, and "Technical efficiency" where a DMU is situated on the production frontier that is also often called the "efficiency frontier"
+
+The literature that influenced the development of performance analysis, began with the early works of [@koopmans1951] from which [@cooper2011] derived the definition above and with the works of [@debreu1951] and [@shephard1970] who introduced distance functions to model the production technology. In this regard, [@kumbhakar1999] view these distances as "a way to measuring the radial distance of a producer from a frontier in either an output-expanding direction(Debreu) or in an input-conserving direction(Shephard)", which is another optic to measuring the productivity ratio. Also, [@farrell1957] was the first to measure technical efficiency directly from data in an empirical application. These contributions presented a major development in the literature of efficiency analysis.
+
+  Inspired by these contributions, the literature provided two major directions in performance analysis. The first is the conventional parametric direction(considers stochastic noise), developed by [@aigner1977], [@seitz1971], [@timmer1971], [@afriat1972], and [@richmond1974] who's contributions led directly to the establishment of the "Stochastic frontier analysis"(here-forth as SFA). The second direction is the non-parametric approach, which was directly developed by [@charnes1978] and later popularized by [@banker1984], leading to the development of "Data envelopment analysis"(here-forth as DEA) and "Full disposal hull"(here-forth as FDH). DEA and FDH gained a large theoretical and empirical literature grounds since they were introduced. [@cooper2011], [@emrouznejad2008],  [@cook2009], [@emrouznejad2018], and [@liu2013] provide an extensive literature review on the advancement and the applications of DEA methodology. Also, [@kumbhakar1999] provides a thorough literature review on SFA. 
+  
+  The wide use of non-parametric methods is linked to the fact that they do not require any apriori knowledge of the production function, rather "The data are allowed to speak for themselves" as [@wheelock2003] put it. However, DEA and FDH are considered the same technique, they are usually both referred to as DEA, the only difference is regarding the convexity assumption which is relaxed in the FDH Data Generating Process (here-forth as DGP) assumptions. In this context, [@leleu2009], and [@wang2003] provide a good comparison and a review for both methods. 
+
+  For now, DEA(and equivalently FDH) can be viewed as an estimate of the distance between an estimated efficiency frontier and observed DMUs, the smaller the distance the more efficient is that observed unit. Other than the distances introduced by [@shephard1970] and [@debreu1951], there is also the hyperbolic distance function, introduced by [@färe1985]. Which measures the equi-proportionate simultaneous contraction in inputs and expansion in outputs, detailed discussion can be found in [@wheelock2008], and [@wilson2011]. In the same context, [@chambers1996] introduced an additive distance measure, namely the "directional distance function", which measures the simultaneous feasible subtraction of input levels which are added to the output given a direction vector that determines the projection of each input and output vector. [@färe2000] provide a thorough discussion of this distance function, and consider it as a generalization, to radial distances(input/output and hyperbolic).
+
+
+  The development of performance analysis of efficiency was influenced by various contributions since the early fifties. However, these contributions diverged in the way they perceive the production process into two major methodologies, the parametric approach where the production process is modeled mathematically and stochastic noise is considered, and the non-parametric approach  where the frontier is estimated directly from the data without imposing any functional from on the production function. In addition, the introduction of distance functions in these analysis allowed for the eventual development of DEA and FDH, with their extensions and empirical applications. 
+  
+  However, DEA(unlike FDH) does not have a limiting distribution, and therefore conventional inference methods are not possible. To solve this, researchers often regress the efficiency estimates in a two-stage analysis, on other covariates in order to be able to derive inference and answer the research questions in this regard. Another approach was the use of sampling techniques, namely the bootstrap in order to generate the distribution of the efficiency estimates and derive confidence intervals. [@simar2007] presented the first paper that justifies statistically the use of a two-stage analysis combining both regression and bootstrap in what they called a semi-parametric approach to derive what they prove to be valid inference.
+  
+  
+  This thesis aims to study this semi-parametric approach and provide a more general DGP that would allow researchers to conduct inference without being limited to radial distances. In chapter two we will provide the general economical and statistical considerations for the production process, as well as the different distance functions used to measure efficiency and their DEA estimate. In chapter three we go through the statistical properties of the DEA as a model and we cover important studies on its consistency and the convergence rates. In chapter four we provide an overview of the two-stage methodology as a way to incorporate non-discretionary variables that can have an indirect effect on the efficiency estimates, then we review the redundancy of the conventional two-stage approach and review the bootstrap algorithms and DGP proposed in [@simar2007] as a valid mean to conduct inference in a two-stage approach and we propose our main contribution where we adapt this DGP and propose the Directional-Double-Bootstrap algorithm that combines directional distance functions and the double-bootstrap procedure. In chapter five we study the inefficiency of a sample of Tunisian secondary schools using our Directional-Double-Bootstrap procedure that takes into consideration the number of dropouts and non-discretionary covariates, we provide the results and conduct a comparison between conventional and modern two-stage approaches to our approach. Lastly, we conclude this thesis with a general conclusion.
+
+
+# 2.The non-parametric estimate of the efficiency
+
+  As previously discussed, non-parametric methods do not impose any specific from on the production function. Rather, researchers use DEA and FDH techniques to envelope the data around the hull that characterizes the estimated efficiency frontier. Indeed, this enveloped hull is an estimate of the true, unknown frontier, often referred to in the economic literature by the production possibility frontier. [@park2000] acknowledge the difficulty of determining the functional details of the production form, stating that "we have no or only vague information about technical possibilities and restrictions" advocating the use of DEA and FDH to estimate the smallest set of technically possible pairs of inputs and outputs. The use of DEA and FDH was intended to evaluate DMUs of public nature, nowadays these techniques are used in all sorts of domains and applications. In fact, in a published survey, [@liu2013] provided a detailed study on methods, the sectors of applications, and the trends in DEA and FDH. A more recent, similar survey can be found in [@emrouznejad2018], and [@daraio2020]. Also, a classic review of empirical applications can be found in [@seiford1997]. For a survey on DEA in banking review [@kumari2019] and [@paradi2013]. A review in energy application can be found in [@zhou2008] and [@mardani2017]. In education [@worthington2001] and [@witte2017] provide an extensive review. 
+
+  The formal illustration of DEA was introduced by [@charnes1978], which represented a linear programming setting to the distance function proposed by [@farrell1957]. To illustrate the importance of this contribution, we should note that [@charnes1978] has been cited over 34000 times. However, Even though the assumption regarding the convexity of the production set subject to the DEA estimate is often related to a certain economic context, in some cases it does not hold. In this context, [@deprins1983] proposed a relaxed version of the DEA that does not assume the convexity of the production set, leading directly to the introduction of the FDH technique. See [@mastromarco2019] for a good review on DEA and FDH as estimation techniques for the efficiency frontier, and [@banker2017] for a review of technical and methodological developments.
+
+
+  In this context, we will provide in this chapter the mathematical formulation of the DEA and FDH techniques, as well as the economic and statistical considerations in the DGP. In addition, we provide details on the different approaches of using distance functions to measure the efficiency of DMUs. 
+
+## 2.1.The model
+
+
+Non-parametric estimation of the efficiency frontier requires several assumptions, the most common and basic ones are inherited from the microeconomic literature of production. In this section, we will provide a general overview of DEA and FDH in the context of multiple input/output production processes following the economic and statistical framework of [@simar2013].
+
+Let's consider a production activity that takes :
+
+  * $x \in \mathbb{R}^{p}_{+}$ : p vectors of observed inputs. $(p > 0)$
+  
+  * $y \in \mathbb{R}^{q}_{+}$ : q vector of desirable, observed outputs. $(q > 0)$
+ 
+
+Let's also consider a dataset defined by $\mathcal{X}_n = \{x_i,y_i\}^{n}_{i=1}$. 
+  
+The attainable production combinations are given in the production set defined as : 
+
+\begin{align}
+  \Psi = \{(x,y) \in \mathbb{R}^{p+q}_{+} | (x,y) \text{ is feasable}\}
+\end{align}
+
+This production set describes all feasible combinations of inputs and outputs, the section of $\Psi$ over its output gives us the production technology set or the frontier of the production set :
+
+\begin{align}
+  Y(x) = \{y \in \mathbb{R}^{q + k}_{+} | (x,y) \in \Psi \}
+\end{align}
+
+using the previous formulation we can proceed in providing the assumptions describing the model we intend to use in this work, we will adopt the conventional assumptions in the production theory and imitate those of [@shephard1970] and [@färe1985] as follows: 
+
+* Assumption 1. $\Psi$ is convex. 
+
+* Assumption 2. $\Psi$ is closed.
+
+* Assumption 3. Strong disposability of inputs.
+
+  - The level of inputs can be increased while keeping other inputs and outputs unchanged, formally we have : $y \in Y(x), x' \geq x \Rightarrow y \in Y(x')$.
+
+* Assumption 4. Strong disposability of outputs.
+
+  - Any reduced level of outputs is feasible if a greater level of this output is also feasible : $y \in Y(x), y' \leq y \Rightarrow y' \in Y(x)$.
+
+Given the assumptions above, from 1 to 4, we can define the DEA estimate of production set : 
+
+
+
+\begin{align}
+  \hat{\Psi}_{DEA} = \{(x,y)\in \mathbb{R}^{p + q}_{+}|x \geq \sum^{n}_{j=1} \lambda _j x_j, \notag\\ 
+  y \leq \sum^{n}_{j=1} \lambda_j y_j, \\ \sum^{n}_{j=1} \lambda_j = 1, \notag\\ 
+  \lambda_i \geq 1 , j =1,...,n \} \notag
+\end{align}
+
+
+If we drop the convexity assumption, we end up with the FDH estimate of the production set : 
+
+
+\begin{align}
+  \hat{\Psi}_{FDH} = \{(x,y) \in \mathbb{R}^{p + q}_{+}| x \geq x_j, \notag\\ 
+  y \leq  y_j, \\ i =1,...,n\} \notag
+\end{align}
+
+The economic and statistical differences of DEA and FDH have been studied, and while they do not differ on a fundamental level, the economic and statistical assumptions should be taken with caution.
+
+## 2.2.Distance functions
+
+DEA and FDH are merely estimates of the efficiency frontier, to estimate the efficiency of DMUs that are not situated on that frontier we compute the distance between each one and the frontier itself. In this context, the literature provided us several formats of distance functions each measure the estimated efficiency in a unique manner. In this section, we will review the major contributions in this regard.
+
+### The Farrell-Debreu distance function: 
+
+Using the model in the previous paragraph we can define efficiency in the Farrell-Debreu sense in the following manner : 
+
+* Input oriented Farrell-Debreu distance : 
+
+
+\begin{align}
+  \alpha(x,y) = min \{ \alpha | (\alpha x, y) \in \Psi \}
+\end{align}
+
+and its DEA estimate is : 
+
+\begin{align}
+  \hat{\alpha}(x,y)_{DEA}= min \{ \alpha | (\alpha x, y) \in \hat{\Psi}_{DEA} \}
+\end{align}
+
+
+
+* Output oriented Farrell-Debreu distance : 
+
+\begin{align}
+  \alpha(x,y) = max \{ \alpha | ( x, \alpha y) \in \Psi \}
+\end{align}
+
+and its DEA estimate is : 
+
+\begin{align}
+  \hat{\alpha}(x,y)_{DEA} = max \{ \alpha | ( x, \alpha y) \in \hat{\Psi}_{DEA} \}
+\end{align}
+
+Note that the scalar $\alpha(x,y)$ is a radial measure by which we describe the proportional inputs used to produce the outputs. In fact, $\alpha(x,y) \leq 1$ for $(x,y) \in \Psi$. When $\alpha(x,y) = 1$ it means that the combination of inputs and outputs are on the efficiency frontier, i.e:  $(x,y) \in \partial{\Psi}$. These properties provides new characteristics to the production possibility set $\Psi$ in the sense that :
+
+\begin{align}
+  \Psi = \{(x,y) \in \mathbb{R}^{p+q}_{+} | \alpha(x,y)  \leq 1\}
+\end{align}
+
+and the frontier of this set : 
+
+\begin{align}
+  \partial{\Psi} = \{(x,y) \in \mathbb{R}^{p+q}_{+} | \alpha(x,y) = 1\}
+\end{align}
+
+
+### The Shephardian distance function
+
+[@shephard1970] provided a distance measure that is interpreted slightly differently than the Farrell-Debreu distance function. In fact, the distance that the shephardian distance function provides is a normalized measure of the distance between the Input/Output combination, and the efficiency frontier. This function is defined as follows :
+
+* Input oriented Shephardian distance : 
+
+\begin{align}
+  \beta(x,y) = max \{ \beta > 0 | (\beta^{-1}x,y) \in \Psi \}
+\end{align}
+
+and its DEA estimate : 
+
+\begin{align}
+  \hat{\beta}(x,y)_{DEA} = max \{ \beta > 0 | (\beta^{-1}x,y) \in \hat{\Psi}_{DEA} \}
+\end{align}
+
+* Output oriented Shephardian distance :
+
+\begin{align}
+  \beta(x,y) = min \{ \beta > 0 | (x,\beta^{-1} y) \in \Psi \}
+\end{align}
+
+and its DEA estimate : 
+
+\begin{align}
+  \hat{\beta}(x,y)_{DEA} = min \{ \beta > 0 | (x,\beta^{-1} y) \in \hat{\Psi}_{DEA} \}
+\end{align}
+
+Which is the reciprocal to the Farrell-Debreu distance function, indeed we can write $\forall (x,y) \in \Psi$: 
+
+\begin{align}
+  \beta(x,y) = \frac{1}{\alpha(x,y)}
+\end{align}
+
+In addition, and with contrast to the Farrell-Debreu distance function, the shephardian distance function is equal or superior to one, i.e: $\beta(x,y) \geq 1 ,\forall (x,y) \in \Psi$, we can also determine the efficient combination of $(x,y)$ in the Farrell sense when : $\beta(x,y) = 1$. Moreover, we can recharacterize the production set and its boundary in the same sense, by : 
+
+\begin{align}
+  \Psi = \{(x,y) \in \mathbb{R}^{p+q}_{+} | \beta(x,y)  \geq 1\}
+\end{align}
+
+
+\begin{align}
+  \partial{\Psi} = \{(x,y) \in \mathbb{R}^{p+q}_{+} | \beta(x,y) = 1\}
+\end{align}
+
+### The directional distance function
+
+[@chambers1996] provided a new approach to measuring the distance between Input/Output combinations using an additive function. This function is called the Directional Distance Function(or DDF for short), its importance  relies on the fact that it is a generalization to the Shephardian and the Farrell-Debreu distances, as illustrated in [@färe2000], and explained in details in [@simar2013].
+
+The Directional Distance Function is given by :
+
+\begin{align}
+  \theta(x,y|g) = max \{ \theta | (x - \theta g_x, y + \theta g_y) \in \Psi \}
+\end{align}  
+
+and its DEA estimate : 
+
+\begin{align}
+  \hat{\theta}(x,y|g)_{DEA} = max \{ \theta | (x - \theta g_x, y + \theta g_y) \in \hat{\Psi}_{DEA} \}
+\end{align} 
+
+with $g = (-g_x,g_y)$ a direction vector.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=12cm]{/home/hsin/my_thesis/writing_work/graph.png}
+  \caption{the point A is projected on the frontier over the vector g}
+  \label{fig:fig1}
+\end{figure}
+
+To illustrate how the directional distance function works we will refer to figure 1 from [@zhu2019g]. In this graph we can see that point $A(x^0,y^0)$ is not projected on the frontier in $B(x^0-g_x, y^0+g_y)$ directly over the $y$ or $x$ axis, but rather this projection vector $\vec{AB}$ is parallel to the vector $g(-g_x,g_y)$. This means that we can control  the interpretation of the distance function using this directions vector $g$, in this case, the distance function seeks to simultaneously expand outputs and contract inputs when point $A$ is projected on the frontier.
+
+Moreover, the directional distance function can also be generalized to the input-oriented, or output-oriented distance functions by changing the directions vector $g$ as follows:
+
+
+  + Directional Input distance function:  
+  
+$\theta(x,y|g) = 1 - \frac{1}{\alpha(x,y)}$, given $g = (x,0)$ :
+  
+\begin{align}
+  \theta(x,y|g) = max \{ \theta | (x - g_x x, y) \in \Psi \}
+\end{align}
+
+and its DEA estimate : 
+
+\begin{align}
+  \hat{\theta}(x,y|g)_{DEA} = max \{ \theta | (x - \theta g_x, y) \in \hat{\Psi}_{DEA} \}
+\end{align} 
+
+  + Directional Output distance function  :
+  
+$\theta(x,y|g) = \frac{1}{\beta(x,y)} - 1$ , given $g = (0,y)$ : 
+  
+\begin{align}
+  \theta(x,y|g) = max \{ \theta | (x, y + \theta g_y) \in \Psi \}
+\end{align}
+
+and its DEA estimate : 
+
+\begin{align}
+  \hat{\theta}(x,y|g)_{DEA} = max \{ \theta | (x, y + \theta g_y) \in \hat{\Psi}_{DEA} \}
+\end{align} 
+
+In addition to being a general form of the input-oriented(and output-oriented) distance functions(in the Farrell-Debreu sense or Shephardian sense), directional distance functions are also able to accommodate a direction for each variable, this allows for a level of flexibility in modeling the efficiency frontier, [@chung1997] was the first to model undesirable outputs with directional distances in an efficiency study. In fact, accounting of undesirable outputs(eg : polluting) was heavily conducted using this function especially in energy and environmental application [@zhang2014] provided a comprehensive review in this regard. 
+
+
+## 2.3.Conclusion
+
+In summary, the production process requires a combination of inputs and outputs, the feasible combinations are considered as a set that describes the production process. In this chapter, we reviewed the non-parametric estimates of efficiency and focused on the DEA estimates of the most used distance functions and the relationship between them. We also provided the general format of these functions represented by the directional distance function. In the next chapter, we will review the statistical properties of DEA and FDH estimators of these distance measures. 
+
+# 3.Statistical properties of non-parametric efficiency estimate
+
+In the previous chapters, we reviewed non-parametric methods, namely DEA and FDH, as an estimate to the production set and therefore to the efficiency frontier that represent that set. However, the statistical properties of these estimates were the subject of various papers that developed their statistical foundation, and the statistical properties of radial distance functions. The works of [@banker1993], [@korostelev1995a], [@korostelev1995b], and [@kneip1998], were perhaps the most important of all. In the same context, other papers focused on providing the statistical properties of the directional distance estimate with DEA and FDH given the flexible properties that this distance function provides for researchers. However, not until recently that [@simar2012b] developed the statistical properties of the Directional distance function.
+
+In this chapter, we will review the contributions made on the statistical foundations of DEA and FDH estimators. We will proceed by reviewing the most important papers on this subject then we will dedicate an entire section for the directional distance function which is the subject of our contribution in the next chapter. In the next section, consistency, convergence rates, and asymptotic distributions of different DEA/FDH estimators are reviewed and provided.
+
+
+## 3.1.Consistency and convergence of DEA and FDH for radial distances:
+
+[@banker1993] was the first to establish the statistical consistency of DEA, and proved weak consistency of the DEA estimate for the  input-oriented case (where $(x,y) \in \mathbb{R}^{p+q}$ where $p=1, q\geq 1$) and proved that this estimator maximizes likelihood:
+
+\begin{align}
+  \hat{\theta}(x,y) \xrightarrow{p} \theta(x,y)
+\end{align}
+
+However, [@banker1993] did not provide the rates of convergence. 
+
+[@korostelev1995a] considers the same  input-oriented case and studies the consistency and convergence of the FDH estimator assuming a uniform distribution for the joint density of inputs and outputs. In fact, [@korostelev1995a] used the Hausdorff metric to measure the difference between the FDH-estimated set and the true set, and proved it maximizes likelihood: 
+
+\begin{align}
+  d_H (\hat{\Psi}_{FDH}, \Psi ) = O_p\big((\frac{n}{log n})^{\frac{-1}{1+q}} \big)
+\end{align}
+
+This means that the FDH estimate of $\Psi$ is asymptotically unbiased, and possess a convergence rate equal to $(\frac{n}{log n})^{\frac{-1}{1+q}}$, which deteriorate when $q$ increases. This illustrates perfectly the curse of dimensionality.
+
+In the same year, [@korostelev1995b] made the same study but in this second paper, they relaxed the assumption regarding the uniformity of the joint distribution, considered both FDH and DEA, and used the Lebesgue metric to measure the difference between the DEA/FDH-estimated sets and the true set in the same spirit of the first paper: 
+
+\begin{align}
+  d_{L}(\hat{\Psi}_{DEA}, \Psi) = O_p (n^{\frac{-2}{q+2}})
+\end{align}
+
+\begin{align}
+  d_{L}(\hat{\Psi}_{FDH}, \Psi) = O_p (n^{\frac{-2}{q+1}})
+\end{align}
+
+This means that the DEA estimate of $\Psi$ converges faster (a rate equal to $n^{\frac{-2}{q+2}}$) than the FDH estimate of $\Psi$ ($n^{\frac{-2}{q+1}}$). This is mainly due to the relaxation of the convexity assumption in the FDH estimate, however, both rates deteriorate when $q$ increase.
+
+[@korostelev1995b] also went on to specify that the DEA estimate of the production set is statistically efficient in the sense that when $\Psi$ is convex, the DEA-estimated set $\hat{\Psi}$ is efficient, and when the actual set is not convex, using DEA yields and inconsistent estimator and that the use of FDH instead will yield consistent and valid results.
+
+
+Moreover, it was not until [@kneip1998], that the general case of multi-input/output was studied and convergence rates were provided, However, the authors did not study the convergence rate of the production set $\Psi$, but rather the efficiency estimate $\theta(x,y), (x,y) \in \Psi$. Indeed, the authors extended the previous works and provided results for the DEA-VRS estimator and the FDH estimator, yielding: 
+
+\begin{align}
+  \hat{\theta}_{DEA}(x,y)-\theta(x,y) = O_p(n^{\frac{-2}{p+q+1}})
+\end{align}
+
+\begin{align}
+  \hat{\theta}_{FDH}(x,y)-\theta(x,y) = O_p(n^{\frac{-1}{p+q}})
+\end{align}
+
+
+These results are consistent with [@korostelev1995a] [@korostelev1995b], and generalizes the estimation case for $q \geq 1, p \geq 1$. Indeed the DEA estimate of efficiency still converges faster (rate equal to $n^{\frac{-2}{p+q+1}}$) than the FDH estimate($n^{\frac{-1}{p+q}}$). 
+
+In fact, these results represent the main contributions to the statistical foundations of DEA/FDH estimators. But, these contributions were extended into studying the asymptotic distribution of the DEA/FDH estimates and their properties in order to derive inference.
+
+In this context, [@park2000] was the first to derive the asymptotic distribution of FDH in the multi-input/output setting and proved the following : 
+
+\begin{align}
+  n^{\frac{1}{p+q}} \big(\hat{\theta}(x,y)_{FDH} - \theta(x,y) \big) \xrightarrow{\mathcal{L}} Weibull(\mu^{p+q}, p+q)
+\end{align}
+
+As for the DEA estimator, it was until [@kneip2008] (for the VRS setting), and [@park2010] (for the CRS setting), that the asymptotic laws were derived as follows:
+
+\begin{align}
+  n^{\frac{2}{p+q-1}} \big(\hat{\theta}(x,y)_{VRS} - \theta(x,y) \big) \xrightarrow{\mathcal{L}} Q(\eta)
+\end{align}
+
+
+\begin{align}
+  n^{\frac{2}{p+q}} \big(\hat{\theta}(x,y)_{CRS} - \theta(x,y) \big) \xrightarrow{\mathcal{L}} Q(\eta)
+\end{align}
+
+Where $Q(.)$ is a regular, non-degenerate distribution, with an unknown parameter $\eta$.
+
+
+## 3.2.DEA as an estimate to the Directional distance function
+
+[@simar2012b] extended the work of [@kneip2008] in deriving the asymptotic properties of DEA-VRS and DEA-CRS estimate of the radial distance functions. In fact, the results of [@simar2012b] are almost identical to the former. The asymptotic properties are given in theorem 4.2 and 4.1 given three additional assumptions over the ones we mentioned in the previous sections. . 
+
+  * Assumption 7 : The $n$ observations of $\mathcal{X}_n$ are independent, identically distributed (iid) random variables on the attainable set $\Psi$.
+  
+  * Assumption 8 : The random variables $(X,Y)$ possess a joint density $f$ with compact support $\mathcal{D} \subset\Psi$; $f$ is continuous on $\mathcal{D}$; and $f(x,y) > 0, \forall (x,y) \in \partial{\Psi}$.
+  
+  * Assumption 9 : The function $\vec{{\theta}}(x,y|g) = max\{\theta|(x- \theta g_x,y + \theta g_y) \in \Psi\}$ is twice differentiable  for all $(x,y)$, and for any $g$.
+  
+    - This assumption imposes smoothness on the boundary of $\Psi$, and is considered as "sufficient but stronger than necessary" by [@simar2012b].
+
+To build on these assumptions [@simar2012b] transformed the coordinate system "in order to represent both the frontier and its estimator in terms of simple, scalar-valued functions." The details of this transformation and the procedure to derive the asymptotic characteristics of the estimator are beyond the scope of our work, however, [@simar2012b], [@jeong2006], and [@kneip2011] used almost identical procedures, also [@kneip2008] provide a detailed explanation of the same procedure. Nonetheless, we will directly provide the results in theorem 4.1(as theorem 1) and 4.2(as theorem 2) of [@simar2012b]
+
+  * Theorem 1: under the regularity conditions given in assumptions 1 to 9, as $n \rightarrow \infty$, and $\forall (x,y) \in \psi$ and $\forall g = (g_x,g_y)$ (This needs review with the original theorem) we have : 
+  
+\begin{align}
+  n^{\frac{2}{n+p+1}}(\hat{\theta}_{vrs} - \theta) \xrightarrow{\mathcal{L}} Q(.)
+\end{align}
+  
+Where Q is a random variable having a non-degenerate distribution with finite mean and variance. This is the case of Variable return to scale(VRS). In addition, [@simar2012b] also provide another theorem when assumption 8 is not retained and use constant return to scale rather than variable. For this case theorem 4.2 of [@simar2012b] provided the rates of convergence in the following manner : 
+
+  * Theorem 2:  under the regularity conditions given in assumptions 1 to 7 in addition to 9, as $n \rightarrow \infty$, and $\forall (x,y) \in \psi$ and $\forall g = (g_x,g_y)$ (This needs review with the original theorem) we have : 
+  
+\begin{align}
+  n^{\frac{2}{n+p}}(\hat{\theta}_{crs} - \theta) \xrightarrow{\mathcal{L}} Q(.)
+\end{align}
+
+Where Q is a random variable having a non-degenerate distribution with finite mean and variance. Proof to this theorem can be derived easily in the same manner in [@park2010]. 
+
+These results were essential to understand the asymptotic behavior of DEA estimates of the directional distance function, however, they do not provide any limiting distribution that allows us to actually conduct inference, which is the main reason for such studies. 
+
+## 3.3.Conclusion 
+
+In this chapter, we reviewed the statistical properties of DEA and FDH estimates(with a focus on DEA) of radial and (additive) directional distance functions. We also provided the most important results on the consistency and convergence of these estimators in the literature. which confirmed the existence of the curse of dimensionality. Also, we provided the main results of the asymptotic distributions where only the FDH estimator is limited asymptotically. In contrast, the distribution of DEA estimators is not limited asymptotically and therefore conventional means to inference are not possible. 
+
+
+# 4.Efficiency estimates and inference with non-discretionary variables
+
+
+In the previous chapter, we provided a review of the statistical properties of DEA and FDH estimators. These results were useful to understand their asymptotic behavior. Furthermore, the main objective of analyzing these results is to develop valid methods to conduct inference, however, [@kneip2015] argue that none of these estimators have an analytical expression of the limiting asymptotic distribution that can be estimated. Therefore, "bootstrap methods appear to be the only practical avenue for inference" on the efficiency estimates. Various papers in this regard have been published, most importantly [@simar1998]; [@simar2000]; and [@kneip2008]. 
+  
+  In the same context, providing answers on the marginal effect that some non-discretionary variables have on the efficiency estimate is one of the most persistent questions in empirical research. Answering these questions is the reason why we seek to develop and apply valid inference methods. In this regard, the literature provided three main avenues :
+  
+  * The One-stage approach : incorporating some non-discretionary variables directly to the Data Generating Process to estimate efficiency. (see [@banker1986])
+  
+  * The Conditional approach : Use a probabilistic formulation to incorporate some non-discretionary variables directly to the Data Generating Process and conduct inference.(see [@cazals2002] and [@daraio2005])
+  
+  * The Two-stage approach : Regressing the efficiency estimates on some non-discretionary variables described in the Data Generating Process.
+  
+  
+  In this context and with the same spirit of [@kneip2015], we will continue our emphasis on valid inference. We will focus mainly on the two-stage approach, often called "two-stage DEA". This chapter will contain our main contribution in this thesis, which is an adaptation to the [@simar2007] DGP and algorithm using the Directional Distance Function instead of the Farrell-Debreu distance. This contribution is a generalization to the work of [@simar2007] as it embodies a generalization to the distance function originally used and allows researchers to be more flexible with the data they use or the research questions they are able to answer. We will start by providing an overview of the conventional approaches of using two-stage DEA analysis, we will also discuss the methodological and statistical issues in these approaches and review major contributions in this regard namely [@simar2007]. Then  we will introduce our contribution(DGP + the algorithm) which will allow researchers to conduct inference, and compute marginal effects.
+
+  
+## 4.1.Two-stage DEA analysis
+
+  The literature is rich with papers treating efficiency estimates as dependent variables regressed on other non-discretionary variables, in fact, a simple search using the google scholar search engine with the keyword "two-stage DEA" between the period 2000 and 2007 yielded 3280 articles, among those papers we can cite [@chilingerian2004], [@ray2004], and [@ruggiero2004], who advocated the use of two-stage DEA, [@byrnes1988], [@ray1988], [@ray1991] [@chu2003], [@wang2004], [@okeahalam2004], and [@turner2004] among others, used this approach to conduct inference on the efficiency estimate. 
+
+  The attractiveness of two-stage DEA is related to its simplicity(infrastructure is available in most statistical tools) and the ease with which inference can be derived. Generally, OLS or Tobit are used in the second stage. However, researchers do not converge in advocating the use of one over the other, and empirical evidence is contradictory in some cases.
+  
+### OLS regression
+
+In an introductory remarque, [@mcdonald2009] quoted his professor: "If someone sells you a regression result much different from OLS, be suspicious - very suspicious". In fact, OLS has been always the favorite econometric tool for economists for its simplicity, clarity of the DGP, and ease of conducting inference and interpreting results. The general expression of an OLS regression is written as follows : 
+
+
+\begin{align}
+  y_i = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_m x_m + u_i
+\end{align}
+
+ 
+The coefficients $\beta_k, k =1...m$ can be estimated with OLS, where $y_i, i =1...n$ is a vector of DEA estimates of efficiency, and $u_i \sim N(0,\sigma^2), i =1...n$ is a vector of error terms with constant variance. However, [@lovell1994] stated that using OLS to estimate the coefficient, as much as it is simple and intuitive to conduct, will yield biased and inconsistent estimates of this vector. Indeed, [@kalirajan1988], and [@banker1994], also admitted to this issue, and proposed a transformation that will convert the dependent variable $y$ from unity-interval bounded variable, to an unbounded variable using the following transformation : 
+
+\begin{align}
+  y^* = ln(\frac{1-y}{y})
+\end{align}
+
+We should also note that [@lovell1994] used a Modified DEA (or MDEA) estimate of efficiency that yields a vector cluster above zero (but are not equal to zero), the authors proposed to convert the dependent variable to $y^* = ln(y)$. As for inefficiency measures using DEA with Directional-Distance-Function this transformation is not enough since the cluster of points forming the frontier are valued at zero, therefore a potential transformation in this case can be $y^* = ln(1- y)$.
+
+### Tobit regression
+
+Tobit models are used when the dependent variable is bounded from one or two sides of an interval, in fact,  most two-stage studies use this form of regression due to the bounded nature of DEA. A typical two-sided tobit model is given by : 
+  
+\begin{align}
+y = 
+\begin{cases}
+  y^* &\text{for } 0\leq y^* \leq 1 \\
+  0 &\text{for } y^* < 0 \\
+  1 &\text{for } 1 < y^*
+\end{cases}
+y^* = \sum \beta_kx_k + u
+\end{align}
+
+with : $u_j \sim N(0, \sigma)$ and,
+
+Unlike linear OLS regression where th estimated coefficients are themselves the marginal effects of each on the dependent variable, the marginal effect in the tobit models is different than point estimate of the coefficients themselves.
+
+\begin{align}
+\begin{aligned}
+E[y|x] = \sum \beta_k x_k [\Phi(\frac{1-\sum\beta_kx_k}{\sigma}) -\Phi(\frac{-\sum\beta_kx_k}{\sigma})] + \notag\\ 
+\sigma [\phi(\frac{-\sum\beta_kx_k}{\sigma})-\Phi(\frac{1-\sum\beta_kx_k}{\sigma})] + \notag\\
+[1 -\Phi(\frac{1-\sum\beta_kx_k}{\sigma})] \notag
+\end{aligned}
+\end{align}
+
+Typically, in a one-sided tobit model, the marginal effect is represented by :
+
+\begin{align}
+  \frac{\partial E(y|x)}{\partial x_k} = \beta_k \bigg(\Phi(\frac{\beta x}{\sigma}) \bigg)
+\end{align}
+
+However, in DEA applications when efficiency is estimated in the sense of Farrell-Debreu, a two-sided model is often used due to the bounded nature in zero and unity of these estimates. [@hoff2007] provides a review on the marginal effect in the two-sided tobit models as follows : 
+
+The marginal effect of each covariate on the dependent variable is given by:
+
+\begin{align}
+  \frac{\partial E(y|x)}{\partial x_k} = \beta_k \bigg( \Phi(\frac{1- \beta x}{\sigma}) - \Phi(\frac{- \beta x}{\sigma}) \bigg)
+\end{align}
+
+The mean marginal effect of each covariate is given by : 
+
+\begin{align}
+\frac{\partial E(y|\bar{x_k})}{\partial x_k} = \beta_k \bigg( \Phi(\frac{1- \beta_k \bar{x_k}}{\sigma}) - \Phi(\frac{- \beta \bar{x_k}}{\sigma}) \bigg)
+\end{align}
+
+Where $\Phi(\frac{\beta x}{\sigma})$ is the cdf of the standard normal distribution, and $\frac{\beta x}{\sigma}$ is its argument. $\phi(.)$ is the density distribution. $\beta$ and $x$ are respectively the vector of coefficients and the matrix of covariates, while $\beta_k$ is the coefficient to the $k^{th}$ exogenous variable $x_k$, and $\bar{x_k}$ is a mean aggregate to $x_k$.
+
+## 4.2.Issues with tobit and OLS in two-stage DEA analysis
+
+  [@hoff2007] presented a review and justification on Using Tobit and OLS in a second stage. In fact, the author proceeded to specifying that tobit regression is the "natural" choice for modeling the exogenous variability on the DEA estimates given the nature of DEA estimates as "corner solution outcomes", with a cluster in either unity or 0. [@hoff2007] also defended the use of OLS as an introductory approach since OLS is the first-order Taylor approximation to non-linear models i.e: tobit models, but only when the estimated coefficients in OLS do not significantly differ from non-linear estimates. In this context the author also argues that using tobit assumes that the probability of attaining both ends of [0,1] is positive, however, since the DEA estimates are limited in ]0,1] only one corner of the interval can be attained, therefore, a two-limit tobit model is a misspecification that may result in misleading inference. For this reason, [@hoff2007] provided a comparison of four models using danish fishery data: (OLS, Tobit, Papke-Wooldridge([@papke1996]), and unit-inflated beta model(an adaptation to the zero-inflated beta model of [@cook2000]), and concluded that initially, the OLS model performs as well as the other models, and that the unit-inflated beta model performs worse than the other three models in general. Also, the author reported that the performance of Papke-Wooldridge and tobit are relatively similar for the data used. Therefore, the author advocated the use of the simple models OLS and tobit, since they seem to be sufficient in the case of modeling DEA in a second stage "even though neither of these[models] are well-defined".
+  
+  [@mcdonald2009] went directly into advocating the use of OLS in a second stage, arguing that the particular fractional properties of DEA measures in the first stage make the tobit regression inappropriate, and the latter can only be justifiable when the first stage estimates are issued from a censored DGP, which is not the case according to [@mcdonald2009]. The major criticism that [@mcdonald2009] provide on [@hoff2007] is that the efficiency "scores" are not censored nor corner solution data, but rather a fractional estimates given the nature of DEA, which is a ratio of outputs over inputs. The paper also acknowledged the contribution of [@simar2007], and [@banker2008]. 
+  
+  In spite of the popularity of two-stage among researchers, this method has been heavily criticized by statisticians. In fact, [@grosskopf1996] was one of the earliest critics to the incoherent practices of two-stage DEA, counting:
+  
+  * The non-appropriation of the use of linear regression. 
+  
+  * The possibility that these non-discretionary variables can be correlated with the output efficiency. 
+  
+  * And more importantly, the lack of a DGP and the underlying distribution of the error term. 
+  
+  In the same context, [@ramalho2010], argued against using linear models in the second stage of DEA, given the bounded nature of DEA, and the fact that the predicted values may lay outside of the unit interval and criticizing the use of censored Tobit models as well, stating that the accumulation of DEA scores at unity is normal given the way DEA is defined, and that the domain of the tow-limit Tobit model differs from DEA, because the null DEA scores are not observable. 
+  
+  In response to these critics, [@simar2007] were the first to provide a coherent DGP that justifies the use of a truncated regression(tobit) in the second stage proposing two algorithms that provide consistent estimates in the second stage, and more importantly, allowing for conducting inference on the efficiency estimates. Also, [@banker2008] provided an alternative to the previous paper proposing also a valid and interesting DGP that justifies the use of OLS in a second stage, and provided evidence on the performance of OLS. However, one should note that the setup for both papers is different, the first considers the efficiency measures as an unobserved estimate of a true unknown efficiency frontier, therefore no stochasticity is counted for and  non-parametric methodology is more appropriate, hence the bootstrap approach, this methodology is more popular among statisticians. The second paper considers stochastic noise and actually imposes a functional form on the production function. Also, considers the efficiency as merely a descriptive measure of observed data, which justifies the use of OLS in a second stage. This approach is more popular among economists and empirical researchers. Since we are in a non-parametric framework, our interest will be dedicated entirely to the method proposed by [@simar2007].
+  
+## 4.3.Two-stage DEA analysis with bootstrap: an overview of [@simar2007]
+
+[@simar2007] was the first paper to provide a statistical model that justifies the use of a two-stage DEA procedure, the creativity, and the technical elegance of the procedure provided grounds for researchers to confidently conduct inference in a two-stage setup. Among those who directly used this technique we find [@latruffe2008], [@alexander2010], [@nedelea2011], [@halkos2013], [@benito2014], [@wijesiri2015], [@lépine2015], [@see2015], [@jebali2017], [@chaabouni2018], [@nkegbe2018], and [@hong2020] and others. In fact, the paper's contribution can be summarized in three points:
+
+  1. Defined a statistical model.
+  
+  2. Demonstrated that conventional, likelihood-based approaches to inference are invalid.
+  
+  3. Developed two bootstrap algorithms that yields valid inference in the second-stage regression when such regressions are appropriate.
+
+Besides the major contribution of [@simar2007] which is the DGP that justifies the use of DEA with tobit in a two-stage analysis, the authors developed two algorithms as well, a single and double-bootstrap algorithms. The single bootstrap algorithm is used mainly to conduct inference on the second stage coefficients and do not correct the bias of the estimation, while the double-bootstrap algorithm is more complex and more robust to bias and is designed to provide bias correction and inference on both the efficiency estimates and the coefficients of the regression in the second stage.
+
+In this section, we will provide a general overview of the DGP and both algorithms in [@simar2007].
+
+### The statistical model.
+
+let's consider $\{x_i\}_{j=1}^{m}$ a vector of inputs, $\{y_i\}_{j=1}^{s}$ a vector of outputs, and $\{z_i\}_{j=1}^{q}$ a vector of environmental variables, all observed on a set $\zeta_n = \{(x_j,y_j,z_j)\}_{j=1}^{n}$. 
+
+In addition to the assumptions of the Shephardian production set $\Psi$ regarding monotonicity, convexity, close, and boundedness, [@simar2007] also adopts additional assumptions in the following manner: 
+
+**Assumption5** : the observed sample is $i.i.d$ to a probability function $f(x,y,z)$ supported over $\Psi$x$\mathbb{R}^r$, with $\Psi \in \mathbb{R}^{m +s}_+$ is the production set.
+
+**Assumption6** :  $f(\theta_j|zj)$ operates in the following manner : 
+$\theta_j = \psi(z_j, \beta) + \varepsilon_j \geq 1$, with $\psi$ : is a smooth continuous function. $\beta$ is a vector of parameters and $\varepsilon_j$ continuous random $i.i.d$ variable independent from $z_j$
+
+Assumption 5 & 6 are called the separability conditions where they specify $\Psi$ as a subset of the sample space, and the effect of $z_j$ operates through the dependence between $z$ and $y$. [@simar2007] stated that these conditions should be supported by the data, otherwise different alternative formulation should be considered. [@coelli] provide different formulations for the separability condition and [@simar2001] proposes a method to test it.
+
+**Assumption7** : $\varepsilon_j \sim N(0, \sigma_{\varepsilon}^2)$ and is left truncated at $1 - \psi(z_j, \beta)$ for each $j = 1,..,n$.
+
+
+**Assumption8** : for $(x,y) \in \Psi$ such that : $(\alpha^{-1}x,y \notin \Psi)$ and $(x, \alpha y \notin \Psi)$, for $\alpha >1$. $f(x,y|z) > 0$ and continuous in any direction toward the interior of $\Psi$ for all $z$.
+
+This assumption describes the probability of observing a DMUs in the neighborhood of $\partial \Psi$, which must approach unity when $n$ increases.
+
+**Assumption9** : for any $(x,y)$ in the interior of $\Psi$ $\theta(x,y|\Psi)$ is differentiable in both it's arguments. 
+
+This assumption is regarding the smoothness of the frontier. 
+
+These assumptions described above are the foundation of a semi-parametric DGP, yielding data in $\mathcal{X}_n$. Next, the objective will be estimating and deriving inference on $\{\theta_j\}_{j=1}^{n}$.
+
+### Invalidity of conventional likelihood methods
+
+  In an effort to provide proof on the statistical issues of using DEA estimates in a regression stage, [@simar2007] also detailed the biased nature of the estimated efficiencies themselves as an additional issue, this was demonstrated in the following manner: 
+  
+  $\hat{\theta}_i = E[\hat{\theta_i}] + u_i$, were $E[u_i] = 0$, while : 
+  
+  $Bias(\hat{\theta}_i) \equiv E[\hat{\theta}_i] - \theta_i$, rearranging the terms yields :
+  
+  $$\theta_i = \hat{\theta}_i- Bias(\hat{\theta}_i) - u_i$$
+  
+$Bias(\hat{\theta}_i)$ doesn't have a zero mean as does $u_i$, adding that to the regression form that most papers use i.e$\psi(z_i,\beta) = z_i\beta$, then we can write : 
+
+$$\hat{\theta}_i - Bias(\hat{\theta}_i) - u_i = z_i\beta + \varepsilon_i \geq 1$$
+
+Which means that the censored(tobit) regression is biased, and would yield inconsistent inference.
+
+### The bootstrap approach (single and double-bootstrap)
+
+
+#### Algorithm 1: 
+
+ 1. Using $\mathcal{X}_n$ compute $\hat{\theta}_i(x_i,y_i|\hat{\Psi})$ $\forall i = 1,...,n$.
+  
+  2. Use Maximum likelihood to estimate $\beta$ and $\sigma_\varepsilon$of the truncated regression of $\hat{\theta}_i$ on the non discretionary variables $z_i$ such that :
+  
+$$
+\theta_i = z_i\beta + \varepsilon_i \geq 1
+$$
+  
+  3. Loop the next steps 3.1 to 3.4 $L_1$ times to obtain L_1 series of bootstrap estimates $\mathcal{B}_i=\{\hat{\theta}^*_{i,b}\}_{b=1}^{L_1}$ :
+
+
+  - 3.1. For each $i = 1,...,n$ draw $\varepsilon_i$ from $N(0,\hat{\sigma}_\varepsilon^2)$ with left truncation at $1 -z_i\hat{\beta}$
+
+  - 3.2. For each $i = 1,...,n$, compute $\theta^*_i = z_i \hat{\beta} + \varepsilon_i$ such that: $$\theta_i = z_i \beta + \varepsilon_i \geq 1$$
+
+  - 3.3. Use Maximum likelihood to estimate $\beta$ and $\sigma_\varepsilon$ of the truncated regression of $\hat{\theta}_i$ on the non-discretionary variables $z_i$ yielding $(\hat{\beta}^*,\hat{\sigma_{\varepsilon}}^*)$
+  
+  4. Use the bootstrap values in $\mathcal{B}$, and the original estimates $(\hat{\beta},\hat{\sigma_\varepsilon})$ to construct estimated confidence intervals for each element of $\beta$ and $\sigma_\varepsilon$.
+  
+#### Algorithm 2:
+
+
+
+ 1. Using $\mathcal{X}_n$ compute $\hat{\theta}_i(x_i,y_i|\hat{\Psi})$ $\forall i = 1,...,n$.
+  
+   2. Use Maximum likelihood to estimate $\beta$ and $\sigma_\varepsilon$of the truncated regression of $\hat{\theta}_i$ on the non-discretionary variables $z_i$ such that :
+  
+$$
+\theta_i = z_i\beta + \varepsilon_i \geq 1
+$$
+  
+  3. Loop the next steps 3.1 to 3.4 $L_1$ times to obtain n series of bootstrap estimates $\mathcal{B}_i=\{\hat{\theta}^*_{i,b}\}_{b=1}^{L_1}$ :
+  
+      - 3.1. For each $i = 1,...,n$ draw $\varepsilon_i$ from $N(0,\hat{\sigma}_\varepsilon^2)$ with left truncation at $1 -z_i\hat{\beta}$
+  
+      - 3.2. For each $i = 1,...,n$, compute $\theta^*_i = z_i \hat{\beta} + \varepsilon_i$ such that: $$\theta_i = z_i \beta + \varepsilon_i \geq 1$$
+
+      - 3.3. Set $x_i^* = x_i$, $y^*_i = \frac{\hat{\theta_i}}{\theta_i^*}$, for all $i = 1,...,n$
+    
+      - 3.4. Restimate $\hat{\theta}^*_i = \theta(x_i^*,y_i^*|\Psi^*)$, where $\Psi^*$ is obtained by replacing $\{x_i,y_i\}_{i=1}^n$ by $\{x_i^*,y_i^*\}_{i=1}^n$
+         
+  4. For each $i = 1,...,n$ compute the bias corrected estimated $\hat{\hat{\theta}}_i$ using the bootstrap estimates obtained in $\mathcal{B}_i$ and the original estimate $\hat{\theta}_i$.
+
+  5. Use Maximum likelihood to estimate $(\hat{\hat{\beta}},\hat{\hat{\sigma_\varepsilon}})$ from the regression of $\hat{\hat{\theta}}_i$ on $z_i$ with left-truncation at $1 -z_i\beta$
+
+  6. Loop over the steps 6.1 to 6.3 $L_2$ times to obtain the sets of bootstrap $\mathcal{C}= \{(\hat{\beta}^*,\hat{\sigma_\varepsilon}^*)_b \}_{b = 1}^{L_2}$
+
+      - 6.1. For each $i = 1,...,n$ draw $\varepsilon_i$ from $N(0,\hat{\hat{\sigma}})$ with a left truncation at $1-z_i\hat{\hat{\beta}}$
+
+      - 6.2. For each $i = 1,...,n$ compute $\theta^{**}_i = z_i \hat{\hat{\beta}} + \varepsilon_i$.
+  
+      - 6.3. Use Maximum likelihood to estimate $(\hat{\hat{\beta}}^*,\hat{\hat{\sigma_\varepsilon}}^*)$ from the truncated regression of $\theta^{**}_i$ on $z_i$.
+
+  7. Use the bootstrap values in $\mathcal{C}$, and the original estimates $(\hat{\hat{\beta}},\hat{\hat{\sigma_\varepsilon}})$ to construct estimated confidence intervals for each element of $\beta$ and $\sigma_\varepsilon$.
+  
+## 4.4.Directional-Double-Bootstrap approach
+
+The DGP is [@simar2007] is designed to incorporate radial measures between the DMUs and the efficiency frontier using Farrell-Debreu distance functions, and is extensible for using the Shephardian distance as well. However, these distances cannot count for negative variables, and thus, the DGP cannot be a general use case, as was clearly stated by the authors themselves. In this section, we will provide our main contribution in this regard, where we adapt the DGP of [@simar2007] to incorporate a more general form of distance function, namely the directional distance function which we discussed its formula and statistical properties in the previous chapters. Our main focus will be then an adaptation to the double-bootstrap algorithm, as well as a small extension with regards to the marginal effect of the estimated coefficients in the second stage of the algorithm.
+
+### 4.4.1.The DGP:
+
+Let's consider a production activity that takes :
+
+  * $x \in \mathbb{R}^{p}_{+}$ : p vectors of observed inputs. $(p > 0)$
+  
+  * $y \in \mathbb{R}^{q}_{+}$ : q vector of desirable, observed outputs. $(q > 0)$
+  
+  * $b \in \mathbb{R}^{k}_{+}$ : k vector of undesirable outputs. $(k \geq 0)$
+  
+  * $z \in \mathbb{R}^{s}_{+}$ : m vector of non-discretionary inputs. $(m \geq 0)$
+
+Let's also consider a dataset defined by $\mathcal{X}_n = \{x_j,z_j,y_j,b_j\}^{n}_{j=1}$. 
+
+The attainable production combinations are given in the production set defined as : 
+
+\begin{align}
+  \Psi = \{(x,z,y,b) \in \mathbb{R}^{p+q+k+s}_{+} | (x,z,y,b) \text{ is feasible}\}
+\end{align}
+
+This production set describes all feasible combinations of inputs and outputs, the section of $\Psi$ over its output gives us the production technology set or the frontier of the production set :
+
+\begin{align}
+  Y(x,z) = \{(y,b) \in \mathbb{R}^{q + k}_{+} | (x,z,y,b) \in \Psi \}
+\end{align}
+
+* Assumption 1. $\Psi$ is convex and closed. 
+
+* Assumption 3. Strong disposability of discretionary inputs.
+  
+  - The level of discretionary input can be increased while keeping other inputs and outputs unchanged, formaly we have : $(y,b) \in Y(x,z), x' \geq x \Rightarrow (y,b) \in Y(x', z)$.
+
+* Assumption 4. Weak disposability f non-discretionary inputs.
+
+  - A proportional increase in the inputs of a feasible input output combination in the production set can yield the same amount of outputs :$(y,b) \in Y(x,z), \beta \geq 1 \Rightarrow (y,b) \in Y(x,\beta z)$
+
+* Assumption 5. Strong disposability of desirable outputs.
+
+  - Any reduced level of desirable outputs is feasible if a greater level of this output with an unchanged level of undesirable output is also feasible : $(y,b) \in Y(x,z), y' \leq y \Rightarrow (y',b) \in Y(x, z)$.
+
+* Assumption 6. Weak disposability of undesirable outputs.
+
+  - A proportional decrease of undesirable outputs is only feasible with the same level of decreasing the desirable outputs given that the input is unchanged. This means that It is not marginally possible to reduce undesirable output while maintaining the  desirable output at a constant level or simply this reduction is costly and cannot occur for free : The level of discretionary input can be increased while keeping other inputs and outputs unchanged, formally we have : $(y,b) \in Y(x,z), 0 \leq \beta \leq 1 \Rightarrow (\beta y,\beta b) \in Y(x, z)$.
+  
+Given the assumptions given above, we can derive the Directional Distance Function as described in [@chambers1996] in order to measure the distance from a particular input/output combination to the production frontier $\Psi$ given a specific direction determined by a vector $g$. Formally we have : 
+
+for $g = (g_x,g_z, g_y, g_b) \in \mathbb{R}^{p+q+k+m}_+$,$g \neq 0$, and $(x,z,y,b)\in \mathbb{R}^{p+q+k+m}_+$, we use DEA to estimate the production set $\Psi$ defined above as well as the directional distance between this set and each observed DMU,
+
+\begin{align}
+\hat{\theta}(x,z,y,b|g) = max\{\theta|(x - \theta g_x,z - \theta g_z,y + \theta g_y, b + \theta g_b) \in \hat{\Psi}_{DEA}\}
+\end{align}
+  
+  * Assumption 7 : The $n$ observations of $\mathcal{X}_n$ are independent, identically distributed (iid) random variables on the attainable set $\Psi$.
+  
+  * Assumption 8 : The random variables $(X,Z,Y,B)$ possess a joint density $f$ with compact support $\mathcal{D} \subset\Psi$; $f$ is continuous on $\mathcal{D}$; and $f(x,z,y,b) > 0, \forall (x,y) \in \Psi^{\partial}$.
+  
+  * Assumption 9 : The function $\theta(x,z,y,b|g,\Psi)$ is twice differentiable  for all $(x,z,y,b)$, and for any $g \in \mathbb{R}^{p+q+k+m}$.
+  
+    - This assumption impose smoothness on the boundary of $\Psi$, and is considered as "sufficient but stronger than necessary" by [@simar2012b].
+
+  * Assumption 10. :  $f(\theta_j|zj)$ operates in the following manner : 
+
+
+$$\theta_j = \psi(z_j, \beta) + \varepsilon_j \geq 0$$
+
+
+with $\psi$ : is a smooth continuous function. $\beta$ is a vector of parameters and $\varepsilon_j$ continuous random $i.i.d$ variable independent from $z_j$
+
+
+  * Assumption 11. : $\varepsilon_j \sim N(0, \sigma_{\varepsilon}^2)$ and is left truncated at $- \psi(z_j, \beta)$, for each $j = 1,..,n$.
+
+These assumptions described above are the foundation of a semi-parametric DGP, yielding data in $\mathcal{X}_n$. Next, the objective will be estimating and deriving inference on $\{\theta_j\}_{j=1}^{n}$ and $\beta$.
+
+### 4.4.2.The algorithm: 
+  
+  1. Using $\mathcal{X}_n$ compute $\hat{\theta}_i(x_j,z_j,y_j,b_j|g)$ $\forall j = 1,...,n$.
+  
+  2. Use Maximum likelihood to estimate $\beta$ and $\sigma_\varepsilon$of the truncated regression of $\hat{\theta}_i$ on the non discretionary variables $z_i$ such that :
+  
+$$
+\theta_j = z_j\beta + \varepsilon_j \geq 0
+$$
+  
+  3. Loop the next steps 3.1 to 3.4 $L_1$ times to obtain n series of bootstrap estimates $\mathcal{B}_j=\{\hat{\theta}^*_{j,b}\}_{b=1}^{L_1}$ :
+  
+      - 3.1. For each $j = 1,...,n$ draw $\varepsilon_j$ from $N(0,\hat{\sigma}_\varepsilon^2)$ with left truncation at $-z_j\hat{\beta}$
+  
+      - 3.2. For each $j = 1,...,n$, compute $\theta^*_j = z_j \hat{\beta} + \varepsilon_j$ such that: 
+    $$\theta_j = z_j \beta + \varepsilon_j \geq 0$$
+
+      - 3.3. Set $x_j^* = x_j$, $y^*_j = \frac{1 +\theta^*_j}{1 +\hat{\theta_j}} y_j$, and $b^*_j = - \frac{1 +\theta^*_j}{1 +\hat{\theta_j}} b_j$, for all $j = 1,...,n$
+    
+      - 3.4. Restimate $\hat{\theta}^*_j = \theta(x_j^*,y_j^*|\Psi^*)$, where $\Psi^*$ is obtained by replacing $\{x_j,z_j,y_j,b_j\}_{j=1}^n$ by $\{x_j^*, z_j^*,y_i^*,b_j^*\}_{j=1}^n$
+         
+  4. For each $j = 1,...,n$ compute the bias corrected estimated $\hat{\hat{\theta}}_j$ using the bootstrap estimates obtained in $\mathcal{B}_j$ and the original estimate $\hat{\theta}_j$.
+
+  5. Use Maximum likelihood to estimate $(\hat{\hat{\beta}},\hat{\hat{\sigma_\varepsilon}})$ from the regression of $\hat{\hat{\theta}}_j$ on $z_j$ with left-truncation at $-z_j\beta$
+
+  6. Loop over the steps 6.1 to 6.3 $L_2$ times to obtain the sets of bootstrap $\mathcal{C}= \{(\hat{\beta}^*,\hat{\sigma_\varepsilon}^*)_b \}_{b = 1}^{L_2}$
+
+      - 6.1. For each $j = 1,...,n$ draw $\varepsilon_i$ from $N(0,\hat{\hat{\sigma}})$ with a left truncation at $-z_j\hat{\hat{\beta}}$
+
+      - 6.2. For each $j = 1,...,n$ compute $\theta^{**}_j = z_j \hat{\hat{\beta}} + \varepsilon_j$.
+  
+      - 6.3. Use Maximum likelihood to estimate $(\hat{\hat{\beta}}^*,\hat{\hat{\sigma_\varepsilon}}^*)$ from the truncated regression of $\theta^{**}_j$ on $z_j$.
+
+  7. Use the bootstrap values in $\mathcal{C}$, and the original estimates $(\hat{\hat{\beta}},\hat{\hat{\sigma_\varepsilon}})$ to construct estimated confidence intervals for each element of $\beta$ and $\sigma_\varepsilon$.
+  
+  Remarques:
+  
+* We use the truncated regression $\theta_j = z_j \beta +\varepsilon_j \geq 0$ as the directional distance is a measure of inefficiency, which means that instead of having a cluster of efficient DMUs at unity(which is the case for [@simar2007]), we end up having this cluster at 0. Therefore non-efficient DMUs will have a value $\theta_j > 0$. This also justifies the use of the truncated-normal distribution for the error term in the regression, where $\varepsilon_j \geq - z_j \beta$
+
+* In the original double-bootstrap algorithm, the authors used a pseudo-sample in the third step, however, this is done by using the (radial) Farrell distance function. Our algorithm uses a directional distance which is an additive measure, therefore the radial transformation used in the original paper i.e: $\frac{\hat\theta_j}{\theta_j^*}$  doesn't hold. Moreover, since the directional function is a generalization of radial distances than we need to use the link between them to provide a valid transformation. [@färe2000] provided the following link between the Farrell distance and the directional distance(see chapter 2, page 16 for more details) : 
+
+$$\theta(x,y|g) = \frac{1}{\beta(x,y)} - 1 \Rightarrow \beta(x,y) = \frac{1}{1 + \theta(x,y)}$$
+
+where $\beta(x,y)$ is the Farrell distance function, replacing the values of $\beta$ in the original pseudo-sample transformation yields the following transformation : 
+
+$$\frac{1 + \theta^*}{1+ \hat{\theta}}$$
+  
+
+This algorithm represents an adaptation to the [@simar2007] Double-Bootstrap algorithm to the directional distance function. The adaptation of the original algorithm appears in 3 major points: 
+
+* The DGP.
+
+* The behavior of $\theta_j$ with regard to $z_j$.
+
+* The smoothing process.
+
+We believe that this work provided answers to these points. Moreover, this procedure provides two main grounds of analysis, one on the inefficiency estimates, and two on the coefficients of the truncated regression. These coefficients if they were in a linear regression context, they would be considered and interpreted as the marginal effects of the exogenous variables on the inefficiencies, however, since we used a form of tobit regression, then, the marginal effect takes this form rather than the estimated coefficients:
+
+\begin{align}
+\frac{\partial E(\hat{\hat{\theta}}|\bar{z_k})}{\partial z_k} = \beta_k \bigg(\Phi(\frac{1-\hat{\hat{\beta_k}} \bar{z_k}}{\hat{\hat{\sigma_{\varepsilon}}}}) - \Phi(\frac{-\hat{\hat{\beta}}\bar{z_k}}{\hat{\hat{\sigma_{\varepsilon}}}}) \bigg)
+\end{align}
+
+Where $k$ represents the $k^{th}$ variable and $\bar{z_k}$ represents the mean of the $k^{th}$ variable $z_k$ and $\Phi$ is the cumulative density function of the standard normal distribution.
+
+
+## 4.5.Conclusion 
+
+In this chapter, we reviewed the use of two-stage analysis on a methodological level, where we investigated the debates around using OLS and using Tobit regression. We also reviewed an alternative solution given by [@simar2007] that's based on the bootstrap as a method to estimate density in order to provide valid inference. We provided also our main contribution in this regard which is an adaptation to the double-bootstrap algorithm using the directional distance function, i.e the Directional-Double-Bootstrap, which uses a general form of distance functions and provides a flexible approach for researchers in a semi-parametric context.
+
+
+# 5.Efficiency of Tunisian schools: approaches and methodologies
+
+Educational institutions can be considered (from an economic point of view) as production units, and can be evaluated in terms of efficiency.  [@bessent1980], [@bessent1982], and [@charnes1981] were the first to consider schools from this angle. In addition, this efficiency can be analyzed from various perspectives, [@ruggiero1999] investigates the efficiency of schools' expenditure per student, [@dewitte2014] examine the efficiency of teaching activities that maximizes students' performance. Another pivotal example for our thesis is the work of [@benyahiya2018], where the authors evaluate the efficiency of schools with regard to dropouts, and the work of [@ray1991] where the author analyzed the contribution of environmental(non-discretionary) factors on the efficiency estimates.
+
+In this chapter we are indeed interested in analyzing the efficiency of Tunisian secondary schools, taking into consideration the factors that are incorporated within the school control, and those that are not, while taking into consideration the number of dropouts. This is an excellent setup for a two-stage analysis. In order to conduct such an analysis, we will provide a statistical model incorporating our algorithm which we developed in the previous chapter: the Directional-Double-Bootstrap, we believe it can be our mean to answer the research questions that this chapter revolves around. The rest of this chapter is divided as follows: section one provides an overview of the education system and its current state, section two details the methodology that we will use and what we will study precisely in the Tunisian education landscape. Section three describes the data, section four reports the results, and section five discusses these results, we finish this chapter with a conclusion.
+
+## 5.1.Tunisian education landscape 
+
+Since its independence the Tunisian state took on the mission to nationalize education and create a sustainable education landscape where each of its phases is responsible for developing certain educational, social and civil attributes in the student. 
+
+For the education year 2014/2015, the ministry of education reported that 1066493 pupils are enrolled in primary schools along the territory, while for the preparatory and secondary schools it reported 876711 pupils are enrolled, while in 2018/2019 school year, this number jumped to 899696 enrolled pupils, the ministry also confirmed that there were more than 157000 dropouts from public schools which raised serious concern within parents, state officials, and educators and pushed the ministry to push for a national campaign: "the school retrieves its students".
+
+
+```{r tab0, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+names <- read_rds("~/Projects/poverty/data_clean//names_of_files.rds")
+
+paths <-map(names, 
+            function(x){
+              paste("~/Projects/poverty/data_clean/",x,".csv", sep = "")
+              }
+            )
+
+tables <- map(paths,read_csv)
+
+table_uno <- bind_rows(tables[1:24])
+
+table_uno %>%
+  group_by(state) %>%
+  summarise(avg_d_primary = mean(dropout_rate_primary),
+            avg_d_secondary = mean(dropout_rate_secondary)) %>% 
+  kable(caption = "Average dropout rates for each state in Tunisia",
+        format='latex',
+        booktabs = TRUE,
+        align = "c", col.names = c("States","Dropouts primary", "Dropout secondary"),
+        digits = 3) %>%
+  kable_styling(latex_options = "h") %>%
+  footnote("source: the national survey of Tunisian house holds, INS.")
+
+```
+
+
+
+```{r, figx, echo=FALSE, fig.cap="Average dropout rate for each state from primary and secondary education", message=FALSE, warning=FALSE}
+
+readRDS("~/my_thesis/data/states_data") %>%
+  pivot_longer(cols = primary:secondary,
+               names_to = "dropout", 
+               values_to = "rate") %>%
+ # filter(dropout == "primary") %>%
+  ggplot(aes(x = long,
+             y = lat,
+             group = group)) +
+  geom_polygon(aes(fill = rate), 
+               color = 'black', 
+               size = 0.1) + 
+  facet_wrap(dropout~.) +
+  scale_fill_viridis_b() +
+  theme_void() 
+
+```
+
+
+Indeed [@benyahiya2018], stated that the ministry of education believes that the reason behind the excessive dropout rate in Tunisian schools, is the poor infrastructure that renders some schools uncomfortable for both teaching staff and students, and even unsafe in some cases. In this context, the authors study Tunisian schools' efficiency to investigate whether this claim is plausible or not, also to shed light on the potential relationship between dropouts, education quality, and other possible factors. The question in this regard as stated by the authors is whether the dropout rate is a consequence of the low education quality reflecting a lack of confidence in the education system, or whether the dropout rate and the low quality are both the result of other possible factors, as the ministry suggests.
+
+```{r tab_pisa, echo=FALSE, message=FALSE, warning=FALSE}
+pisa_1 <- readxl::read_xls("~/my_thesis/data/pisa_2012_2015.xls", sheet = 1) %>% 
+  mutate(subject = rep("reading", 42)) %>%
+  mutate(year = c(rep(2015, 23), rep(2012,19))) 
+pisa_2 <- readxl::read_xls("~/my_thesis/data/pisa_2012_2015.xls", sheet = 2) %>% 
+  mutate(subject = rep("math", 42)) %>%
+  mutate(year = c(rep(2015, 23), rep(2012,19))) 
+pisa_3 <- readxl::read_xls("~/my_thesis/data/pisa_2012_2015.xls", sheet = 3) %>% 
+  mutate(subject = rep("science", 42)) %>%
+  mutate(year = c(rep(2015, 23), rep(2012,19))) 
+
+pisa <- rbind(pisa_1,pisa_2,pisa_3)
+pisa %>%
+  .[-c(1:9,29:33), -c(1,4)] %>%
+  rename(country = `...2`,
+         average = `...3`) %>% 
+  mutate(average = na_if(average, "—")) %>%
+  mutate(average = as.numeric(average)) %>%
+  drop_na(average) %>%
+  pivot_wider(names_from = c("subject","year"),
+              values_from = average) %>%
+  drop_na() %>%
+  filter(country %in% c("International Average (OECD)", "Tunisia")) %>%
+  mutate(country  = ifelse(country == "International Average (OECD)", "OECD average",country)) %>%
+  kable(caption = "Average PISA scores in 2012 and 2015",
+        format='latex',
+        booktabs = TRUE,
+        align = "c", col.names = c("country","2015","2012","2015","2012","2015","2012"),
+        digits = 3) %>%
+  add_header_above(c(" " = 1, "Reading" = 2, "Maths" = 2, "Science" = 2)) %>%
+  kable_styling(latex_options = "h") %>%
+  footnote("source: OECD PISA data 2012 and 2015")
+```
+
+To justify these questions in the first place we refer to the PISA survey, in table \ref{tab:tab_pisa} we compiled the average scores in reading, math, and science in Tunisia in comparison to the OECD average in these subjects. Tunisian students who took the survey are among the worst performing in countries outside the OECD and below the OECD average in every subject. 
+
+In addition, in one of its most recent report, the INS (The national institute of statistics) provided updated and interesting data on the state of poverty in Tunisia using data from the ministry of education and the survey of consumption of Tunisian households. We extracted this data and compiled table \ref{tab:tab0} where we provide mean aggregate statistics on the dropout rates in the primary and secondary phase for each state. Table \ref{tab:tabx} provides the national dropout rate averages, from the primary phase of education this rate is at 0.41, while the average of dropout rates from the secondary phase is 7.34, *that is 17.9 times higher than dropout from the primary phase*. We can observe this contrast in figure 2.
+
+The problem with student dropout in Tunisia is not related to the event itself, but rather to its outcome as these dropouts will induce social and economic challenges where they occur, [@thornberry1985] confirms that dropping out of secondary schools is "positively associated with later crime", The INS report also states a positive correlation between the poverty rate and the dropout rate. In this regard, studying the efficiency of these schools is very important because it gives policy makers a view on how this phenomenon behave in its context : in the school, and in its environment, which will lead to precise and effective policies. However, in order to confirm these observations independent studies should be conducted using the proper statistical tools and data.
+
+
+```{r tabx, echo=FALSE, message=FALSE, warning=FALSE}
+
+table_uno %>% 
+  group_by(state) %>%
+  summarize(dropout_primary = mean(dropout_rate_primary),
+            dropout_secondary = mean(dropout_rate_secondary)) %>%
+  pivot_longer(cols = c("dropout_primary","dropout_secondary"),
+               names_to = "dropout",
+               values_to = "rate", 
+               names_prefix = "dropout_") %>%
+  group_by(dropout) %>%
+  summarise(mean = mean(rate),
+            variance = sd(rate)^2,
+            min = min(rate),
+            max = max(rate)) %>%
+  kable(caption = "summary statistics for the dropout rate in primary and secondary education",
+        format='latex',
+        booktabs = TRUE,
+        digits = 3) %>%
+  kable_styling(latex_options = "h") %>%
+  footnote("source: the national survey of Tunisian house holds, INS.")
+  
+
+```
+
+
+
+## 5.2.Methodology
+
+In order to investigate the relationship (in sense and volume) between Tunisian schools' efficiency and the dropouts we will have to use conventional and unconventional statistical tools, each of them is supposed to solve a modeling issue. First, since we don't have any idea on the production function of Tunisian secondary schools, a parametric approach is not plausible, therefore, the efficiency frontier that this function is supposed to form can be estimated using DEA, which will allow the data to speak directly without any statistical constraints. The first empirical application of DEA in schools' efficiency, was part of its founding paper in [@charnes1978], since then various studies were published using the same technique, indeed, [@bonesronning1994] used DEA in order to evaluate the efficiency of schools given the resource used and the results achieved in Norwegian high schools. [@barbetta2003] used DEA, and SFA to evaluate the efficiency of a sample of Italian high schools given the proprietary structure and concluded that this structure affects the school's efficiency. [@mancebon2008] used DEA to evaluate the efficiency of Spanish high schools and compare public schools to private schools.
+
+Second, DEA(in the Farrell or shephard sense) doesn't allow for using negative values in data, which means, the conventional DEA approach won't allow us to count for the number of dropouts as an undesirable output. As a remedy for this issue, we will rely on the Directional Distance Function, which is a generalization to the radial distance functions (the Farrell-Debreu and the Shephardian distance functions, see chapter 3 for more details). This function should allow us to accord a vector of weights to each DMU for each variable. In this manner we will be able to accord the dropout variable a negative weight which will render it an undesirable output. However, we should again note that Directional Distance Functions yield not a measure of efficiency, but rather a measure of inefficiency, which reverse the interpretation of the conventional Farrel-Debreu or Shephardian Distances with DEA. [@barra2014] used directional distance function and DEA to model, evaluate, and compare the efficiency of Italian universities given the number of dropouts as an undesirable output, the authors revealed the existence of geographical and ownership effect on the efficiency estimated using DEA. [@benyahiya2018] used the directional distance to evaluate the efficiency of a sample of Tunisian high schools while taking into account the dropout rate.
+
+Lastly, in order to investigate the effect that non-discretionary variables have on the efficiency estimate that we will estimate using DEA estimates of Directional distance function, we will rely on the Double-Bootstrap methodology which yields valid inference according to [@simar2007] and [@kneip2015], this will allow us to avoid the methodological issues of conventional two-stage analysis. In this context, [@johnes2006] used a bootstrap procedure to test the significance of the difference between the most and least efficient higher education institutes in England, Also, [@afonso2006] used both single and double-bootstrap procedures on DEA estimates of efficiency in the context of a semi-parametric model to evaluate the efficiency of education expenditures in 25 OECD countries using the PISA data. In addition [@liu2017] used the  bootstrap procedure with a truncated regression to evaluate the effect of e-learning on the efficiency of a sample of Taiwanese high schools. With the same spirit, this chapter will rely on the Double-bootstrap methodology of [@simar2007] precisely the Directional-Double-Bootstrap algorithm that we developed in the previous chapter. However, to simplify the process, we will assume that all the assumptions in the model that we proposed are respected by our data, as the complexity of testing such assumptions require a dedicated study. Moreover, we will use the results of our model and a randomForest model in order to provide more meaningful insights using the feature(variables) importance matrix. We will also compare these results to conventional OLS with a transformation on the dependent variable and without one, as well as Tobit regression.
+
+
+## 5.3.The data
+
+Efficiency analysis of education institiutions started with the influential papers of [@bessent1980], and [@charnes1981], following these papers a great number of studies using DEA have been puplished, each of these studies used a specific combination of Inputs and Outputs, depending on the data availability, the context, and the objective of the study. [@thanassoulis2016] determined three variables categories that reflect characteristics of the students, the characteristics of the school, and the characteristics of the teaching staff.  For Inputs,[@cherchye2010] used the total number of instruction units assigned to students. Also, one of the earliest studies in this context is [@bessent1982] who used as inputs the number of teaching staff with a master's qualification, the number of professional staff, and the number of teachers with more than three years of experience, also [@ray1991] used the number of class teachers and the number of support and administrative staff as inputs as well. Also, a cost-wise angle has been evaluated as in [@fare1989] with the number of students and net expenditure is considered as inputs, while [@ruggiero1999] used the expenditure per pupil as a straight forward input. As for the outputs, in general tests scores are considered, such as in [@sengupta1987], the proportion or number of passing students in specific subjects such as in [@mccarty1993]. Also, [@ruggiero1996] used the scores in social studies, and [@ray1991] used scores in languages and art performance. In addition, The proportion of pupils achieving more than a certain grade has been used in [@bradley2001]. In addition [@kirjavainen1998], [@muniz2002], and [@oliveira2005] used the number of approvals or success rate. The attendance rate in [@arnold1996] and [@bradley2001], the number of graduates were considered in [@kirjavainen1998] and the percentage of students who do not drop out in [@arnold1996]. Another interesting study that considered unconventional outputs was that of [@lovell1994] where the authors investigated the performance of schools in terms of opportunity generation for students in the intermediate and long term, using as outputs post-secondary school grades, intermediate revenue, and long term education achievements, the importance of this study concerns the result which indicated that schools perform better in intermediate and long term objective than short term objectives. In addition to that dropouts has been considered in many studies, [@benyahiya2018] provided a contextualization of this problem in the Tunisian education landscape, mentioning that the complexity of this problem goes beyond pedagogical or societal factors around students and schools. In this context, [@hunt2008], [@dewitte2013], and [@dewitte2017] also, provide a comprehensive and extensive review on the complexity of the dropout phenomenon. 
+
+The choice of the variables in the inputs and outputs is subject to the research objective and to data availability constraint, in fact,  this has been an issue for researchers for a long time since [@bessent1982] where the authors stated their main challenges were "(1)obtaining data to specify adequate input measures, (2) obtaining data to specify outputs that were not limited to cognitive test results, and (3)
+difficulties in communicating the results of a complex quantitative process to those affected by the results.". This study is not an exception, the data availability is also an issue in the Tunisian context, for this reason we decided to use the same approach in inputs and outputs as in [@benyahiya2018] and [@rebai2019] using data from the PISA(Program for International Student Assessment) 2012 survey in order to avoid any bias related to data collection methodology and techniques.
+
+#### Inputs
+
+As mentioned above we will follow the strategy used in [@rebai2019], we will be using 3 inputs in the first stage. We start by defining the time of learning spent at the school itself and divide that into 3 different variables: 
+
+*   learning time spent on Science(SMINS) 
+
+*   learning time spent on Languages(LMINS)
+
+*   learning time spent on Mathematics(MMINS)
+
+In this regard, [@brennan2014], and [@bradley2001] provide a review that rationalizes the use of these variables as inputs.
+
+#### Outputs 
+
+The outputs will be divided into 2 categories, the desirable outputs, and the undesirable outputs.
+
+  * PISA test scores in : Mathematics (SM), Sciences (SS) and Languages (SL).
+  
+  * Number of dropouts (DROP)
+    
+As for the desirable outputs, we will consider the PISA test scores(SM, SS, SL) for each subject (SMINS,MMINS,LMINS), as advocated by [@agasisti2014]. In addition, for the undesirable output, we will consider the number of dropouts from the schools (DROP), those are the students leaving the school without a certificate of completion or a qualification that allows them to access post-schools destinations. A review of the effect of the dropout rate on efficiency estimates can be found in [@benyahiya2018].
+
+```{r include=FALSE}
+summy <- function(y){
+  tibble(mean = mean(y) %>% round(., 3),
+         sd = sd(y) %>% round(., 3),
+         min = min(y) %>% round(., 3),
+         max = max(y) %>% round(., 3)) %>%
+    return()
+}
+data_first <- read_csv("~/my_thesis/data/clean_data.csv") %>% .[,c(2:8)] 
+DMUs <- read_csv("~/my_thesis/data/clean_data.csv")[,1]
+```
+
+```{r tab1, echo=FALSE, results='markup'}
+stage_one_names <- c("MMINS","LMINS","SMINS","Math","Reading","Science","Dropouts")
+
+colnames(data_first) <- stage_one_names
+
+data_first %>% 
+  sapply(., summy) %>%
+  kable(caption = "Descriptive statistics of the first stage variables",
+               format='latex',
+               booktabs = TRUE) %>%
+  kable_styling(latex_options = "h")
+```
+
+
+#### Second stage variables 
+
+In the second stage of our analysis, we will devote it to explain the marginal effect of the socio-economic, the geo-demographic, and the historical factors on the DEA estimates obtained using the variables discussed above. We can differentiate seven groups of factors which are: socio-economic status of students; Type of school location; School location; Political context; Competition; Teacher characteristics; school/class sizes. 
+
+To accentuate this in our analysis and investigate the relevance of each factor on the first stage scores we will use the following categories: 
+
+* School characteristics: As defined in [@agasisti2013], [@agasisti2014] and [@masci2016] this category contains variable which is a direct characteristic of the school itself. According to the same authors, the Class size (CLSIZE: average class sizes in the school) has a positive impact on efficiency, while School location (SCLOC: either: village, small town, town, city, large city), and School size(SCSIZE: total number of students enrolled in the school) can have either a positive or a negative effect on the efficiency. 
+
+* School environment: [@masci2016] stated that gender proportion can either negatively or positively affect efficiency. We will use the variable Proportion of girls (NGIRLs: number of girls in the school). Moreover, as stated in [@agasisti2013] we shall also represent parental pressure (PRESS: answer of the principals on whether there is much, little, or no pressure on the school from parents to get better performance). Also, we introduce the Competition variable (COMP: measures the number of similar schools in proximity) following [@bradley2001].
+
+
+```{r tab2, echo=FALSE, results='markup'}
+
+# dummy variables summary statistic is useless think about an alternative for this one.
+
+readRDS("~/my_thesis/code_output/DB_DDF/stage_2") %>%
+  sapply(., summy) %>%
+  kable(caption = "Descriptive statistics of the second stage variables",
+               format='latex',
+               booktabs = TRUE) %>%
+  kable_styling(latex_options = "h")
+
+```
+
+## 5.3.Results and discussion
+
+To evaluate the efficiency of the sample schools represented in our data, and described in table \ref{tab:tab1}, we use the Directional-double-bootstrap algorithm that we developed in the previous section. To use our algorithm, we need to define key global parameters; The directions vector for the first stage($g$), the first loop size($L_1$), and the second loop size for the second stage($L_2$). 
+
+In the first stage, the directions vector chosen for this analysis is the same used in [@rebai2019], assigning a negative direction to the dropout variable to indicate that the dropout is a bad variable and that efficient units should have a minimum amount of this output. In fact the directions vector is considered for our study : $g = (0,0,y,-b)$. 
+
+Using this directions vector yielded the efficiency estimates of step 1 in the algorithm. A description is provided in the table \ref{tab:tab3} where we can observe that 25 units are efficient.  
+
+
+```{r, tab3, echo=FALSE, results='markup'}
+teta_s1 <- readRDS("~/my_thesis/code_output/DB_DDF/teta_s1") 
+
+teta_s1 %>% 
+  summy() %>% 
+  cbind(., tibble("efficient units" = teta_s1[teta_s1 == 0]) %>% 
+          count(name = "efficient units") ) %>% 
+  mutate("proportion of efficient units" = round(`efficient units`/105 * 100, 3)) %>%
+  kable(caption = "Descriptive statistics of the initial efficiency estimate of the sample schools",
+               format='latex',
+               booktabs = TRUE) %>%
+  kable_styling(latex_options = "h")
+  
+```
+
+
+Moreover, our algorithm uses a smoothing process in step 3. This is considered as the first loop in the procedure. [@simar2007] indicated that using 100 to 200 replication is optimal for this step. However, given the small sample size we used $L_1 = 300$ replications. The results of the first loop are obtained in the table \ref{tab:tab4}. We can observe that the number of efficient DMUs dropped by 10 units (15 efficient unit compared to 25 in the initial estimate), in addition, the possible increase of efficiency for non efficient DMUs has increased(mean = 0.32) comparing to the initial efficiency estimates(mean = 0.163). Also, the least efficient DMUs are even less efficient than the initial estimates, the least bootstrapped-efficient DMU is at 0.998, while the least efficient DMU in the initial estimate is at 0.576.
+
+```{r, tab4, echo=FALSE, results='markup'}
+teta_s4 <- readRDS("~/my_thesis/code_output/DB_DDF/teta_s4")
+teta_s4 %>% 
+	    summy() %>% 
+	      cbind(., tibble("efficient units" = teta_s4[teta_s4 == 0]) %>% 
+		              count(name = "efficient units") ) %>% 
+  mutate("proportion of efficient units" = round(`efficient units`/105 * 100, 3)) %>%
+    knitr::kable(caption = "Descriptive statistics of the bootstrapped efficiency estimate of the sample schools",
+		                format='latex',
+				               booktabs = TRUE) %>%
+    kable_styling(latex_options = "h")
+```
+For the second stage, the results of the truncated regression are given in table \ref{tab:tab5}. These are the coefficient of the non-discretionary variables(as described in table \ref{tab:tab2}) used in step 5 of the algorithm, where we conducted 4000 replications in the second loop. In addition, table \ref{tab:tab5} also incorporates the marginal effects that were computed separately using the same method that we provided in the previous chapter. 
+
+```{r, tab5, echo=FALSE, results='markup'}
+
+beta_s5 <- readRDS("~/my_thesis/code_output/DB_DDF/beta_s5") %>% t() %>% as_tibble() %>% rename(Intercept = `(Intercept)`)
+mmef <- readRDS("~/my_thesis/code_output/MEFF/mmef")
+
+betas <- rbind(beta_s5, mmef) %>% rowid_to_column(var = "variable") 
+betas$variable <- c("coefficient", "marginal effect")
+betas <- betas %>% 
+  column_to_rownames ( var = "variable")
+  
+betas %>% 
+  kable(caption = "truncated regression estimate and marginal effect for each variable",
+               format='latex',
+               booktabs = TRUE, digits = 5,row.names = T) %>%
+  kable_styling(., 
+                  latex_options = "scale_down") %>%
+  footnote(c("The coefficients are obtained in the fifth step of the algorithm.", "The marginal effect are computed seperatly using a different code script.")) %>%
+  kable_styling(latex_options = "h")
+  
+```
+
+
+```{r, tab6, echo=FALSE, results='markup'}
+cib_05 <- readRDS("~/my_thesis/code_output/DB_DDF/ci_beta_05")
+
+cib_05 %>% 
+  kable(caption = "Bootstrapped confidence intrval for the 95th perentile",
+               format='latex',
+               booktabs = TRUE, digits = 5) %>%
+  kable_styling(latex_options = "h")
+```
+
+The results of tabel \ref{tab:tab5} should be reviewed with the results in table \ref{tab:tab6} in which we provide the confidence intervals for each variable at 95% confidence. 
+
+We can observe that at 5% level of risk, Only the variables NGIRLS and SCHSIZE are insignificant. However, we are more interested in the marginal effect that these variables may have on the efficiency estimates. Indeed we can easily conclude from table \ref{tab:tab5} the marginal effect each variable has on the efficiency estimate:
+
+* A transition from 1 to 0 in school location: (the school in a rural area) increases the inefficiency by 0.039(3.9%) which means that schools in urban areas are 3.9% more efficient than those in rural areas.
+
+* A transition from 1 to 0 in competition: (there are no competing schools in the same area) increases the inefficiency by 0.036(3.6%), which means that schools in competition with other schools 3.6% more efficient than schools without any competing peers in the same area.
+
+* A transition from 1 to 0 in parental pressure: (parents do not exercise pressure on the school to improve the grades of their students) decreases the inefficiency by 0.0128(1.28%), which means that schools where the parents do not exercise pressure to improve their children grades are 1.28% more efficient.
+
+* An increase of one unit in the number of girls in a given school provides a decrease of inefficiency by 0.00007(0.007%), which means that schools with more female students are 0.007% more efficient than schools with fewer students of the same gender(at a one unit base).
+
+* An increase of one unit in the class size of a given school induces a decrease of inefficiency by 0.0008(0.08%), which means that schools with smaller classes are 0.08% more efficient than schools with larger classes(at a one unit base).
+
+* An increase of one unit in the school size, yields an increase by 0.00005(0.005%) of inefficiency, which means that smaller schools are more efficient by 0.005% than bigger schools(at a one unit base).
+
+
+We can observe that at 5% risk level the variables: NGIRLS(number of girls) and SCSIZE (school size) are insignificant on a marginal level. However, how can we evaluate the contribution of these variables when they are presented collectively with the rest of the variables. In OLS the $R^2$ is often used to do just that by comparing the change in the $R^2$ when we add or remove a certain variable, In a two-stage setup such as ours this is not possible. However, [@rebai2019] used machine learning algorithms to capture the variance in the second stage instead.
+
+In this regard, we constructed a Random Forest and  regression trees models using the default settings of the rpart package in R by [@rpart2010]  and the randomFroest by [@rf] yielding the regression tree plot in figure 3, and the variable importance plot in figure 4, we regressed the inefficiency estimates of step 1 in the algorithm, described in table \ref{tab:tab4} over the second stage variables described in \ref{tab:tab2}. These tree-based algorithms are attracting more attention for their ability to handle large sample sizes and capture non-linear patterns in the data.
+
+These results of the random forest model are similar to the ones in [@rebai2019], with minor differences in sorting the least important variables, competition(COMP) and parental pressure(PRESS)(7% and 8% of importance in our second stage) while the second stage in [@rebai2019] yielded (10.5% and 8.5% respectively). These differences are normal in our opinion and are issued from a different preprocessing approaches, we used the actual number of girls instead of the percentage, and the number of dropouts instead of the dropout rate.
+
+Moreover, the Random Forest algorithm provides some interesting insights, while the number of girls (NGIRLS) and the school size (SCSIZE) variables were insignificant in our Directional-Double-Bootstrap algorithm, they seem to capture 47% and 46% of the variance in the model respectively. 
+
+
+```{r, figrpart, echo=FALSE, message=FALSE, warning=FALSE, fig.cap="The regression tree model plot"}
+m <- readRDS("~/my_thesis/code_output/RT/RT_model")
+mrf <- readRDS("~/my_thesis/code_output/RF/importance")
+m %>% rpart.plot()
+```
+ 
+Similarly, the regression trees model resulted in various interesting insights, but ours are significantly different from the regression tree in [@rebai2019]. Due to the high sensitivity of the tree-based models and the small data set, the difference in the data preprocessing phase can in fact,  alter the results this much. Indeed, our regression tree starts from the mother node with 100% of DMUs with more than 346 girls enrolled in the school obtain an inefficiency average of 0.16. 
+20% of the DMUs are associated with a number of female students above 644 and obtained an average inefficiency of 0.076. 10% of the DMUs are associated with a number of female students between 385 and 346, with an average inefficiency of 0.074, being the least of the tree. In addition, 9% of the DMUs have a number of female students between 346 and 434 with an average inefficiency of 0.24. 16% of the DMUs with total enrolled students below 969 and with a number of female students between 434 and 644, obtained an inefficiency of 0.12, while the DMUs with a total number of enrolled students above 969 and a number of female students between 434 and 644 obtained an inefficiency of 0.22 and represent 9% of the DMUs.
+As for DMUs where parents exercise pressure on the schools, and where the number of enrolled female students is below 346 the inefficiency is averaged at 0.18, while for the DMUs where the parents do not exercise any pressure on the school, and where the schools are located in an urban area who represent 11% of the DMUs have an average score of 0.31, and those in rural areas represent 10% of the DMUs and obtained an average inefficiency of 0.19.
+
+*the variable number of girls provides more explainability when it's above 346, while parental pressure and school locations are more detrimental when the number of girls is below 346.*
+
+```{r, figvarrpart, echo=FALSE, message=FALSE, warning=FALSE, fig.cap= "variable importance for the random forest(rforest) and the regression trees(tree) algorithms"}
+
+m$variable.importance %>% 
+  as_tibble() %>%
+  mutate(variable = c("NGIRLS" ,"SCHSIZE", "SCHLOC", "CLSIZE",  "PRESS","COMP")) %>%
+  rename( importance = value) %>%
+  merge(.,mrf, by = "variable") %>%
+ rename(regression_tree = "importance.x", 
+        regression_rforest = "importance.y") %>%
+  pivot_longer(cols = regression_tree:regression_rforest,
+               names_to = "regression", 
+               values_to = "importance") %>%
+  mutate(variable = fct_reorder(variable, importance)) %>%
+  ggplot(aes(x = importance, y = variable)) + 
+  geom_col() + 
+  facet_wrap(regression ~.) +
+  theme_light() 
+```
+
+Tree-based models, as convenient as they are, are not best suited for such a small data set, but we can use them to guide us in the analysis and to obtain as many insights as possible from the data since these models can capture non-linear patterns in the sample. However, it wouldn't be fair to compare the results of our approach to the two-stage Random Forest and Regression tree approaches since for these more data is required in order to conduct a meaningful model fit. Figure 4 represents the variable importance vector. Indeed, while the number of girls and the school size variables are insignificant in our model, they capture most of the variability in the second stage in the Random Forest and regression trees models. Which can in fact,  be explained with fact that the most important and desirable marginal effects of the other variables are more likely to be present in bigger schools where more female students are enrolled. However, this should be a subject of a further dedicated investigation in future studies using the proper data and statistical tools.
+
+```{r tabols, echo=FALSE}
+readRDS("~/my_thesis/code_output/OLS/single_table") %>%
+  kable(caption = "Output of conventional regression",
+               format='latex',
+               booktabs = TRUE, digits = 5,row.names = T) %>%
+  footnote("Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1")
+```
+
+Table \ref{tab:tabols} provides an overview of the regression models used in conventional two-stage analysis, a comparison of the values of the regressed variables as well as their level of significance, for the "ols_ln" model we transformed the dependent variable to $ln(1-y)$ as we discussed in the previous chapter following  [@banker1994], this transformation will allow us to interpret the coefficients as if these are the percentage marginal effects on efficiency rather than inefficiency. Moreover, these three models consistently provide the same insights with slight difference in the significance level : 
+
+  * SCHSIZE (school size) : insignificant in all models, (including our proposed model,see table \ref{tab:tab6}), with a negative impact on efficiency.
+  
+  * CLSIZE (class size) : insignificant in all models, but significant in ours at 95% confidence with a negative impact on efficiency.
+  
+  * NGIRLS (number of girls) : insignificant in all models, including ours, with a positive impact on efficiency.
+  
+  * PRESS (parental pressure) : significant in all models, including our model with at 95% confidence with a positive impact on efficiency.
+  
+  * COMP (competition) : significant in all models, ours included, with a negative impact on efficiency.
+  
+  * SCHLOC (School location): significant in all models including ours with a negative impact on efficiency.
+  
+
+We believe that both the results of the Directional-Double-Bootstrap algorithm and, and the Random Forest algorithm are complementary, and should be used hand in hand in coherent setup in order to derive as much interpretability as possible from the data in question, the use of conventional OLS and Tobit is also possible for simplification and comparison purposes, but the golden standard remains a coherent statistical model(such as the one we proposed) along with enough data to aslo rely on the machine learning techniques as well.
+
+In this regard, and to complement the work of [@rebai2019], we will shed light on what we think is an important output from the Random Forest algorithm that shouldn't be neglected, which is the percentage of the variance explained by the model. The percentage of variance explained is 13.62%, which is indeed a small value and represents a poor fit for the model which is mainly due to the data-set size that we have used, which is for tree-based algorithms very problematic since they possess a slow convergence rate. In fact the same problem(the poor fit) arise in the OLS regression both with and without the transformation on the dependent variable where for the OLS model without transformation the R-squared is 0.2, and for the model with transformation the R-squared is worse at 0.19, both better than the random forest's.  
+
+
+## 5.4.Conclusion
+
+In this chapter we shed light on an important issue in the Tunisian educational system: the Dropout phenomenon. We proposed a two-stage methodology that takes into consideration this phenomenon as an undesirable output using our Directional-Double-Bootstrap Algorithm. In addition, we used the Random Forest algorithm, regression-trees, OLS and tobit regression building on the work of [@benyahiya2018] and  [@rebai2019]  to provide more insights from the PISA 2012 survey data on Tunisian secondary schools. Our results did not only confirm the sense of the marginal effect of the variables we used on the inefficiency with accordance to the literature, but also resulted in considering some variables significantly unlike what has been reported in similar studies in this regard.  
+
+# General Conclusion
+
+In this work we addressed  the issue of inference in two-stage DEA analysis incorporating bad outputs. We relied on the semi-parametric approach of [@simar2007] and adapted the DGP and the double-bootstrap algorithm to count for bad outputs using the directional distance function, we called this algorithm the:  Directional-double-bootstrap algorithm. Our model incorporates a general form of the distance function that allows for negative values and different projection vectors on the variables used in the first stage, and a double-bootstrap algorithm that corrects for the bias of estimated coefficients in a second stage using a truncated regression, we used an adapted version of marginal effect for tobit regression as well. An empirical application was also included where our model is compared to random forest regression trees, OLS and Tobit regression in the second stage. Our model confirms the results of other two-stage regression models, and provides an alternative to the measure bias of the other models especially as these models tend to overestimate the marginal effect of the second stage variables. Our model does not consider the number of girls, nor the school size significant at 95% confidence level for the data used in this case. Also, important insights were derived from the random forest algorithm were the insignificant variables capture most of the variance of the efficiency. Further studies should use less restrictive DGP in the modeling phase as well as embrace more flexible and general methodologies such as the purely non-parametric conditional approach. Also, the asymptotic behavior of the directional-double-bootstrap DGP should be studied. Finally more work on gathering, and centralizing panel and geographical data on Tunisian schools and their economic and social environments should be done, as well as cross countries studies in this context. 
+
+# References
