@@ -11,6 +11,8 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 pacman::p_load(tidyverse, gt)
 
+theme_set(theme_light())
+
 data_full <- readr::read_csv('clean_data/clean_united_data.csv')
 dea_out_1 <- read_rds(here::here("results", "dea_out_1.rds"))
 ```
