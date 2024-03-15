@@ -9,6 +9,51 @@ summary_stats <- dea_out_1 %>%
   )
 print(summary_stats)
 
+data_full %>% 
+  na.omit() %>% 
+  group_by(CNT) %>%
+  summarise(
+    across(
+      all_of(c(inputs, outputs, envs)),
+      list(min = ~min(.x, na.rm = TRUE), 
+           max = ~max(.x, na.rm = TRUE),
+           mean = ~mean(.x, na.rm = TRUE), 
+           sd = ~sd(.x, na.rm = TRUE)), 
+      .names = "{.col}__{.fn}"
+    )
+  ) %>% 
+  pivot_longer(2:ncol(.), names_to = 'variable', values_to = 'value') %>% 
+  separate(variable, c('variable', 'measure'), sep = '__') %>% 
+  pivot_wider(names_from = variable, values_from = value) %>% 
+  gt(groupname_col = 'CNT', rowname_col = 'measure') %>% 
+  tab_options(
+    table.font.size = px(8),
+    table.width = pct(100), # Ensure the table uses the full page width
+    table.align = 'left'
+    # column_labels.text_wrap = TRUE, # Wrap column headers
+    # data_row.text_wrap = TRUE # Wrap data rows
+  ) %>% 
+  fmt_number(
+    columns = 3:last_col(),
+    decimals = 3
+  ) %>%
+  tab_spanner(
+    label = "Input Variables",
+    columns = vars(CPERIODS, STRATIO)
+  ) %>%
+  # Spanner for Output Variables
+  tab_spanner(
+    label = "Output Variables",
+    columns = vars(SCIENCE, READING, MATH)
+  ) %>%
+  # Spanner for Environmental Variables
+  tab_spanner(
+    label = "Environmental Variables",
+    columns = vars(STUBI, TEABI, RESSI, STAFI, COMP, SCSIZE, LOC, TOTAT)
+  ) 
+# %>%
+#   gtsave(here::here('results', 'summary_tab.tex'))
+
 # Analysis 2: Plot distribution of efficiency scores for each country.
 dea_out_1 %>%
   mutate(efficiency_scores = map(dea_out, ~.$eff)) %>%
@@ -186,6 +231,7 @@ dea_out_1 %>%
 extract_info <- function(boot_item) {
   # Extracting coefficients and their confidence intervals
   beta_hat <- boot_item$beta_hat_hat
+  sigma_hat <- boot_item$sigma_hat
   beta_ci_low <- boot_item$beta_ci[, 1]
   beta_ci_high <- boot_item$beta_ci[, 2]
   
@@ -194,8 +240,9 @@ extract_info <- function(boot_item) {
   # Combine into a data frame
   data.frame(
     Coefficient = beta_hat,
-    CI_Low = beta_ci_low,
-    CI_High = beta_ci_high,
+    Std.error = sigma_hat,
+    # CI_Low = beta_ci_low,
+    # CI_High = beta_ci_high,
     Significance = significance
   )
 }

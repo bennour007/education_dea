@@ -126,7 +126,7 @@ school_issues <- c(
   "SC061Q09TA", # Learning hindered by teachers being too strict with students
   "SC061Q10TA", # Learning hindered by teachers not being well prepared for classes
   # Instructional Hindrances Related to Infrastructure and Resources
-  ### resources
+  ### staff
   "SC017Q01NA", # Instruction hindered by a lack of teaching staff
   "SC017Q02NA", # Instruction hindered by inadequate or poorly qualified teaching staff
   "SC017Q03NA", # Instruction hindered by a lack of assisting staff
@@ -148,15 +148,34 @@ school_data_vars <- c(
   "TOTAT"       # Total number of all teachers at the school
 )
 
-
 schools %>% 
   mutate(
     # Calculate the mean for each group of variables
     student_behavior_issue_mean = rowMeans(select(., c("SC061Q01TA", "SC061Q02TA", "SC061Q03TA", "SC061Q04TA", "SC061Q05TA")), na.rm = T),
     teacher_behavior_issue_mean = rowMeans(select(., c("SC061Q06TA", "SC061Q07TA", "SC061Q08TA", "SC061Q09TA", "SC061Q10TA")), na.rm = T),
-    resources_issue_mean = rowMeans(select(., c("SC017Q01NA", "SC017Q02NA", "SC017Q05NA", "SC017Q06NA")), na.rm = T),
-    staff_issues_mean = rowMeans(select(., c("SC017Q03NA", "SC017Q04NA", "SC017Q07NA", "SC017Q08NA")), na.rm = T)
+    resources_issue_mean = rowMeans(select(., c(
+      "SC017Q05NA", # Instruction hindered by a lack of educational material (e.g., textbooks, IT equipment)
+      "SC017Q06NA", # Instruction hindered by inadequate or poor-quality educational material
+      "SC017Q07NA", # Instruction hindered by a lack of physical infrastructure (e.g., buildings, heating/cooling)
+      "SC017Q08NA"  # Instruction hindered by inadequate or poor-quality physical infrastructure
+    )), na.rm = T),
+    staff_issues_mean = rowMeans(select(., c(
+      "SC017Q01NA", # Instruction hindered by a lack of teaching staff
+      "SC017Q02NA", # Instruction hindered by inadequate or poorly qualified teaching staff
+      "SC017Q03NA", # Instruction hindered by a lack of assisting staff
+      "SC017Q04NA", # Instruction hindered by inadequate or poorly qualified assisting staff
+    )), na.rm = T)
   ) %>% 
+
+
+# schools %>% 
+#   mutate(
+#     # Calculate the mean for each group of variables
+#     student_behavior_issue_mean = rowMeans(select(., c("SC061Q01TA", "SC061Q02TA", "SC061Q03TA", "SC061Q04TA", "SC061Q05TA")), na.rm = T),
+#     teacher_behavior_issue_mean = rowMeans(select(., c("SC061Q06TA", "SC061Q07TA", "SC061Q08TA", "SC061Q09TA", "SC061Q10TA")), na.rm = T),
+#     resources_issue_mean = rowMeans(select(., c("SC017Q01NA", "SC017Q02NA", "SC017Q05NA", "SC017Q06NA")), na.rm = T),
+#     staff_issues_mean = rowMeans(select(., c("SC017Q03NA", "SC017Q04NA", "SC017Q07NA", "SC017Q08NA")), na.rm = T)
+#   ) %>% 
   select(
     CNT, CNTSCHID, REGION, STRATUM,
     all_of(school_data_vars), 

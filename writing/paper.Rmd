@@ -1,10 +1,14 @@
 ---
-title: "Untitled"
-author: "Bennour Mohamed Hsin"
+title: "Visegrad Countries and Education Challenges : An
+Efficiency Analysis"
+author: "Bennour Mohamed Hsin - University of Pécs - Faculty of Business and Economics"
 date: "2024-02-04"
 output:
-  pdf_document: default
-  html_document: default
+  pdf_document: 
+    latex_engine: xelatex
+    includes:
+      in_header: header.tex
+bibliography: refs.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -15,19 +19,18 @@ theme_set(theme_light())
 
 data_full <- readr::read_csv('clean_data/clean_united_data.csv')
 dea_out_1 <- read_rds(here::here("results", "dea_out_1.rds"))
+inputs <- c("CPERIODS", "STRATIO")
+outputs <- c("SCIENCE", "READING", "MATH")
+envs <- c("STUBI", "TEABI", "RESSI", "STAFI", "COMP", "SCSIZE", "LOC", "TOTAT")
 ```
+
+
+\newpage
+
 
 ## Abstract 
 
-# change the names of the vars in the tables
-# put larger tables in portrait mode
-# add literature to the ND var subsections
-# talk about the descriptives of the data
-# interpret the results 
-# finalize the citations 
-# discuss (the disposability test, generalization problem, more dimensions to add, time, student vs school level issue of aggregation)
-
-Education is the backbone of long-term economic prosperity. Thus, studying the educational landscapes of different countries for comparative reasons allows researchers to derive best practices that can be moulded into policies for the benefit of the collective well-being of communities in the regions. In this context, we conduct a detailed examination of school efficiency across 1190 schools at the NUTS2 regions of the Visegrad countries, namely Hungary, Poland, the Czech Republic, and the Slovak Republic, utilizing the rich dataset provided by PISA 2019. The dataset compiled for this research consists of an integrated mix of data, where student-level performance metrics and scores are aggregated to reflect school-level outcomes. This comprehensive dataset includes detailed information about the internal environment of each school, as well as the external factors surrounding it. Our analysis is threefold: first, we employ Data Envelopment Analysis (DEA) that identifies key factors contributing to school effectiveness and best practices in terms of student performancces; second, we employ a double-bootstrap procedure to estimate the contribution of various non-discretionary variables on school efficiency (related to the schools and to the region in question); and third, we conduct a Meta-Efficiency analysis across the four countries to unravel hidden patterns of inefficiencies. Our approach provides comprehensive analysis and insights that have actual practical policy implications, which can be tailored to the regional context of each of the countries in our study.
+Education is the backbone of long-term economic prosperity. Thus, studying the educational landscapes of different countries for comparative reasons allows researchers to derive best practices that can be moulded into policies for the benefit of the collective well-being of communities in the regions. In this context, we conduct a detailed examination of school efficiency across 1190 schools at the NUTS2 regions of the Visegrad countries, namely Hungary, Poland, the Czech Republic, and the Slovak Republic, utilizing the rich dataset provided by PISA 2019. The dataset compiled for this research consists of an integrated mix of data, where student-level performance metrics and scores are aggregated to reflect school-level outcomes. This comprehensive dataset includes detailed information about the internal environment of each school, as well as the external factors surrounding it. Our analysis is threefold: first, we employ Data Envelopment Analysis (DEA) that identifies key factors contributing to school effectiveness and best practices in terms of student performances; second, we employ a double-bootstrap procedure to estimate the contribution of various non-discretionary variables on school efficiency.
 
 
 
@@ -39,7 +42,7 @@ Understanding the mechanics that drives investment in Human Capital, and the cau
 The literature provided various scopes on how to approach educational landscapes from this perspective, two main scopes are efficiency (doing the right things) and effectiveness (doing things right). Essentially effectiveness focus on the practices (resources, operations, pedagogy, etc) that yields a desired result in terms of output, whereas efficiency (the scope of this paper) focuses on the operational dimension of these practices and how to maximize a desired output given a status quo of inputs. [@dewitte2017] in a comprehensive review criticizes the dychotomy between the literature on efficiency and effectiveness in the context of an educational landscape, arguing that both scopes have distinct contributions that must be connected together for a rather comprehensive understanding of the issues challenges and adavantages of a given system. 
 For the purposes of this paper we will approach the problem of assessing an educational landscape from the efficiency perspective, essentially given the finite nature of resources that are versed into a given system and because of the public nature of a majority of the education instituion which require additional attention to the policies implemented and their results and consequences on the public. This justifies the study of education systems as it allows to pinpoints the advantages and challenges that countries face in terms of educational excellence. following this line of thought, [@worthington2001] assumes that education institutions conduct a basic transformation of inputs into outputs, and this transformation can be proxied with a production function which can be estimated directly (parametrically) or indirectly (non-parametrically). Using Frontier estimation methods such as Data-envelopment-Analysis ([@charnes1978]) or Stochastic-Frontier-Analysis ([@aigner1977]) (or other similar methodologies) expanded the analysis tools that researchers used to approach educational institutions from the input/output perspective. 
 Building on this, frontier methodologies are often utilized in a two-stage set up to further assess how efficient Decision Making Units (or DMU) react with other non-discretionary variables, this methodology has been observed in various studies including [@mayston_jesson1988], [@ray2004], and [@ruggiero2004] among others.
-For this paper we decided to adopt this approach where we estimate (non-parametrically) the production function of our school sample with the means of Data-envelopment-analysis (or DEA, yielding efficiency scores) in the first stage then we use a a double-bootstrap process (following [@sw2007]) to estimate a truncated regression that enables inference on some non-discretionary factors within the DMUs and around it. 
+For this paper we decided to adopt this approach where we estimate (non-parametrically) the production function of our school sample with the means of Data-envelopment-analysis (or DEA, yielding efficiency scores) in the first stage then we use a a double-bootstrap process (following [@simar2007]) to estimate a truncated regression that enables inference on some non-discretionary factors within the DMUs and around it. 
 In this study we will use a sample of schools spanning across the Visegrad countries (V4: ) extracted from the PISA survey data of 2022. This data allows us to specify a set of inputs, outputs, and non discretionary  factors that we will use to derive best practices, and to derive inference in the second stage of our analysis. 
 The remaining of the paper is as follows: section 2 will introduce the methodology and data used in the study, section 3 will provide the results, section 4 will present a discussion, and finally we conclude in section 5. 
 
@@ -61,30 +64,30 @@ In order to conduct the investigation on the influential environmental factors o
 The PISA survey data is commonly used by researcher as it contains comprehensive information on many levels for multiple countries within the OECD and outside it. The survey contains multiple response files, on Student level, School level, and Teacher level (among others). The popularity of the use of this PISA survey data is reflected by the amount of papers published containing 'PISA data' or 'PISA survey' as a keyword which amounts to 322 papers from the Web of Science database and 414 from the Scopus database, between 2003 and 2024. 
 In our study we combine a set a variables on school level and student level to build a comprehensive and aggregated school level data set that contain enough information that can be leveraged by the methodology we use to investigate the effect of non-discretionary variables on school efficiency for the Visegrad countries (Hungary (HUN), Poland (POL), Czech Republic (CZE), Slovak Republic (SVK)). Our final clean dataset contains 1180 observations originally, and 1085 observation after removing the missing values. The decomposition of the final dataset by country is described in table 1. 
 
-```{r echo=FALSE}
+```{r tab1, echo=FALSE}
 data_full %>% 
   na.omit() %>% 
   group_by(CNT) %>% 
   summarise(count = n()) %>% 
-  gt()
+  gt() %>% 
+  tab_header(
+    title = 'Table 1: Number of observation (schools) per country' 
+  )
 ```
-Table 2 provide a full description of the final 
 
 
-```{r echo=FALSE}
 
-variables <- c("SC001Q01TA", "SC011Q01TA", "SCHSIZE", "SC002Q01TA", "SC002Q02TA",
-               "STRATIO", "TOTAT", "student_behavior_issue_mean", "teacher_behavior_issue_mean",
-               "resources_issue_mean", "staff_issues_mean", "total_homework_time",
-               "total_class_periods", "mean_PV_science", "mean_PV_reading", "mean_PV_math",
-               "mean_reading_attitude", "mean_science_attitude", "mean_math_attitude")
+Table 2 provide a full description of the final data across all the visegrad countries.
+
+
+```{r tab2, echo=FALSE}
 
 data_full %>% 
   na.omit() %>% 
   # group_by(CNT) %>% 
   summarise(
     across(
-      all_of(variables),
+      all_of(c(inputs, outputs, envs)),
       list(min = ~min(.x, na.rm = TRUE), 
                          max = ~max(.x, na.rm = TRUE),
                          mean = ~mean(.x, na.rm = TRUE), 
@@ -92,144 +95,108 @@ data_full %>%
       .names = "{.col}__{.fn}"
     )
   ) %>% 
-  pivot_longer(1:76, names_to = 'variable', values_to = 'value') %>% 
+  pivot_longer(1:ncol(.), names_to = 'variable', values_to = 'value') %>% 
   separate(variable, c('variable', 'measure'), sep = '__') %>% 
   pivot_wider(names_from = measure, values_from = value) %>% 
-  gt()
-```
-<div align="center">
-
-```{r echo=FALSE}
-
-data_full %>% 
-  na.omit() %>% 
-  group_by(CNT) %>%
-  summarise(
-    across(
-      all_of(variables),
-      list(min = ~min(.x, na.rm = TRUE), 
-                         max = ~max(.x, na.rm = TRUE),
-                         mean = ~mean(.x, na.rm = TRUE), 
-                         sd = ~sd(.x, na.rm = TRUE)), 
-      .names = "{.col}__{.fn}"
-    )
+  gt(rowname_col = 'variable') %>% 
+  fmt_number(
+    columns = 2:last_col(),
+    decimals = 3
+  ) %>%
+  # Group Rows based on category (e.g., 'Input Variables', 'Output Variables', 'Environmental Variables')
+  tab_row_group(
+    label = "Input Variables",
+    rows = variable %in% c("CPERIODS", "STRATIO")
+  ) %>%
+  tab_row_group(
+    label = "Output Variables",
+    rows = variable %in% c("SCIENCE", "READING", "MATH")
+  ) %>%
+  tab_row_group(
+    label = "Environmental Variables",
+    rows = variable %in% c("STUBI", "TEABI", "RESSI", "STAFI", "COMP", "SCSIZE", "LOC", "TOTAT")
   ) %>% 
-  pivot_longer(2:77, names_to = 'variable', values_to = 'value') %>% 
-  separate(variable, c('variable', 'measure'), sep = '__') %>% 
-  pivot_wider(names_from = variable, values_from = value) %>% 
-  gt() %>% 
-  tab_options(
-    table.width = pct(50) # Ensure the table uses the full page width
-    # column_labels.text_wrap = TRUE, # Wrap column headers
-    # data_row.text_wrap = TRUE # Wrap data rows
+  tab_header(
+    title = 'Table 2: Descriptive statistics of all the variables for the entire sample' 
   )
 ```
-</div>
+
+
+
+
+\blandscape
+\begin{table}
+\centering
+
+Table 3: Descriptive statistics of all the variables for each country
+\newlength\holdLTleft\newlength\holdLTright\setlength\holdLTleft{\LTleft}\relax\setlength\holdLTright{\LTright}\relax\setlength\LTleft{0\linewidth}
+\setlength\LTright{0\linewidth}\begin{longtable}{@{\extracolsep{\fill}}l|rrrrrrrrrrrrr}
+\toprule
+\multicolumn{1}{l}{} & \multicolumn{2}{c}{Input Variables} & \multicolumn{3}{c}{Output Variables} & \multicolumn{8}{c}{Environmental Variables} \\ 
+\cmidrule(lr){2-3} \cmidrule(lr){4-6} \cmidrule(lr){7-14}
+\multicolumn{1}{l}{} & CPERIODS & STRATIO & SCIENCE & READING & MATH & STUBI & TEABI & RESSI & STAFI & COMP & SCSIZE & LOC & TOTAT \\ 
+\midrule\addlinespace[2.5pt]
+\multicolumn{14}{l}{CZE} \\ 
+\midrule\addlinespace[2.5pt]
+min & $4.000$ & $3.250$ & $237.794$ & $323.644$ & $349.407$ & $1.000$ & $1.000$ & $1.000$ & $1.000$ & $1.000$ & $13.000$ & $0.000$ & $4.000$ \\ 
+max & $41.125$ & $100.000$ & $675.767$ & $664.219$ & $661.315$ & $3.600$ & $3.400$ & $4.000$ & $4.000$ & $3.000$ & $1,910.000$ & $1.000$ & $126.500$ \\ 
+mean & $30.157$ & $13.042$ & $503.257$ & $493.412$ & $492.427$ & $1.895$ & $1.862$ & $1.886$ & $1.954$ & $1.617$ & $459.782$ & $0.569$ & $36.267$ \\ 
+sd & $4.664$ & $5.567$ & $69.887$ & $68.933$ & $66.563$ & $0.474$ & $0.501$ & $0.675$ & $0.683$ & $0.860$ & $244.159$ & $0.496$ & $19.091$ \\ 
+\midrule\addlinespace[2.5pt]
+\multicolumn{14}{l}{HUN} \\ 
+\midrule\addlinespace[2.5pt]
+min & $3.000$ & $1.000$ & $322.458$ & $241.531$ & $265.364$ & $1.000$ & $1.000$ & $1.000$ & $1.000$ & $1.000$ & $9.000$ & $0.000$ & $9.000$ \\ 
+max & $53.000$ & $25.409$ & $659.594$ & $628.476$ & $636.929$ & $3.800$ & $4.000$ & $4.000$ & $3.750$ & $3.000$ & $1,461.000$ & $1.000$ & $123.000$ \\ 
+mean & $29.720$ & $10.892$ & $472.745$ & $458.126$ & $456.751$ & $1.650$ & $1.644$ & $2.154$ & $1.941$ & $1.675$ & $497.228$ & $0.714$ & $45.182$ \\ 
+sd & $7.139$ & $3.212$ & $76.142$ & $83.917$ & $77.683$ & $0.572$ & $0.501$ & $0.823$ & $0.604$ & $0.836$ & $272.114$ & $0.453$ & $21.831$ \\ 
+\midrule\addlinespace[2.5pt]
+\multicolumn{14}{l}{POL} \\ 
+\midrule\addlinespace[2.5pt]
+min & $3.000$ & $1.000$ & $358.259$ & $235.286$ & $305.966$ & $1.000$ & $1.000$ & $1.000$ & $1.000$ & $1.000$ & $23.000$ & $0.000$ & $4.500$ \\ 
+max & $42.840$ & $20.192$ & $638.343$ & $627.149$ & $632.535$ & $3.600$ & $3.400$ & $3.750$ & $4.000$ & $3.000$ & $1,428.000$ & $1.000$ & $124.500$ \\ 
+mean & $30.769$ & $10.093$ & $500.726$ & $489.696$ & $489.461$ & $2.026$ & $1.685$ & $1.659$ & $1.708$ & $1.312$ & $508.714$ & $0.808$ & $48.912$ \\ 
+sd & $7.057$ & $3.438$ & $63.010$ & $71.327$ & $62.903$ & $0.526$ & $0.531$ & $0.669$ & $0.630$ & $0.636$ & $297.766$ & $0.395$ & $23.701$ \\ 
+\midrule\addlinespace[2.5pt]
+\multicolumn{14}{l}{SVK} \\ 
+\midrule\addlinespace[2.5pt]
+min & $3.000$ & $3.143$ & $294.747$ & $278.503$ & $282.693$ & $1.000$ & $1.000$ & $1.000$ & $1.000$ & $1.000$ & $42.000$ & $0.000$ & $7.000$ \\ 
+max & $44.111$ & $21.615$ & $645.012$ & $648.836$ & $642.726$ & $4.000$ & $3.200$ & $4.000$ & $3.750$ & $3.000$ & $1,344.000$ & $1.000$ & $102.500$ \\ 
+mean & $27.001$ & $12.403$ & $466.918$ & $452.341$ & $468.762$ & $1.793$ & $1.704$ & $2.024$ & $1.827$ & $1.549$ & $389.675$ & $0.488$ & $31.006$ \\ 
+sd & $5.642$ & $3.209$ & $63.869$ & $64.199$ & $64.536$ & $0.596$ & $0.491$ & $0.830$ & $0.653$ & $0.815$ & $224.078$ & $0.501$ & $16.131$ \\ 
+\bottomrule
+\end{longtable}
+\setlength\LTleft{\holdLTleft}
+\setlength\LTright{\holdLTright}
+
+
+\end{table}
+\elandscape
+\newpage
+
+
 
 
 
 #### Inputs 
 
-Choosing the inputs that will be used in our analysis is very important for few reasons. First, in the context of analyzing schools' efficiency, the inputs of schools are almost fixed, thus we have to use plausible inputs with enough variation. We decided to use as  inputs the students to teacher ratio (STRATIO) which has been used in other studies such as [@Bessent_Bessent_1980; @Charnes_et_al_1981;  @Ray_1991; @Johnes_1996; @Cooper_Cohn_1997; @Heshmati_Kumbhakar_1997;  @Afonso_Aubyn_2006; @Johnes_Yu_2008; @Cherchye_et_al_2010; @Agasisti_2011b; @Agasisti_2013; @Johnes_2013; @Zoghbi_et_al_2013] among others and the total number of schooling hours (total_class_period)  which has been used in similar studies such as [@rebai2020; @benyahia2018] to cite a few. 
-
-
-```{r echo=FALSE}
-data_full %>% 
-  na.omit() %>% 
-  select(CNT, STRATIO, total_class_periods) %>% 
-  group_by(CNT) %>%
-  summarise(
-    across(
-      c(STRATIO, total_class_periods),
-      list(min = ~min(.x, na.rm = TRUE), 
-                         max = ~max(.x, na.rm = TRUE),
-                         mean = ~mean(.x, na.rm = TRUE), 
-                         sd = ~sd(.x, na.rm = TRUE)), 
-      .names = "{.col}__{.fn}"
-    )
-  ) %>% 
-  pivot_longer(2:ncol(.), names_to = 'variable', values_to = 'value') %>% 
-  separate(variable, c('variable', 'measure'), sep = '__') %>% 
-  pivot_wider(names_from = variable, values_from = value) %>% 
-  gt()
-```
-
+Choosing the inputs that will be used in our analysis is very important for few reasons. First, in the context of analyzing schools' efficiency, the inputs of schools are almost fixed, thus we have to use plausible inputs with enough variation. We decided to use as  inputs the students to teacher ratio (STRATIO) which has been used in other studies such as [@Bessent_Bessent_1980; @Charnes_et_al_1981;  @Ray_1991; @Johnes_1996; @Cooper_Cohn_1997; @Heshmati_Kumbhakar_1997;  @Afonso_Aubyn_2006; @Johnes_Yu_2008; @Cherchye_et_al_2010; @Agasisti_2011b; @Agasisti_2013;  @Zoghbi_et_al_2013] among others and the total number of class periods per week (CPERIODS)  which has been used in similar studies such as [@rebai2020; @benyahia2018] to cite a few. 
+The data (per table 2) shoes that Czech Republic has an average of 30.157 class periods, similar to Poland's average of 30.769, although these are higher values compared to Hungary (29.720) and the Slovak Republic (27.001). Hungary exhibits the widest range with class periods extending up to 53, indicating significant variability in schooling intensity.
 
 
 
 #### Outputs
 
 For the output we will adopt variables depicting aggregate (average) students' test scores by school, these aggregations describe the average scores students got for each school in MATH, READING, and SCIENCE. This is in accordance with multiple studies in this context such as[@Bessent_Bessent_1980; @Charnes_et_al_1981; @Afonso_Aubyn_2006;  @Cherchye_et_al_2010; @Essid_et_al_2010; @Essid_et_al_2013; @De_Witte_Kortelainen_2013; @De_Witte_et_al_2013; @rebai2020; @benyahia2018]
-
-```{r echo=FALSE}
-data_full %>% 
-  na.omit() %>% 
-  select(CNT, mean_PV_science, mean_PV_reading, mean_PV_math) %>% 
-  group_by(CNT) %>%
-  summarise(
-    across(
-      c(mean_PV_science, mean_PV_reading, mean_PV_math),
-      list(min = ~min(.x, na.rm = TRUE), 
-                         max = ~max(.x, na.rm = TRUE),
-                         mean = ~mean(.x, na.rm = TRUE), 
-                         sd = ~sd(.x, na.rm = TRUE)), 
-      .names = "{.col}__{.fn}"
-    )
-  ) %>% 
-  pivot_longer(2:ncol(.), names_to = 'variable', values_to = 'value') %>% 
-  separate(variable, c('variable', 'measure'), sep = '__') %>% 
-  pivot_wider(names_from = variable, values_from = value) %>% 
-  gt()
-```
+The descriptives in table 2 show that Poland and the Czech Republic present closely matched average scores in science (500.726 and 503.257 respectively), but Czech Republic seems to have an advantage compared to the rest of the countries in reading, and math as well, indicating that academic achievements vary widely across countries according to the survey. The Slovak Republic, with an average science score of 466.918, and Hungary, with 472.745, show lower performance levels in comparison, whereas Hungary shows the largest variations in all scores among the four countries with a standard deviation amounting to 76.142 in science, 83.917 for reading, and 77.683 for math.
 
 
-#### Non-discretionary variables
 
-The final piece of our data is the non-discretionary variables which we will use to assess the contribution of environmental variables in the schools and around them on the their efficiency. These variables are typically used in a two-stage analysis such as ours and provide insights that enables inference in order to understand what can be done (according to the sample of the study) to imptove the school efficiency that maximizes the output of test scores. We incorporated in the second stage of our analysis variables regarding behavior issues (absence, delinquency, harassment, violence, etc) of students (student_behavior_issue_mean), teachers (teacher_behavior_issue_mean), and staff  (staff_issues_mean), as well as issues of available resources in the premis including personal and material resources  (resources_issue_mean), number of schools in the area (SC011Q01TA, 3 none, 2 one school, 1 two ore more schools),  Community type where the school is located (SC001Q01TA, 1 urban, 0 rural), school size depicted by the number of enrolled students in the school (SCHSIZE), and the total number of all teachers at the school (TOTAT).
 
-```{r echo=FALSE}
-data_full %>% 
-  na.omit() %>% 
-  select(CNT, 
-         student_behavior_issue_mean,
-          teacher_behavior_issue_mean,
-          resources_issue_mean,
-          staff_issues_mean,
-          # total_homework_time, #I dont think this is necessary
-          # total_class_periods,
-          SC011Q01TA, # number of schools in the area (3 none, 2 one school, 1 two ore more schools)
-          # STRATIO,
-          SCHSIZE,
-          SC001Q01TA, # Community type where the school is located
-          TOTAT # Total number of all teachers at the school
-         ) %>% 
-  group_by(CNT) %>%
-  summarise(
-    across(
-      c(student_behavior_issue_mean,
-          teacher_behavior_issue_mean,
-          resources_issue_mean,
-          staff_issues_mean,
-          # total_homework_time, #I dont think this is necessary
-          # total_class_periods,
-          SC011Q01TA, # number of schools in the area (3 none, 2 one school, 1 two ore more schools)
-          # STRATIO,
-          SCHSIZE,
-          SC001Q01TA, # Community type where the school is located
-          TOTAT # Total number of all teachers at the school
-        ),
-      list(min = ~min(.x, na.rm = TRUE), 
-                         max = ~max(.x, na.rm = TRUE),
-                         mean = ~mean(.x, na.rm = TRUE), 
-                         sd = ~sd(.x, na.rm = TRUE)), 
-      .names = "{.col}__{.fn}"
-    )
-  ) %>% 
-  pivot_longer(2:ncol(.), names_to = 'variable', values_to = 'value') %>% 
-  separate(variable, c('variable', 'measure'), sep = '__') %>% 
-  pivot_wider(names_from = variable, values_from = value) %>% 
-  gt()
-```
+#### Environmental variables
+
+The final piece of our data is the environmental (non-discretionary) variables which we will use to assess the contribution of environmental variables in the schools and around them on their efficiency. These variables are typically used in a two-stage analysis such as ours and provide insights that enable inference in order to understand what can be done (according to the sample of the study) to improve school efficiency that maximizes the output of test scores. We incorporated in the second stage of our analysis variables regarding behavior issues aggregated by means of other variables for students (STUBI, includes aspects such as truancy, disrespect towards teachers, substance abuse, and bullying), teachers (TEABI, reflecting the degree to which teachers meet individual students' needs, their absenteeism, resistance to change, strictness, and preparation for classes), and staff (STAFI, This variable measures the aspects related to the school's staff, encompassing the availability and quality of teaching staff and assisting personnel. It checks if there are enough teachers and assistants, and whether they are qualified and capable to meet educational demands.), as well as issues of available resources in the premises including personal and material resources (RESSI, this variable reflects the school's environment and resources, focusing on the availability of educational materials like textbooks and IT equipment, as well as the school's physical facilities such as buildings and heating/cooling systems. Essentially, it looks at whether students have the materials they need and a conducive learning environment). Both the STAFI and RESSI varaibles are observed in [@benyahia2018]. Also we use the number of schools in the area (COMP, 3 none, 2 one school, 1 two or more schools) observed in studies like [@Agasisti2013; @BradleyEtAl2001; @rebai2020], Community type where the school is located (LOC, 1 urban, 0 rural) observed in studies such as [@BurneyEtAl2013; @MizalaEtAl2002;  @rebai2020], school size depicted by the number of enrolled students in the school (SCSIZE), and the total number of all teachers at the school (TOTAT).
+In our data, Poland exhibits the highest mean in student behavioral issues (2.026), which may impact the teaching environment. However, its mean for teacher behavioral issues is relatively low (1.685), indicating that despite student behavior, teacher performance remains less affected. However Slovakia presents the highest maximum of student behavioral issues (4.0) despite having the second lowest average (1.793) after Hungary (1.650). Similarly shows the lowest teacher behavior issues (1.644) followed by Poland despite the latter having the highest maximum value in this variable across all countries (4.0). Moreover, for resources issues, Hungary stands at the top of the rank (2.177) followed by Slovakia (1.975), which also have the highest variation in this variable (0.710), then Czech Republic (1.956) and finally Poland (1.868). Additionally, for staff-related issues, Slovakia and Hungary exhibit relatively high means (1.875 and 1.917 respectively), which suggests that there might be concerns regarding the availability or quality of assisting staff or teaching conditions. However, the Czech Republic (1.885) and Poland (1.5) show lower average values in staff issues, hinting at possibly better staff conditions or fewer concerns in these aspects. Notably, Slovakia and Czech Republic both have the highest maximum value (3.75) for staff issues, indicating some schools might face more significant challenges in this area.Regarding competition (COMP), the Czech Republic and Poland present lower average values (1.617 and 1.312 respectively), suggesting less competition among schools, which could mean fewer options for parents and potentially larger catchment areas for each school, especially for Poland which exhibits the lowest variation among the four countries (0.636). Hungary (1.675) and Slovakia (1.549) on the other hand show slightly higher averages, indicating higher competition among schools within these countries. When looking at school size by number of students (SCSIZE), Poland and Hungary exhibit the largest average sizes (508.714 and 497.228 respectively) and the highest variations as well (297.766 and 271.114 respectively). Conversely, the Czech Republic and Slovakia have smaller average school sizes (459.782 and 389.675 respectively). In terms of the community type where schools are located (LOC), Poland has the highest urban representation in term of mean (0.808), suggesting a greater proportion of schools in urban areas. Hungary follows with a mean value of (0.714), indicating a substantial urban presence as well. The Czech Republic and Slovakia have lower mean values, (0.569 and 0.488 respectively), suggesting a higher proportion of schools in rural areas in these countries. Lastly, the total number of teachers (TOTAT) shows Poland with the highest average (48.912) and the highest variation as well (23.701). Hungary follows with an average of (45.182), while the Czech Republic (36.267) and Slovakia (31.006) have lower averages, possibly indicating fewer resources in terms of teaching staff, which could impact the quality of education provided.
+
 
 ### Methodology
 
@@ -238,7 +205,7 @@ The choice of the methodology is directly linked to the objective of this study.
 
 To execute our approach, we start by scrutinizing DEA, the result of the pioneering work of [@charnes1978] which was later popularized by [@banker1984], the idea is basically a linear program that estimates a set of parameters for each DMU that allows to rank these DMUs in order of their best practices or technical efficiency additionally depicting a frontier of best practice determined by efficient DMUs. DEA programs can be input oriented (minimize inputs at the same level of output, yielding efficiency scores between $]0,1]$ where a score of 1 indicate a fully efficient unit (FE) ) or ouptut oriented (maximize outputs at the same level of inputs, yielding efficiency scores between $[1,+\infty [$, where a score of 1 indicate a fully efficient unit (FE) ) while accounting for returns to scale as a constraint in the program. As for the second stage, it's also straight forward, as many authors advocate for the use of OLS or tobit regression such as [@chilingerian2004], [@ray2004], and [@ruggiero2004].
 
-However, an interesting debate has took place regarding the statistical plausibility of second stage regression. On the one hand, advocates of this approach argue that the simplicity and versatility of the approach allows for valuable and practical insight. OLS or Tobit regressions are usually used in this context allowing for inference, in fact [@hoff2007] provided a review of the use of tobit and OLS regression in a second stage, and advocated for the use of tobit. On the other hand opponents to the approach advocate for a more careful specifications, since a two-stage analysis doesn't stem for a data generating process (DGP), thus it's quite difficult to understand what is exactly being estimated in the second stage. One of the earliest critics of this approach was [@grosskopf1996] who specified that other than the lack of a DGP, there's a possibility that these non-discretionary variables of the second stage can be correlated with the output efficiency of the first stage. Both [@grosskopf1996] and [@ramalho2010] argued against the use of linear models in the second stage. Building on this criticism, [@simar2007] was the first paper that coherently justified the use of a two-stage DEA proposing a DGP and two bootstrap algorithm that enable inference in the second stage with a truncated regression. The basic idea behind [@simar2007] work, is that DEA efficiency scores are non-parametrically estimated, thus they are a non-observed estimate of an unkown efficiency frontier which means that these scores do not account for stochasticity (i.e: any deviation from the efficiency frontier is entirely due to inefficiency) which means that using non-parametric methods in the second stage is more appropriate, hence the bootstrap algorithms.
+However, an interesting debate has took place regarding the statistical plausibility of second stage regression. On the one hand, advocates of this approach argue that the simplicity and versatility of the approach allows for valuable and practical insight. OLS or Tobit regressions are usually used in this context allowing for inference, in fact [@hoff2007] provided a review of the use of tobit and OLS regression in a second stage, and advocated for the use of tobit. On the other hand opponents to the approach advocate for a more careful specifications, since a two-stage analysis doesn't stem for a data generating process (DGP), thus it's quite difficult to understand what is exactly being estimated in the second stage. One of the earliest critics of this approach was [@grosskopf1996] who specified that other than the lack of a DGP, there's a possibility that these non-discretionary variables of the second stage can be correlated with the output efficiency of the first stage. Both [@grosskopf1996] and [@ramalho2010] argued against the use of linear models in the second stage. Building on this criticism, [@simar2007] was the first paper that coherently justified the use of a two-stage DEA proposing a DGP and two bootstrap algorithm that enable inference in the second stage with a truncated regression. The basic idea behind [@simar2007] work, is that DEA efficiency scores are non-parametrically estimated, thus they are a non-observed estimate of an unkown efficiency frontier which means that these scores do not account for stochasticity (i.e: any deviation from the efficiency frontier is entirely due to inefficiency) which means that using non-parametric methods in the second stage is more appropriate as proven and discussed in [@simar2011], hence the bootstrap algorithms.
 
 In this study, we adopt an output oriented model with the aim to maximize the average test scores' results of the schools in our sample data with variable returns to scales for the first stage, whereas for the second stage, we adopt the second algorithm (Double Bootstrap) from [@simar2007] to estimate the parameters of the second stage truncated regression, at 95% confidence interval, with the first bootstrap loop at L1=100,  and the second one at L2=2000.
 
@@ -271,38 +238,34 @@ Where:
 
 ## Results
 
-```{r echo=FALSE}
-summary_stats <- dea_out_1 %>%
+The results of the first stage DEA estimation (table 4) indicate that Poland is the most efficient country according to our specifications (1.183), followed by Slovakia (1.226). Then Hungary with a score of (1.253) who exhibits the largest variation in efficiency (0.172), while the Czech Republic ranks as the least efficient country (1.269).
+
+```{r tab4, echo=FALSE}
+dea_out_1 %>%
   mutate(efficiency_scores = map(dea_out, ~.$eff)) %>%
   summarise(
     mean_efficiency = mean(unlist(efficiency_scores)),
     sd_efficiency = sd(unlist(efficiency_scores)),
     min_efficiency = min(unlist(efficiency_scores)),
     max_efficiency = max(unlist(efficiency_scores))
+  ) %>% 
+  arrange(mean_efficiency) %>% 
+  gt(rowname_col = 'CNT') %>% 
+  fmt_number(
+    columns = 2:last_col(),
+    decimals = 3
+  ) %>% 
+  tab_footnote(footnote = 'Efficient units are has value closer to 1') %>% 
+  tab_header(
+    title = 'Table 4: Average efficiencies for each country'
   )
-summary_stats %>% 
-  gt()
 ```
 
 
-
-```{r echo=FALSE}
-# Analysis 2: Plot distribution of efficiency scores for each country.
-dea_out_1 %>%
-  mutate(efficiency_scores = map(dea_out, ~.$eff)) %>%
-  unnest(efficiency_scores) %>%
-  ggplot(aes(x = efficiency_scores)) +
-  geom_histogram(bins = 30, fill = "skyblue", color = "skyblue") +
-  facet_wrap(~CNT) +
-  labs(title = "Distribution of Efficiency Scores by Country",
-       subtitle = "Including Fully efficient schools",
-       x = "Efficiency Score",
-       y = "Frequency")
-```
+In the table 5 and figure 1, we can see the distribution of schools across the efficiency quartiles. Poland present the biggest number of fully efficient schools (efficiency score = 1) with (5.46%) of the total number of schools, followed by Hungary (3.54%), Slovakia (3.32%), and lastly Czech Republic (1.92%). However, when we check the forth quartile of efficiency for each country we observe that Poland also has the most percentage of highly inefficient schools (24.79%) followed with close percentage by Czech Republic (23.98%). Additionally, in table 7, we calculated the frequency for null and non-null multiplier wights. These wights depict the importance that each DMU (school) give to each output when the efficiency score is being calculated for it. We can observe that science subjects have the most influence Polish and Czech schools' efficiency (55.56% and 48.62% respectively of schools have non-null weights) whereas mathematics is the influencing subject for Hungarian schools (39.81%) and Slovakian schools as well (73.98% highest among all countries) 
 
 
-
-```{r echo=FALSE}
+```{r tab5, echo=FALSE, warning=FALSE}
 # Extract efficiency scores, compute quartiles, and mark fully efficient schools.
 dea_by_quartile <- dea_out_1 %>% 
   mutate(
@@ -316,36 +279,6 @@ dea_by_quartile <- dea_out_1 %>%
                     labels = c('Q1', 'Q2', 'Q3', 'Q4'),
                     include.lowest = TRUE)
   )
-
-# Plot histogram of efficiency scores by country and quartile for non-fully efficient schools.
-dea_by_quartile %>% 
-  filter(full_eff != 1) %>% 
-  ggplot(aes(x = eff_scores)) +
-  geom_histogram(bins = 30, fill = "skyblue", color = "skyblue") +
-  facet_grid(quartiles ~ CNT) +
-  labs(title = "Distribution of Efficiency Scores by Country and Quartile\nFor non Efficient Schools",
-       x = "Efficiency Score",
-       y = "Frequency")
-```
-
-
-
-
-```{r echo=FALSE}
-# Plot boxplot of efficiency scores by country and quartile for non-fully efficient schools.
-dea_by_quartile %>% 
-  filter(full_eff != 1) %>% 
-  ggplot(aes(x = quartiles, y = eff_scores)) +
-  geom_boxplot() +
-  facet_grid(~ CNT) +
-  labs(title = "Distribution of Efficiency Scores by Country and Quartile\nFor non Efficient Schools",
-       x = "Quartile",
-       y = "Efficiency Score")
-```
-
-
-
-```{r echo=FALSE, warning=FALSE}
 # Calculate and display count and percentage of schools in each quartile, including fully efficient ones.
 dea_by_quartile %>% 
   mutate(
@@ -354,47 +287,29 @@ dea_by_quartile %>%
   count(quartiles_ineff) %>% 
   mutate(
     p = case_when(
-      CNT == 'CZE' ~ (n / 417)*100,
-      CNT == 'HUN' ~ (n / 254)*100,
-      CNT == 'POL' ~ (n / 238)*100,
-      CNT == 'SVK' ~ (n / 271)*100
+      CNT == 'CZE' ~ (n / 399)*100,
+      CNT == 'HUN' ~ (n / 206)*100,
+      CNT == 'POL' ~ (n / 234)*100,
+      CNT == 'SVK' ~ (n / 246)*100
     ),
     p = glue::glue('({round(p, 2)}%)')
   ) %>% 
   unite(p, c('n','p'), sep = '  ') %>% 
   pivot_wider(names_from = quartiles_ineff, values_from = p) %>% 
   ungroup() %>% 
-  gt()
+  arrange(FE) %>% 
+  gt(rowname_col = 'CNT') %>% 
+  tab_header(
+    title = 'Table 5: Distribution of Efficiency Scores by Country and Quartile'
+  )
 ```
 
 
 
-```{r echo=FALSE}
-# Create and plot a stacked bar chart showing the percentage distribution of schools by efficiency quartile and country.
-dea_by_quartile %>% 
-  mutate(
-    quartiles_ineff = if_else(full_eff == 1, "FE", quartiles)
-  ) %>% 
-  count(quartiles_ineff) %>% 
-  ggplot() +
-  geom_col(
-    aes(
-      x = n, 
-      y = CNT,
-      .group = CNT,
-      fill = quartiles_ineff
-    ), position = "dodge"
-  ) +
-  labs(title = "Percentage of Fully Efficient (FE) and Quartile distribution\nof Inefficient Schools by Country",
-       x = "Percentage",
-       y = "Country")
-
-
-```
 
 
 
-```{r echo=FALSE}
+```{r tab6, echo=FALSE}
 # Function to calculate the number of zero and non-zero values in each column
 count_zeros_and_nonzeros <- function(matrix) {
   # Count non-zero values
@@ -417,71 +332,89 @@ frequency_results <- dea_out_1 %>%
     frequency_counts = map(multiplier_weights, count_zeros_and_nonzeros)
   )
 
-subjects <- c('science', 'reading', 'math')
+subjects <- c('SCIENCE', 'READING', 'MATH')
 
 
 frequency_results %>% 
   unnest(frequency_counts) %>% 
   mutate(output = subjects) %>% 
   pivot_longer(c(non_zero_counts,zero_counts), names_to = 'importance1', values_to = 'frequency') %>% 
-  # pivot_longer(c(non_zero_avg,zero_avg), names_to = 'importance2', values_to = 'avg') %>%
-  ggplot() +
-  geom_col(
-    aes(x = frequency, y = CNT, fill = output),
-    position = 'fill'
-  ) +
-  # geom_col(
-  #   aes(x = avg, y = CNT, fill = output),
-  #   position = 'fill'
-  # ) +
-  facet_grid(~importance1)
+  select(
+    CNT,
+    output,
+    importance1,
+    frequency) %>% 
+  ungroup() %>% 
+  mutate(
+    n = case_when(
+      CNT == 'CZE' ~ (frequency / 399)*100,
+      CNT == 'HUN' ~ (frequency / 206)*100,
+      CNT == 'POL' ~ (frequency / 234)*100,
+      CNT == 'SVK' ~ (frequency / 246)*100
+    ),
+    freq = glue::glue('{frequency} ({round(n, 2)}%)')
+  ) %>% 
+  select(-frequency, -n) %>% 
+  pivot_wider(names_from = output:importance1, values_from = c(freq), names_sep = '__') %>% 
+  gt(rowname_col = 'CNT') %>% 
+  tab_spanner_delim('__', columns = 2:last_col()) %>% 
+  cols_label(
+    ends_with('zero_counts') ~ 'null',
+    ends_with('non_zero_counts') ~ 'non-null'
+  ) %>% 
+  tab_header(
+    title = 'Table 6: Frequency of null and non-null multiplier weights by output and country'
+  )
+
 ```
 
 
 
-```{r echo=FALSE}
-frequency_results %>% 
-  unnest(frequency_counts) %>% 
-  mutate(output = subjects) %>% 
-  # pivot_longer(c(non_zero_counts,zero_counts), names_to = 'importance1', values_to = 'frequency') %>% 
-  pivot_longer(c(non_zero_avg,zero_avg), names_to = 'importance2', values_to = 'avg') %>% 
-  ggplot() +
-  geom_col(
-    aes(x = avg, y = CNT, fill = output),
-    position = 'dodge'
-  ) +
-  facet_grid(~importance2)
-
-```
+For the second stage of our analysis the double-bootstrap procedure to estimate the parameters of the truncated regression are summarized in table 7. 
 
 
-results of the efficiency, multipliers and the intensity weights
+\begin{table}[htbp]
+\centering
+\caption{Regression coefficients and confidence intervals across countries}
+\begin{tabular}{l|cccc}
+\hline
+\textbf{Variable} & \textbf{CZE} & \textbf{HUN} & \textbf{POL} & \textbf{SVK} \\
+\hline
+Intercept & $1.076^{*}$ & $1.331^{*}$ & $1.152^{*}$ & $1.305^{*}$ \\
+          & \scriptsize{(0.989, 1.161)} & \scriptsize{(1.209, 1.451)} & \scriptsize{(1.067, 1.233)} & \scriptsize{(1.198, 1.409)} \\
+STUBI     & $0.153^{*}$ & $0.189^{*}$ & $0.123^{*}$ & $0.092^{*}$ \\
+          & \scriptsize{(0.117, 0.188)} & \scriptsize{(0.142, 0.234)} & \scriptsize{(0.090, 0.157)} & \scriptsize{(0.058, 0.125)} \\
+TEABI     & $-0.062^{*}$ & $-0.075^{*}$ & $-0.052^{*}$ & $-0.063^{*}$ \\
+          & \scriptsize{(-0.093, -0.030)} & \scriptsize{(-0.132, -0.022)} & \scriptsize{(-0.085, -0.015)} & \scriptsize{(-0.105, -0.021)} \\
+RESSI     & $-0.020$ & $-0.010$ & $-0.032^{*}$ & $-0.001$ \\
+          & \scriptsize{(-0.043, 0.003)} & \scriptsize{(-0.043, 0.023)} & \scriptsize{(-0.057, -0.005)} & \scriptsize{(-0.028, 0.024)} \\
+STAFI     & $0.027^{*}$ & $-0.033$ & $-0.001$ & $0.018$ \\
+          & \scriptsize{(0.005, 0.050)} & \scriptsize{(-0.081, 0.013)} & \scriptsize{(-0.029, 0.025)} & \scriptsize{(-0.015, 0.054)} \\
+COMP      & $0.031^{*}$ & $0.013$ & $0.031^{*}$ & $-0.019$ \\
+          & \scriptsize{(0.014, 0.050)} & \scriptsize{(-0.015, 0.042)} & \scriptsize{(0.009, 0.055)} & \scriptsize{(-0.046, 0.007)} \\
+SCSIZE    & $0.0003^{*}$ & $0.0001$ & $-0.0001$ & $0.0001$ \\
+          & \scriptsize{(0.0002, 0.0004)} & \scriptsize{(-0.0001, 0.0002)} & \scriptsize{(-0.0002, 0.0000)} & \scriptsize{(-0.0001, 0.0003)} \\
+LOC       & $-0.010$ & $-0.130^{*}$ & $-0.056^{*}$ & $-0.070^{*}$ \\
+          & \scriptsize{(-0.043, 0.022)} & \scriptsize{(-0.191, -0.068)} & \scriptsize{(-0.094, -0.018)} & \scriptsize{(-0.119, -0.027)} \\
+TOTAT     & $-0.004^{*}$ & $-0.002^{*}$ & $0.0001$ & $-0.003$ \\
+          & \scriptsize{(-0.005, -0.002)} & \scriptsize{(-0.004, -0.0001)} & \scriptsize{(-0.001, 0.001)} & \scriptsize{(-0.006, 0.0001)} \\
+\hline
+\end{tabular}
+\end{table}
 
-all the plots
 
-| Variable                      | CZE                            | HUN                            | POL                            | SVK                            |
-|-------------------------------|--------------------------------|--------------------------------|--------------------------------|--------------------------------|
-| **Intercept**                 | 1.626* <br> (1.511, 1.742)     | 1.545* <br> (1.376, 1.727)     | 1.568* <br> (1.458, 1.673)     | 1.686* <br> (1.541, 1.824)     |
-| **Student Behavior Issue Mean** | 0.122* <br> (0.092, 0.154)      | 0.227* <br> (0.170, 0.283)      | 0.102* <br> (0.067, 0.138)      | 0.097* <br> (0.062, 0.134)      |
-| **Teacher Behavior Issue Mean** | -0.069* <br> (-0.099, -0.039)  | -0.053 <br> (-0.110, 0.006)     | -0.043 <br> (-0.076, -0.010)    | -0.044 <br> (-0.088, -0.000)    |
-| **Resources Issue Mean**      | 0.032* <br> (0.004, 0.059)     | -0.046 <br> (-0.099, 0.007)     | -0.023 <br> (-0.054, 0.009)     | -0.001 <br> (-0.034, 0.032)     |
-| **Staff Issues Mean**         | -0.009 <br> (-0.033, 0.016)    | -0.010 <br> (-0.060, 0.041)     | -0.019 <br> (-0.050, 0.014)     | 0.014 <br> (-0.018, 0.046)      |
-| **Total Class Periods**       | -0.015* <br> (-0.018, -0.012)  | -0.007* <br> (-0.011, -0.004)   | -0.010* <br> (-0.013, -0.009)   | -0.015* <br> (-0.018, -0.011)   |
-| **SCHSIZE**                   | 0.0002* <br> (0.0001, 0.0003)  | -0.0001 <br> (-0.0003, 0.0001)  | -0.0001* <br> (-0.0002, -0.0000)| 0.0002* <br> (-0.0000, 0.0004)  |
-| **SC001Q01TA**                | -0.016* <br> (-0.030, -0.002)  | -0.047* <br> (-0.073, -0.022)   | -0.030* <br> (-0.047, -0.015)   | -0.051* <br> (-0.075, -0.029)   |
-| **TOTAT**                     | -0.003 <br> (-0.004, -0.001)   | -0.001 <br> (-0.003, 0.002)     | 0.0004 <br> (-0.001, 0.002)     | -0.004* <br> (-0.007, -0.001)   |
+For The baseline efficiencies (when all variables are at zero) for the schools in all countries are statistically significant, suggesting a positive starting point for school efficiency. The intercepts vary across countries, with Hungary having the highest baseline efficiency (1.331) followed by Slovakia (1.305), Poland (1.152), and Czech Republic (1.076). For Student Behavioral Issues the coefficients (STUBI)  indicate the impact of student behavioral issues on school efficiency. All countries show a positive and significant relationship, suggesting that as student behavioral issues increase, so does the efficiency, which may seem counterintuitive indeed and could indicate that there might be omitted variables that may influence the relationship. Hungary has the highest coefficient (0.189), suggesting student behavioral issues have a more pronounced impact there compared to other countries. This might also suggest that in these four countries the schools manage to improve their efficiency despite the student related issues. In all countries, teacher behavior issues coefficients (TEABI) are negative and significant, meaning that teacher behavioral issues reduce school efficiency. The impact is greatest in Hungary (-0.075), indicating that teacher behavioral issues are a more significant problem for school efficiency there than in other countries. Hungary is followed by Czech Republic (-0.062) and closely Slovakia (-0.063) and lastly Poland (-0.052.) who also has the second lowest average value of this variable across its schools. Poland is also the only country that shows a significant negative coefficient (-0.032) for resource issues (RESSI), meaning that in Poland, lacking resources significantly reduces its schools' efficiency, this is also aligned with its average value regarding this variable with the lowest average issues among the rest of the countries. In other countries, this relationship is not statistically significant. Regarding staff issues (STAFI) Czech Republic is the only country where this variable have a statistically significant positive effect on school efficiency (0.027). This could suggest that in Czech Republic, schools manage to maintain or even improve efficiency despite staff-related challenges. Moreover, School competition seems to significantly improve efficiency only in Czech Republic and Poland, both with coefficients of (0.031), this could indicate that the presence of more schools in a given area positively influence the efficiency of these schools. The impact in Slovakia is negative but not significant whereas in Hungary it's positive but also not significant. School size (SCSIZE) impacts efficiency positively and significantly only in Czech Republic (0.0003), indicating that larger schools tend to be more efficient there. In the rest of the other countries, the effect of school size varies in sense (positive for Hungary and Slovakia and negative for Poland) and is not significant. Although despite its significance in Czech Republic the coefficient is very small for an actual effect on its efficiency. Additionally, The location of the school (LOC) shows significant negative coefficients for Hungary (-0.130), Poland (-0.056), and Slovakia (-0.070), as well as Czech Republic (-0.01) but insignificant, indicating that schools in rural areas (LOC = 0) are more efficient than those in urban areas (LOC = 1), especially in Hungary where the influence of this variable is notably larger. Lastly, for the number of teachers (TOTAT), its impact on school efficiency is negative and significant in Czech Republic and Hungary, suggesting that having more teachers than necessary could reduce efficiency. In Poland, the coefficient is positive but not significant, while in Slovakia, it's negative but not significant.
+
+
+## Discussion and concluding remarks
+
+The results we discussed in the previous section, despite its usefulness provide counter intuitive insights in some cases, this might be due to  several factors especially one concern of ours regarding the data used for the second stage. In fact, behavioral variables (STUBI and TEABI) are aggregated from different levels, the student behavioral issues were first aggregated from different other variables as discussed in section 2, then aggregated by school, wherhas for the teacher  behavior issues, it was a simple horizontal aggregation from different variable, as the data in this context is already at school level. Moreover, these two variables along with resources issues and staff issues might not properly fit as environmental variables for a second stage. However, they might be considered as undesirable inputs and can be used in the DEA estimation in the first stage using a Directional Distance Function ([@chambers1996]). Additionally and more importantly, the double-bootstrap truncated regression procedure of [@simar2007] requires the satisfaction of multiple assumption of its DGP. This has been explicitly discussed and argued in the initial paper and in [@simar2011] by emphasizing on the separability condition mentioned in assumptions 1 and 2 in [@simar2007], this condition simply mean that the second stage variables should not depend on the first stage variables (outputs). To properly use the double-bootstrap, this  condition must be first tested, which can be a major area of improvement for our study. 
+To summarize, we conducted a two-stage DEA analysis with a double-bootstrap truncated regression in the second stage to investigate the influence a set of non-discretionary variables affect the efficiency of a sample of schools in the four Visegrad countries. Our results showed that each country has its own strengths and weaknesses in terms of their efficiencies, what drives them, and how they are influenced by the seconds stage variables. Given the specifications we used in our analysis Poland is the most efficient country with science related subject driving this efficiency (similar to Czech schools), which means that their schools' eefficiency can be improved if more effort is made to improve the quality of teaching and the results in math and reading, Polish schools are also sensitive to resources issues as shown by the second stage results. Additionally, math is the most important subject for Hungarian and Slovakian schools, which also means that  there is an area of improvement in terms of efficiency if more effort in other subjects in terms of quality of education and resources. 
 
 
 
-## Discussion
 
-limitations of the dea methodology and the specifications.
 
-how these results can have policy implications
-
-## Conclusion
-
-summarize.
 
 
 ## References

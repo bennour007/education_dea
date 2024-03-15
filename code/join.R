@@ -37,5 +37,28 @@ data_full <- stu %>%
     mean_reading_attitude, 
     mean_science_attitude, 
     mean_math_attitude
-  ) 
-  # readr::write_csv(data_full,'clean_data/clean_united_data.csv')
+  ) %>% 
+  rename(
+    CPERIODS = total_class_periods,
+    # student_teacher_ratio = STRATIO,
+    SCIENCE = mean_PV_science,
+    READING = mean_PV_reading,
+    MATH = mean_PV_math,
+    STUBI = student_behavior_issue_mean,
+    TEABI = teacher_behavior_issue_mean,
+    RESSI = resources_issue_mean,
+    STAFI = staff_issues_mean,
+    COMP = SC011Q01TA,
+    SCSIZE = SCHSIZE,
+    LOC = SC001Q01TA,
+    # total_teachers = TOTAT
+    # Add more renaming here if needed
+  ) %>% 
+  # DUMMIFYING LOC BECAUSE IT HAS 5 LEVELS OF URBANIZATION
+  mutate(
+    LOC = if_else(
+      LOC %in% c(1,2), 0, 1 # RURAL
+    )
+  )
+
+  readr::write_csv(data_full,'clean_data/clean_united_data.csv')
