@@ -1,0 +1,152 @@
+---
+title: 'Visegrad Countries and Education Challenges : An Efficiency Analysis'
+author: "Bennour Mohamed Hsin - University of Pécs - Faculty of Business and Economics"
+date: "2024-03-22"
+output:
+  slidy_presentation: default
+  ioslides_presentation: default
+  beamer_presentation: default
+bibliography: refs.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+
+## AGENDA 
+
+- Context 
+
+- Methodology
+
+- Results 
+
+- Possible extensions
+
+- Conclusion
+
+## CONTEXT
+
+- Capitalism requires a push for efficiency
+  - either tby maximizing output or minimizing input
+  - Either ways innovation is key
+
+- Knowledge is the engine that drives innovation (among other things) [@cunha2006].
+
+- Knowledge capital increasing is the result of the investment efforts in Human Capital (**AND EDUCATION**) [@hanushek2021]
+
+- The importance of Education in increasing the levels of knowledge and thus the capacity to innovate in the long run, affecting gorwth and potentially development and wellfare [@hanushek2020_a].
+
+## --
+
+- Assessing Education performance is necessary to drive policies in a larger context of innovation policy.
+
+- [@worthington2001] assumes that education institutions conduct a basic transformation of inputs into outputs, and this transformation can be proxied with a production function 
+
+- Assessing the efficiency based on input output approach is plausible in this context
+
+## -- 
+
+- What are the drivers of efficiency for the V4 schools?
+
+- What are the environmental factors that affect this efficiency?
+
+
+
+
+
+
+## METHODOLOGY
+
+- Methodology for evaluating educational institutions includes DEA (Data Envelopment Analysis [@charnes1978]), combined with other methods like Bootstrapping, regression (OLS, Tobit, or truncated), or the Malmquist index.
+
+- Focus on school-level analysis, treating educational institutions as units that transform inputs into outputs.
+
+- Schools are assumed to be influenced by various internal and external factors.
+
+
+## 
+
+- Investigation involves two-stage analysis using 2022 PISA survey data for schools in the Visegrad countries:
+  - First stage: Estimate efficiency of schools in each country (output oriented).
+  - Second stage: Double bootstrap procedure with truncated regression [@simar2007] to assess environmental factors' influence on school efficiency.
+  
+  
+## DATA
+
+
+| Category                | Determinants                                                                                                           |
+|-------------------------|------------------------------------------------------------------------------------------------------------------------|
+| Inputs                  | STRATIO (Students to Teacher Ratio), CPERIODS (Class Periods per Week)                                                 |
+| Outputs                 | MATH, READING, SCIENCE (Average Test Scores)                                                                           |
+| Environmental Variables | STUBI (Student Behavioral Issues), TEABI (Teacher Behavioral Issues), STAFI (Staff Issues), RESSI (Resources), COMP (Competition), LOC (Location), SCSIZE (School Size), TOTAT (Total Number of Teachers) |
+
+
+
+## RESULTS: STAGE 1
+
+
+- First Stage DEA Estimation:
+  - Poland is the most efficient country (score: 1.183).
+  - Slovakia follows with a score of 1.226.
+  - Hungary has a score of 1.253 with the largest efficiency variation (0.172).
+  - Czech Republic is the least efficient (score: 1.269).
+  
+## -- 
+
+- Distribution of Schools Across Efficiency Quartiles:
+  - Poland has the highest percentage of fully efficient schools (5.46%).
+  - Hungary follows with 3.54%, Slovakia with 3.32%, and Czech Republic with 1.92%.
+  - Poland also has the highest percentage of highly inefficient schools (24.79%), followed by Czech Republic (23.98%).
+  
+  
+## --
+
+- Influence of School Subjects on Efficiency:
+  - Science influences efficiency most in Polish and Czech schools (55.56% and 48.62% respectively).
+  - Mathematics is most influential in Hungarian (39.81%) and Slovakian schools (73.98%).
+  
+## RESULTS: SECOND STAGE
+
+
+  - Positive and significant baseline efficiencies across all countries, with Hungary having the highest.
+  - Student behavioral issues (STUBI) positively impact efficiency in all countries, with the highest impact in Hungary.
+  - Teacher behavior issues (TEABI) negatively affect efficiency, particularly in Hungary.
+  - In Poland, resource issues (RESSI) significantly reduce school efficiency, unlike in other countries.
+  - Czech Republic sees a positive effect on efficiency from staff issues (STAFI).
+  
+## -- 
+
+  - School competition (COMP) improves efficiency significantly only in Czech Republic and Poland.
+  - School size (SCSIZE) shows a significant positive impact only in Czech Republic.
+  - Schools in rural areas (LOC) are more efficient than urban ones, especially in Hungary.
+  - Number of teachers (TOTAT) negatively impacts efficiency in Czech Republic and Hungary; not significant in Poland and Slovakia.
+  
+  
+## Implications
+
+Here's a table summarizing the recommendations for each country:
+
+| Country   | Recommendation 1                                      | Recommendation 2                                             | Recommendation 3                                              | Recommendation 4                                            |
+|-----------|-------------------------------------------------------|--------------------------------------------------------------|---------------------------------------------------------------|-------------------------------------------------------------|
+| **Poland**    | Enhance Resource Allocation                           | Expand Successful Schools                                    | Address Inefficiencies in Large Schools                       | Foster Healthy Competition                                  |
+| **Slovakia**  | Focus on Teacher Quality                              | Leverage Efficient Small Schools                             | Enhance Student Behavior Programs                            | Address Staff Issues                                        |
+| **Hungary**   | Improve Student Behavioral Interventions             | Enhance Teacher Support and Development                      | Optimize School Size                                         | Promote Rural School Efficiency                             |
+| **Czech Republic** | Invest in Staff Development                           | Optimize Teacher Numbers                                     | Encourage School Competition                                 | Improve Resource Efficiency                                 |
+
+
+
+## POTENTIAL ISSUES and POSSIBLE EXTENSIONS
+
+- Aggregation on different levels might be problematic
+
+- Separability test was not conducted 
+
+- Directional Distance Function might be more appropriate than DEA in this case
+
+- Adding time dimension can increase the importance of the study
+
+
+# Thank you for your attention
